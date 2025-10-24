@@ -1,0 +1,137 @@
+{
+    "product": [
+      {
+        "id": 1,
+        "name": "Smartphone Premium",
+        "price": 799,
+        "originalPrice": 899,
+        "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400",
+        "category": "Électronique",
+        "description": "Smartphone haut de gamme avec écran OLED 6.7 pouces",
+        "isFeatured": true,
+        "isOnSale": true,
+        "rating": 4.5
+      },
+      {
+        "id": 2,
+        "name": "Casque Audio Bluetooth",
+        "price": 199,
+        "originalPrice": 249,
+        "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400",
+        "category": "Audio",
+        "description": "Casque sans fil avec réduction de bruit active",
+        "isFeatured": true,
+        "isOnSale": true,
+        "rating": 4.2
+      },
+      {
+        "id": 3,
+        "name": "Montre Connectée",
+        "price": 299,
+        "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400",
+        "category": "Électronique",
+        "description": "Montre intelligente avec suivi santé avancé",
+        "isFeatured": true,
+        "isOnSale": false,
+        "rating": 4.3
+      },
+      {
+        "id": 4,
+        "name": "Chaussures de Sport",
+        "price": 129,
+        "originalPrice": 159,
+        "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400",
+        "category": "Mode",
+        "description": "Chaussures running légères et confortables",
+        "isFeatured": true,
+        "isOnSale": true,
+        "rating": 4.7
+      },
+      {
+        "id": 5,
+        "name": "Sac à Dos Urbain",
+        "price": 89,
+        "image": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400",
+        "category": "Accessoires",
+        "description": "Sac élégant et fonctionnel pour la ville",
+        "isFeatured": true,
+        "isOnSale": false,
+        "rating": 4.4
+      },
+      {
+        "id": 6,
+        "name": "Enceinte Portable",
+        "price": 149,
+        "originalPrice": 199,
+        "image": "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400",
+        "category": "Audio",
+        "description": "Enceinte Bluetooth résistante à l’eau",
+        "isFeatured": true,
+        "isOnSale": true,
+        "rating": 4.6
+      },
+      {
+        "id": 7,
+        "name": "Lunettes de Soleil",
+        "price": 159,
+        "image": "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400",
+        "category": "Accessoires",
+        "description": "Lunettes polarisées protection UV400",
+        "isFeatured": true,
+        "isOnSale": false,
+        "rating": 4.1
+      },
+      {
+        "id": 8,
+        "name": "Console de Jeux",
+        "price": 499,
+        "originalPrice": 549,
+        "image": "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=400",
+        "category": "Gaming",
+        "description": "Console nouvelle génération 4K",
+        "isFeatured": true,
+        "isOnSale": true,
+        "rating": 4.8
+      }
+],
+
+    "category":[
+      {
+        "id": 1,
+        "name": "Électronique",
+        "image": "https://images.unsplash.com/photo-1498049794561-7780e7231661?w=300",
+        "productCount": 45
+      },
+      {
+        "id": 2,
+        "name": "Mode",
+        "image": "https://images.unsplash.com/photo-1445205170230-053b83016050?w=300",
+        "productCount": 120
+      },
+      {
+        "id": 3,
+        "name": "Maison",
+        "image": "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300",
+        "productCount": 89
+      },
+      {
+        "id": 4,
+        "name": "Sport",
+        "image": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300",
+        "productCount": 67
+      },
+      {
+        "id": 5,
+        "name": "Beauté",
+        "image": "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300",
+        "productCount": 54
+      },
+      {
+        "id": 6,
+        "name": "Jouets",
+        "image": "https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=300",
+        "productCount": 32
+      }
+    ]
+    }
+  

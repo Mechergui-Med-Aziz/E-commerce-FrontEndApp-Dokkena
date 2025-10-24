@@ -1,0 +1,134 @@
+<div class="home-container">
+    <!-- Hero Slider Section -->
+    <section class="slider-section">
+      <div class="slider-container">
+        <div class="slider-wrapper">
+          <div class="slider" [style.transform]="'translateX(-' + (currentSlide * 100) + '%)'">
+            <div class="slide" *ngFor="let product of getProductsOnSale()">
+              <div class="slide-content">
+                <div class="slide-image">
+                  <img [src]="product.image" [alt]="product.name" loading="lazy">
+                </div>
+                <div class="slide-info">
+                  <span class="promo-badge">PROMOTION</span>
+                  <h1 class="slide-title">{{ product.name }}</h1>
+                  <p class="slide-description">{{ product.description }}</p>
+                  <div class="slide-pricing">
+                    <span class="current-price">{{ product.price }}€</span>
+                    <span *ngIf="product.originalPrice" class="original-price">
+                      {{ product.originalPrice }}€
+                    </span>
+                    <span *ngIf="product.originalPrice" class="discount-badge">
+                      -{{ getDiscountPercentage(product) }}%
+                    </span>
+                  </div>
+                  <button class="cta-button">Acheter Maintenant</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Navigation buttons -->
+          <button class="slider-nav prev" (click)="prevSlide()">
+            <i class="arrow">‹</i>
+          </button>
+          <button class="slider-nav next" (click)="nextSlide()">
+            <i class="arrow">›</i>
+          </button>
+          
+          <!-- Dots indicator -->
+          <div class="slider-dots">
+            <button 
+              *ngFor="let product of getProductsOnSale(); let i = index" 
+              class="dot" 
+              [class.active]="i === currentSlide"
+              (click)="goToSlide(i)">
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <!-- Categories Section -->
+    <section class="categories-section">
+      <div class="container">
+        <h2 class="section-title">Catégories Populaires</h2>
+        <p class="section-subtitle">Découvrez nos différentes gammes de produits</p>
+        
+        <div class="categories-grid">
+          <div 
+            *ngFor="let category of categories" 
+            class="category-card"
+            [style.backgroundImage]="'url(' + category.image + ')'">
+            <div class="category-overlay">
+              <h3 class="category-name">{{ category.name }}</h3>
+              <p class="category-count">{{ category.productCount }} produits</p>
+              <button class="category-button">Explorer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <!-- Featured Products Section -->
+    <section class="featured-section">
+      <div class="container">
+        <h2 class="section-title">Produits Vedettes</h2>
+        <p class="section-subtitle">Découvrez nos meilleures ventes du moment</p>
+        
+        <div class="products-grid">
+          <div 
+            *ngFor="let product of getFeaturedProducts()" 
+            class="product-card"
+            [class.on-sale]="product.isOnSale">
+            
+            <div class="product-image">
+              <img [src]="product.image" [alt]="product.name" loading="lazy">
+              <div class="product-badges">
+                <span *ngIf="product.isOnSale" class="badge sale-badge">
+                  -{{ getDiscountPercentage(product) }}%
+                </span>
+                <span class="badge featured-badge" *ngIf="product.isFeatured">
+                  ★ Vedette
+                </span>
+              </div>
+              <button class="quick-view-btn" (click)="deleteobject(product.id)">👁️ Vue rapide</button>
+            </div>
+            
+            <div class="product-info">
+              <h3 class="product-name">{{ product.name }}</h3>
+              <p class="product-category">{{ product.category }}</p>
+              
+              <div class="product-rating">
+                <span class="stars">{{ getStarRating(product.rating) }}</span>
+                <span class="rating-value">({{ product.rating }})</span>
+              </div>
+              
+              <div class="product-pricing">
+                <span class="current-price">{{ product.price }}€</span>
+                <span *ngIf="product.originalPrice" class="original-price">
+                  {{ product.originalPrice }}€
+                </span>
+              </div>
+              
+              <button class="add-to-cart-btn">🛒 Ajouter au panier</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <!-- Newsletter Section -->
+    <section class="newsletter-section">
+      <div class="container">
+        <div class="newsletter-content">
+          <h2>Restez Informé</h2>
+          <p>Inscrivez-vous à notre newsletter pour recevoir nos offres exclusives</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="Votre email" class="newsletter-input">
+            <button class="newsletter-btn">S'inscrire</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>

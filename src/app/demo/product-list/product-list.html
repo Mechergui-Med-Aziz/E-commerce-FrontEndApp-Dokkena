@@ -1,0 +1,46 @@
+<section class="featured-section">
+    <div class="container">
+      <h2 class="section-title">Produits Vedettes</h2>
+      <p class="section-subtitle">Découvrez nos meilleures ventes du moment</p>
+      
+      <div class="products-grid">
+        <div 
+          *ngFor="let product of getFeaturedProducts()" 
+          class="product-card"
+          [class.on-sale]="product.isOnSale">
+          
+          <div class="product-image">
+            <img [src]="product.image" [alt]="product.name" loading="lazy">
+            <div class="product-badges">
+              <span *ngIf="product.isOnSale" class="badge sale-badge">
+                -{{ getDiscountPercentage(product) }}%
+              </span>
+              <span class="badge featured-badge" *ngIf="product.isFeatured">
+                ★ Vedette
+              </span>
+            </div>
+            <button class="quick-view-btn" (click)="deleteobject(product.id)">👁️ Vue rapide</button>
+          </div>
+          
+          <div class="product-info">
+            <h3 class="product-name">{{ product.name }}</h3>
+            <p class="product-category">{{ product.category }}</p>
+            
+            <div class="product-rating">
+              <span class="stars">{{ getStarRating(product.rating) }}</span>
+              <span class="rating-value">({{ product.rating }})</span>
+            </div>
+            
+            <div class="product-pricing">
+              <span class="current-price">{{ product.price }}€</span>
+              <span *ngIf="product.originalPrice" class="original-price">
+                {{ product.originalPrice }}€
+              </span>
+            </div>
+            
+            <button class="add-to-cart-btn">🛒 Ajouter au panier</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
