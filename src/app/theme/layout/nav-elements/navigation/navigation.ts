@@ -40,52 +40,52 @@ export const NavigationItems: NavigationItem[] = [
     ]
   },
    {
-    id: 'ui-element',
-    title: 'UI ELEMENT',
+    id: 'category',
+    title: 'Catégories',
     type: 'group',
     icon: 'icon-ui',
     children: [
       {
-        id: 'basic',
-        title: 'Component',
+        id: 'categories',
+        title: 'Catégories',
         type: 'collapse',
         icon: 'feather icon-box',
         children: [
           {
-            id: 'button',
-            title: 'Button',
+            id: 'beauty',
+            title: 'Beauty',
             type: 'item',
-            url: '/basic/button'
+            url: '/categories/beauty'
           },
           {
-            id: 'badges',
-            title: 'Badges',
+            id: 'electronic',
+            title: 'Electronic',
             type: 'item',
-            url: '/basic/badges'
+            url: '/categories/electronic'
           },
           {
-            id: 'breadcrumb-pagination',
-            title: 'Breadcrumb & Pagination',
+            id: 'fashion',
+            title: 'Fashion',
             type: 'item',
-            url: '/basic/breadcrumb-paging'
+            url: '/categories/fashion'
           },
           {
-            id: 'collapse',
-            title: 'Collapse',
+            id: 'game',
+            title: 'Game',
             type: 'item',
-            url: '/basic/collapse'
+            url: '/categories/game'
           },
           {
-            id: 'tabs-pills',
-            title: 'Tabs & Pills',
+            id: 'kitchen',
+            title: 'Kitchen',
             type: 'item',
-            url: '/basic/tabs-pills'
+            url: '/categories/kitchen'
           },
           {
-            id: 'typography',
-            title: 'Typography',
+            id: 'sport',
+            title: 'Sport',
             type: 'item',
-            url: '/basic/typography'
+            url: '/categories/sport'
           }
         ]
       }

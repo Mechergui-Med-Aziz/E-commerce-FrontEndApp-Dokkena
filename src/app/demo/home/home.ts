@@ -5,10 +5,11 @@ import { Product } from 'src/app/classes/product';
 import { Category } from 'src/app/classes/category';
 import { ProductService } from 'src/app/services/product-service';
 import { CategoryService } from 'src/app/services/category-service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule,SharedModule],
+  imports: [CommonModule,SharedModule,RouterModule],
   templateUrl: './home.html',
   styleUrl: './home.scss',
   providers:[ProductService,CategoryService]

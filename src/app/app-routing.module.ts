@@ -20,8 +20,8 @@ const routes: Routes = [
         loadComponent: () => import('./demo/home/home').then((c) => c.Home)
       },
       {
-        path: 'basic',
-        loadChildren: () => import('./demo/ui-elements/ui-basic/ui-basic.module').then((m) => m.UiBasicModule)
+        path: 'categories',
+        loadChildren: () => import('./demo/categories/categories-module').then((m) => m.CategoriesModule)
       },
       {
         path: 'forms',

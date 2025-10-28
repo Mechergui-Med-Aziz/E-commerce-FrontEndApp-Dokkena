@@ -14,9 +14,9 @@
                   <h1 class="slide-title">{{ product.name }}</h1>
                   <p class="slide-description">{{ product.description }}</p>
                   <div class="slide-pricing">
-                    <span class="current-price">{{ product.price }}€</span>
+                    <span class="current-price">{{ product.price }}DT</span>
                     <span *ngIf="product.originalPrice" class="original-price">
-                      {{ product.originalPrice }}€
+                      {{ product.originalPrice }}DT
                     </span>
                     <span *ngIf="product.originalPrice" class="discount-badge">
                       -{{ getDiscountPercentage(product) }}%
@@ -63,8 +63,8 @@
             <div class="category-overlay">
               <h3 class="category-name">{{ category.name }}</h3>
               <p class="category-count">{{ category.productCount }} produits</p>
-              <button class="category-button">Explorer</button>
-            </div>
+              <button class="category-button" [routerLink]="['/categories', category.name.toLowerCase()]">Explorer</button>
+        </div>
           </div>
         </div>
       </div>
@@ -105,9 +105,9 @@
               </div>
               
               <div class="product-pricing">
-                <span class="current-price">{{ product.price }}€</span>
+                <span class="current-price">{{ product.price }}DT</span>
                 <span *ngIf="product.originalPrice" class="original-price">
-                  {{ product.originalPrice }}€
+                  {{ product.originalPrice }}DT
                 </span>
               </div>
               

@@ -9,7 +9,6 @@ import { NavigationItem, NavigationItems } from 'src/app/theme/layout/nav-elemen
 import { SharedModule } from '../../shared.module';
 
 interface titleType {
-  // eslint-disable-next-line
   url: string | boolean | any | undefined;
   title: string;
   breadcrumbs: unknown;
