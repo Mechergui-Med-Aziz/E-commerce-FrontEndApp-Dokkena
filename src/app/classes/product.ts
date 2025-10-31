@@ -1,4 +1,16 @@
 export class Product {
+    public get image2(): string {
+        return this._image2;
+    }
+    public set image2(value: string) {
+        this._image2 = value;
+    }
+    public get image3(): string {
+        return this._image3;
+    }
+    public set image3(value: string) {
+        this._image3 = value;
+    }
     public get originalPrice(): number {
         return this._originalPrice;
     }
@@ -66,6 +78,8 @@ export class Product {
         private _name: string,
         private _price: number,
         private _image: string,
+        private _image2: string,
+        private _image3: string,
         private _category: string,
         private _description: string,
         private _isFeatured: boolean,

@@ -38,6 +38,12 @@ const routes: Routes = [
       },{
         path: 'product-list',
         loadComponent: () => import('./demo/product-list/product-list').then((c) => c.ProductList)
+      },{
+        path: 'product-details',
+        loadComponent: () => import('./demo/product-details/product-details').then((c) => c.ProductDetails)
+      },{
+        path: 'checkout',
+        loadComponent: () => import('./demo/check-out/check-out').then((c) => c.CheckOut)
       }
     ]
   },

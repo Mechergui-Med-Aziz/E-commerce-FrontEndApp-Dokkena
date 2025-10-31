@@ -1,0 +1,68 @@
+
+<div class="checkout-container">
+
+    <h1 class="checkout-title">🛒 Récapitulatif de votre panier</h1>
+  
+    <div class="checkout-grid">
+  
+      <div class="cart-items">
+  
+        <div class="cart-item" *ngFor="let item of cartItems; let i = index">
+  
+          <img [src]="item.product.image" class="item-img" alt="{{item.product.name}}">
+  
+          <div class="item-details">
+            <h2>{{ item.product.name }}</h2>
+            <p class="description">{{ item.product.description }}</p>
+            
+            <div class="price-row">
+              <span class="unit-price">{{ item.product.price }} DT</span>
+            </div>
+  
+            <div class="quantity-box">
+              <button (click)="decreaseQty(i)">-</button>
+              <input type="number" value="{{item.quantity}}"  min="1">
+              <button (click)="increaseQty(i)">+</button>
+            </div>
+          </div>
+  
+          <div class="subtotal">
+            {{ item.product.price * item.quantity }} DT
+          </div>
+  
+          <button class="delete-btn" (click)="removeItemFromBasket(item.product.id)">🗑️</button>
+        </div>
+  
+        <div *ngIf="cartItems.length === 0" class="empty-cart">
+          Votre panier est vide 😥
+        </div>
+      </div>
+  
+      <!-- ✅ Récapitulatif -->
+      <div class="summary-box">
+  
+        <h2>Récapitulatif</h2>
+  
+        <div class="summary-line">
+          <span>Sous-total</span>
+          <span>{{ getSubtotal() }} DT</span>
+        </div>
+  
+        <div class="summary-line">
+          <span>Livraison</span>
+          <span>{{ deliveryFee }} DT</span>
+        </div>
+  
+        <div class="summary-total">
+          <span>Total</span>
+          <span>{{ getTotal() }} DT</span>
+        </div>
+  
+        <button class="pay-btn">
+          ✅ Procéder au paiement
+        </button>
+  
+      </div>
+    </div>
+  </div>
+  

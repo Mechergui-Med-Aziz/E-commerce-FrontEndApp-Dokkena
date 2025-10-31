@@ -5,7 +5,9 @@ import { Product } from 'src/app/classes/product';
 import { Category } from 'src/app/classes/category';
 import { ProductService } from 'src/app/services/product-service';
 import { CategoryService } from 'src/app/services/category-service';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { CartItem } from 'src/app/classes/cart-item';
+import { BasketService } from 'src/app/services/basket-service';
 
 @Component({
   selector: 'app-home',
@@ -21,8 +23,12 @@ export class Home implements OnInit {
   currentSlide = 0;
   sliderInterval: undefined | ReturnType<typeof setInterval>;
   productsOnSale:Product[]=[];
+  //basket:CartItem[]=[];
+  showToast = false;
+  toastMessage = '';
+  toastType='success';
 
- constructor(private productService:ProductService,private categoryService:CategoryService) { }
+ constructor(private productService:ProductService,private categoryService:CategoryService, private basketService:BasketService,private router:Router) { }
 
 
   ngOnInit() {
@@ -31,6 +37,7 @@ export class Home implements OnInit {
       console.log(this.products);
       this.productsOnSale=data.filter(product=>product.isOnSale==true);
       console.log(this.productsOnSale);
+      //this.showToastMessage('Test du toast');
     });
 
     this.categoryService.getAllCategories().subscribe((data: Category[]) => {
@@ -48,12 +55,6 @@ export class Home implements OnInit {
     }
   }
 
-  deleteobject(id:number){
-    this.productService.deleteProduct(id).subscribe(()=>{
-      this.products=this.products.filter(product=>product.id!==id);
-      console.log(this.products);
-    });
-  }
 
   // Méthodes pour le slider
   startAutoSlide() {
@@ -94,6 +95,31 @@ export class Home implements OnInit {
     const emptyStars = 5 - fullStars - halfStar;
     
     return '★'.repeat(fullStars) + '½'.repeat(halfStar) + '☆'.repeat(emptyStars);
+  }
+
+  addToBasket(product: Product) {
+      
+    if(!this.basketService.addToBasket(product)){
+      this.toastMessage = 'Ce produit est déja dans votre panier.';
+      this.toastType="error";
+    }
+    else{
+      this.toastMessage = 'Produit ajouté au panier.';
+      this.toastType="success"
+    }
+    this.showToastMessage(this.toastMessage);
+  }
+  showToastMessage(message: string): void {
+    this.toastMessage = message;
+    this.showToast = true;
+
+    setTimeout(() => {
+      this.showToast = false;
+    }, 3000);
+  }
+
+  openDetails(product: Product) {
+    this.router.navigate(['/product-details'], { state: {data: product} });
   }
 }
 

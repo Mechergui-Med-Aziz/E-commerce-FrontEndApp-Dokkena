@@ -1,4 +1,3 @@
-<p>electronic works!</p>
 <section class="featured-section">
     <div class="container">
         <h2 class="section-title">Tous les produits de la catégorie Eléctronique</h2>
@@ -18,7 +17,7 @@
                 -{{ getDiscountPercentage(product) }}%
               </span>
             </div>
-            <button class="quick-view-btn" (click)="deleteobject(product.id)">👁️ Vue rapide</button>
+            <button class="quick-view-btn" (click)="openDetails(product)">👁️ Vue rapide</button>
           </div>
           
           <div class="product-info">
@@ -37,9 +36,25 @@
               </span>
             </div>
             
-            <button class="add-to-cart-btn">🛒 Ajouter au panier</button>
+            <button class="add-to-cart-btn" (click)="addToBasket(product)">🛒 Ajouter au panier</button>
           </div>
         </div>
       </div>
     </div>
   </section>
+
+  @if(showToast){
+    <div id="toastMessage" [ngClass]="toastType">
+      <div class="toast-icon">
+        <i class="fa" [ngClass]="{
+          'fa-check-circle': toastType == 'success',
+          'fa-exclamation-circle': toastType == 'error'}"></i>
+  </div>
+  <div class="toast-text">
+    {{ toastMessage }}
+  </div>
+  <div class="toast-close" (click)="showToast = false">
+    <i class="fa fa-times"></i>
+  </div>
+</div>
+  }

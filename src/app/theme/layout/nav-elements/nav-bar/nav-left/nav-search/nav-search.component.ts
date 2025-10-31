@@ -1,5 +1,6 @@
 // angular import
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 // project import
 import { SharedModule } from 'src/app/theme/shared/shared.module';
@@ -17,12 +18,13 @@ export class NavSearchComponent {
   searchWidthString: string;
 
   // constructor
-  constructor() {
+  constructor(private route:Router) {
     this.searchWidth = 0;
   }
 
   // public method
   searchOn() {
+    console.log(this.route.url);
     document.querySelector('#main-search').classList.add('open');
     this.searchInterval = setInterval(() => {
       if (this.searchWidth >= 170) {

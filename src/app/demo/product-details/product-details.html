@@ -1,0 +1,119 @@
+<div class="product-details" *ngIf="data">
+    <div class="product-container">
+  
+      <!-- Galerie d'images -->
+      <div class="product-gallery">
+        <div class="main-image">
+          <img 
+            [src]="selectedImage || data.image" 
+            [alt]="data.name"
+            (error)="handleImageError($event)"
+          >
+        </div>
+  
+        <div class="image-thumbnails" *ngIf="hasMultipleImages()">
+          <div 
+            class="thumbnail" 
+            [class.active]="selectedImage === data.image"
+            (click)="selectImage(data.image)"
+          >
+            <img [src]="data.image" [alt]="data.name + ' - 1'" (error)="handleImageError($event)">
+          </div>
+  
+          <div 
+            class="thumbnail" 
+            *ngIf="data.image2"
+            [class.active]="selectedImage === data.image2"
+            (click)="selectImage(data.image2)"
+          >
+            <img [src]="data.image2" [alt]="data.name + ' - 2'" (error)="handleImageError($event)">
+          </div>
+  
+          <div 
+            class="thumbnail" 
+            *ngIf="data.image3"
+            [class.active]="selectedImage === data.image3"
+            (click)="selectImage(data.image3)"
+          >
+            <img [src]="data.image3" [alt]="data.name + ' - 3'" (error)="handleImageError($event)">
+          </div>
+        </div>
+      </div>
+  
+      <!-- Infos -->
+      <div class="product-info">
+  
+        <div class="product-header">
+          <span class="category-badge">{{ data.category }}</span>
+          <div class="badges">
+            <span class="badge featured" *ngIf="data.isFeatured">⭐ Produit vedette</span>
+            <span class="badge sale" *ngIf="data.isOnSale">🔥 Promotion</span>
+          </div>
+        </div>
+  
+        <h1 class="product-name">{{ data.name }}</h1>
+  
+        <div class="rating">
+          <div class="stars">
+            <span 
+              class="star" 
+              *ngFor="let star of [1,2,3,4,5]"
+              [class.filled]="star <= getStarRating()"
+              [class.half]="star === getStarRating() + 0.5"
+            >★</span>
+          </div>
+          <span class="rating-value">({{ data.rating }})</span>
+        </div>
+  
+        <div class="pricing">
+          <span class="current-price">{{ data.price }} DT</span>
+          <span class="original-price" *ngIf="data.isOnSale">{{ data.originalPrice }} DT</span>
+          <span class="discount" *ngIf="data.isOnSale">{{ calculateDiscount() }}%</span>
+        </div>
+  
+        <div class="description">
+          <h3>Description</h3>
+          <p>{{ data.description }}</p>
+        </div>
+  
+        <div class="product-actions">
+          
+  
+          <button class="btn-primary" (click)="addToBasket(data)">🛒 Ajouter au panier</button>
+        </div>
+  
+        <div class="additional-info">
+          <div class="info-item">
+            <span class="label">📦 Livraison :</span>
+            <span>2-3 jours</span>
+          </div>
+          <div class="info-item">
+            <span class="label">↩️ Retour :</span>
+            <span>15 jours</span>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="loading" *ngIf="!data">
+    Chargement du produit...
+  </div>
+
+  @if(showToast){
+    <div id="toastMessage" [ngClass]="toastType">
+      <div class="toast-icon">
+        <i class="fa" [ngClass]="{
+          'fa-check-circle': toastType == 'success',
+          'fa-exclamation-circle': toastType == 'error'}"></i>
+  </div>
+  <div class="toast-text">
+    {{ toastMessage }}
+  </div>
+  <div class="toast-close" (click)="showToast = false">
+    <i class="fa fa-times"></i>
+  </div>
+</div>
+  }
+  

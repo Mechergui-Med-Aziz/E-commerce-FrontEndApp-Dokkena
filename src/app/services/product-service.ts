@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import {  Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Product } from '../classes/product';
+import { CartItem } from '../classes/cart-item';
 
 
 @Injectable({
@@ -9,8 +10,11 @@ import { Product } from '../classes/product';
 })
 export class ProductService {
   private apiUrl="http://localhost:3000/product"
-  //private http=inject(HttpClient)
-  constructor(private http:HttpClient) { }
+  
+ 
+  constructor(private http:HttpClient) {
+    
+   }
 
   // eslint-disable-next-line @angular-eslint/prefer-inject
   //constructor(private httpq:HttpClient) { }
