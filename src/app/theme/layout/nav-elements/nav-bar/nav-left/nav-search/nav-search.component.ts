@@ -1,50 +1,61 @@
-// angular import
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Component, OnDestroy } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 // project import
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 
 @Component({
   selector: 'app-nav-search',
-  imports: [SharedModule],
+  imports: [SharedModule, CommonModule],
   templateUrl: './nav-search.component.html',
   styleUrls: ['./nav-search.component.scss']
 })
-export class NavSearchComponent {
-  // public props
+export class NavSearchComponent implements OnDestroy {
   searchInterval;
   searchWidth: number;
   searchWidthString: string;
+  allowed: boolean = true;
+  allowedRoutes: string[] = ['/home','/categories/beauty','/categories/electronic','/categories/fashion','/categories/game','/categories/kitchen','/categories/sport','/product-list'];
 
-  // constructor
-  constructor(private route:Router) {
+  routerSub: Subscription;
+
+  constructor(private router: Router) {
     this.searchWidth = 0;
+
+    this.routerSub = this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        const url = event.urlAfterRedirects;
+        this.allowed = this.allowedRoutes.includes(url);
+        this.searchOff();
+      }
+    });
   }
 
-  // public method
   searchOn() {
-    console.log(this.route.url);
     document.querySelector('#main-search').classList.add('open');
     this.searchInterval = setInterval(() => {
-      if (this.searchWidth >= 170) {
-        clearInterval(this.searchInterval);
-        // return false;
-      }
-      this.searchWidth = this.searchWidth + 30;
+      if (this.searchWidth >= 170) clearInterval(this.searchInterval);
+      this.searchWidth += 30;
       this.searchWidthString = this.searchWidth + 'px';
     }, 35);
+    let currentUrl=this.router.url
+    console.log(currentUrl)
   }
 
   searchOff() {
     this.searchInterval = setInterval(() => {
       if (this.searchWidth <= 0) {
-        document.querySelector('#main-search').classList.remove('open');
+        document.querySelector('#main-search')?.classList.remove('open');
         clearInterval(this.searchInterval);
-        // return false;
       }
-      this.searchWidth = this.searchWidth - 30;
+      this.searchWidth -= 30;
       this.searchWidthString = this.searchWidth + 'px';
     }, 35);
+  }
+
+  ngOnDestroy() {
+    this.routerSub.unsubscribe();
   }
 }

@@ -183,5 +183,89 @@
     &:hover {
       background: #0b5fcc;
     }
+  
+    &:disabled {
+      background: #c5c5c5 !important;
+      cursor: not-allowed;
+      color: #666;
+      box-shadow: none;
+    }
   }
+
+  /* Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+
+/* Modal box */
+.modal-box {
+  background: #fff;
+  width: 32%;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  border-top: 4px solid #ef4444; /* rouge */
+  text-align: center;
+  animation: fadeIn 0.25s ease-in-out;
+}
+
+/* Title */
+.modal-box h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 10px;
+}
+
+/* Message text */
+.modal-box p {
+  color: #4b5563;
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+
+/* Buttons container */
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+/* Button Style */
+.btn-close {
+  background: #9ca3af;
+  color: #fff;
+  padding: 10px 24px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background .2s ease;
+}
+
+.btn-close:hover {
+  background: #6b7280;
+}
+
+/* Icon color */
+.modal-icon {
+  color: #ef4444;
+  margin-bottom: 15px;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+  
   

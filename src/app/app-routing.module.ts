@@ -2,8 +2,9 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 // project import
-import { GuestComponent } from './theme/layout/guest/guest.component';
+import { Guest } from './theme/layout/guest/guest';
 import { NavElements } from './theme/layout/nav-elements/nav-elements';
+import { profileGuardGuard } from './guards/profile-guard-guard';
 
 const routes: Routes = [
   {
@@ -22,20 +23,8 @@ const routes: Routes = [
       {
         path: 'categories',
         loadChildren: () => import('./demo/categories/categories-module').then((m) => m.CategoriesModule)
-      },
+      },      
       {
-        path: 'forms',
-        loadComponent: () => import('./demo/pages/form-element/form-element').then((c) => c.FormElement)
-      },
-      
-      {
-        path: 'apexchart',
-        loadComponent: () => import('./demo/pages/core-chart/apex-chart/apex-chart.component').then((c) => c.ApexChartComponent)
-      },
-      {
-        path: 'sample-page',
-        loadComponent: () => import('./demo/extra/sample-page/sample-page.component').then((c) => c.SamplePageComponent)
-      },{
         path: 'product-list',
         loadComponent: () => import('./demo/product-list/product-list').then((c) => c.ProductList)
       },{
@@ -44,12 +33,18 @@ const routes: Routes = [
       },{
         path: 'checkout',
         loadComponent: () => import('./demo/check-out/check-out').then((c) => c.CheckOut)
+      },{
+        path:'payment',
+        loadComponent: () => import('./demo/payment/payment').then((c) => c.Payment)
+      },{
+        path:'profile', canActivate: [profileGuardGuard],
+        loadComponent: () => import('./demo/profile/profile').then((c) => c.Profile)
       }
     ]
   },
   {
     path: '',
-    component: GuestComponent,
+    component: Guest,
     children: [
       {
         path: 'login',

@@ -1,0 +1,13 @@
+<div class="payment-loading" *ngIf="!paymentSuccess">
+    <div class="spinner"></div>
+    <p>Traitement du paiement... ⏳</p>
+  </div>
+  
+
+  <div class="success-box" *ngIf="paymentSuccess">
+    <h2>✅ Paiement réussi !</h2>
+    <p>Merci pour votre achat 🎉</p>
+  
+    <button [routerLink]="['/home']">Retour à la boutique</button>
+  </div>
+  

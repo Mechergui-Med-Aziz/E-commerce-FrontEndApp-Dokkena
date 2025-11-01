@@ -16,8 +16,6 @@ export class ProductService {
     
    }
 
-  // eslint-disable-next-line @angular-eslint/prefer-inject
-  //constructor(private httpq:HttpClient) { }
 
   getAllProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(this.apiUrl);

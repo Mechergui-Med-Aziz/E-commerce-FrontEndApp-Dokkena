@@ -1,18 +1,22 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CartItem } from 'src/app/classes/cart-item';
+import { AuthService } from 'src/app/services/auth-service';
 import { BasketService } from 'src/app/services/basket-service';
 
 @Component({
   selector: 'app-check-out',
   imports: [CommonModule],
   templateUrl: './check-out.html',
-  styleUrl: './check-out.scss'
+  styleUrl: './check-out.scss',
+  providers: [BasketService,AuthService],
 })
 export class CheckOut implements OnInit {
-  constructor(private basketService:BasketService) {}
+  constructor(private basketService:BasketService,private router:Router,private authService:AuthService) {}
   cartItems:CartItem[]=[];
   deliveryFee = 7;
+  isLoggedIn=false;
 
   
 
@@ -51,6 +55,20 @@ getTotal() {
 
 removeItemFromBasket(productId: number) {
   this.basketService.removeItem(productId);
+}
+
+pay(){
+  if(this.authService.isAuthenticated()){
+    this.router.navigate(['/payment']);
+    }
+    else{
+    this.isLoggedIn = true;
+    }
+}
+
+closeLoginModal() {
+  this.isLoggedIn = false;
+  this.router.navigate(['/login']);
 }
 
 }
