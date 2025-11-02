@@ -73,7 +73,6 @@ datta-able-angular/
 │   │   ├── app-routing.module.ts<br>
 │   ├── assets/<br>
 │   ├── environments/<br>
-│   ├── fake-data/<br>
 │   ├── scss/ ...<br>
 ├── angular.json<br>
 ├── package.json<br>
@@ -104,6 +103,7 @@ datta-able-angular/
  
 
  
+
 
 
 
