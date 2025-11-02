@@ -96,13 +96,18 @@ datta-able-angular/
 ✅ Processus de commande
 
 🖼️ Captures d’écran
-<div align="center"> <img width="1352" height="639" src="https://github.com/user-attachments/assets/6352df0f-3b7a-4232-991f-ccac6e190814" /> <img width="1351" height="641" src="https://github.com/user-attachments/assets/2510a8b5-4173-40e1-a018-687ba7e08a9f" /> <img width="1585" height="772" src="https://github.com/user-attachments/assets/76fdc272-2ffc-41eb-be04-0a0e66ccbf5c" /> <img width="1585" height="775" src="https://github.com/user-attachments/assets/e295ac47-c4e2-490b-803a-faf251b642f4" /> <img width="1588" height="779" src="https://github.com/user-attachments/assets/8ef550fc-e4f1-4a58-bfc1-55c4aa758798" /> <img width="1586" height="767" src="https://github.com/user-attachments/assets/0e0203cd-3457-42ad-aa65-af8098f3a945" /> </div>
+<div align="center"> <img width="1352" height="639" src="https://github.com/user-attachments/assets/6352df0f-3b7a-4232-991f-ccac6e190814" /> <img width="1351" height="641" src="https://github.com/user-attachments/assets/2510a8b5-4173-40e1-a018-687ba7e08a9f" /> <img width="1585" height="772" src="https://github.com/user-attachments/assets/76fdc272-2ffc-41eb-be04-0a0e66ccbf5c" /> <img width="1585" height="775" src="https://github.com/user-attachments/assets/e295ac47-c4e2-490b-803a-faf251b642f4" /> <img width="1588" height="779" src="https://github.com/user-attachments/assets/8ef550fc-e4f1-4a58-bfc1-55c4aa758798" /> <img width="1586" height="767" src="https://github.com/user-attachments/assets/0e0203cd-3457-42ad-aa65-af8098f3a945" /> </div><br>
+
+
+Pour tout support ou information, contactez-moi :<br>
+📧 moazizmechergui@gmail.com
 
 
 
  
 
  
+
 
 
 
