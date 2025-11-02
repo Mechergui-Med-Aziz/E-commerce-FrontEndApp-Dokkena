@@ -20,7 +20,6 @@ Tailwind CSS
 
 📂 Structure du projet
 
-datta-able-angular/ 
 ├── src/<br>
 │   ├── app/<br>
 │   │   ├── classes/<br>
@@ -107,6 +106,7 @@ Pour tout support ou information, contactez-moi :<br>
  
 
  
+
 
 
 
