@@ -47,8 +47,9 @@ export class BreadcrumbsComponent {
         const breadcrumbList = this.filterNavigation(this.navigations, activeLink);
         console.log(breadcrumbList);
         this.navigationList = breadcrumbList;
-        const title = breadcrumbList[breadcrumbList.length - 1]?.title || 'Welcome';
-        this.titleService.setTitle(title + ' | Berry Angular Admin Template');
+        let route=(this.route.url).substring(1).charAt(0).toUpperCase() + (this.route.url).substring(2);
+        const title = breadcrumbList[breadcrumbList.length - 1]?.title || route;
+        this.titleService.setTitle(title + ' | Dokkena');
       }
     });
   }
