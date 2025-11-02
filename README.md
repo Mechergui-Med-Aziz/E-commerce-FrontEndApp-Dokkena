@@ -1,128 +1,108 @@
-﻿# E-commerce-FrontEndApp-Dokkena
- 
-Description du projet :
+﻿🛍️ E-commerce FrontEnd App - Dokkena
+📌 Description du projet
+
 Ce projet est une application web e-commerce développée avec Angular, offrant une interface moderne, responsive et intuitive.
-Elle permet aux utilisateurs de parcourir une large sélection de produits, consulter leurs détails, gérer leur panier et finaliser leurs achats.
+Elle permet aux utilisateurs de parcourir une large sélection de produits, afficher les détails, gérer leur panier et finaliser leurs achats.
 
-L'application inclut un système d’authentification, une navigation fluide et sécurisée, ainsi qu’une gestion dynamique des produits et du panier.
-Grâce à Tailwind CSS, le design est élégant, performant et adapté à tous les écrans.
+L’application intègre un système d’authentification sécurisé, une navigation fluide ainsi qu’une gestion dynamique du panier et des produits.
 
-Ce frontend consomme une API pour récupérer les produits, les utilisateurs et gérer les actions comme l’inscription, la connexion, et les opérations du panier.
+Grâce à Tailwind CSS, le design est élégant, optimisé et adapté à tous types d’écrans.
 
-Technologie utilisés: 
+Ce frontend consomme une API externe afin de récupérer les produits, gérer les utilisateurs, l’inscription, la connexion, ainsi que les opérations liées au panier.
+
+🛠️ Technologies utilisées
+
 Angular 20
-Json Web Server
+
+JSON Web Server
+
 Tailwind CSS
 
-Structure du projet:
+📂 Structure du proje
 
 datta-able-angular/ 
 ├── src/
 │   ├── app/
-|   |   |──classes/
-│   │   |    |├── cart-item.ts
-│   │   |    |├── category.ts
-│   │   |    |├── product.ts
-│   │   |    |├── user.ts
+│   │   ├── classes/
+│   │   │   ├── cart-item.ts
+│   │   │   ├── category.ts
+│   │   │   ├── product.ts
+│   │   │   ├── user.ts
 │   │   ├── demo/ 
-│   │   |    |├── checkout
-│   │   |    |├── categories
-│   │   │    │  ├── beauty/
-│   │   │    │  ├── electronic
-│   │   │    │  ├── fashion
-│   │   │    │  ├── game
-│   │   │    │  ├── kitchen
-│   │   │    │  ├── sport
-│   │   |    |├── home
-│   │   |    |├── pages
-│   │   │    │  ├── auth-signin
-│   │   │    │  ├── auth-signup
-│   │   |    |├── payment
-│   │   |    |├── product-details
-│   │   |    |├── product-list
-│   │   |    |├── profile
-│   │   ├── guards/ 
-│   │   |    |├── profile-guard
+│   │   │   ├── checkout
+│   │   │   ├── categories
+│   │   │   │   ├── beauty/
+│   │   │   │   ├── electronic/
+│   │   │   │   ├── fashion/
+│   │   │   │   ├── game/
+│   │   │   │   ├── kitchen/
+│   │   │   │   ├── sport/
+│   │   │   ├── home/
+│   │   │   ├── pages/
+│   │   │   │   ├── auth-signin/
+│   │   │   │   ├── auth-signup/
+│   │   │   ├── payment/
+│   │   │   ├── product-details/
+│   │   │   ├── product-list/
+│   │   │   ├── profile/
+│   │   ├── guards/
+│   │   │   ├── profile-guard
 │   │   ├── services/ 
-│   │   |    |  ├── auth-service
-│   │   |    |  ├── basket-service
-│   │   |    |  ├── category-service
-│   │   |    |  ├── product-service
+│   │   │   ├── auth-service
+│   │   │   ├── basket-service
+│   │   │   ├── category-service
+│   │   │   ├── product-service
 │   │   ├── theme/
 │   │   │   ├── layout/
-│   │   │   │   ├── guest
+│   │   │   │   ├── guest/
 │   │   │   │   ├── nav-elements/
 │   │   │   │   │   ├── footer/
 │   │   │   │   │   ├── nav-bar/
-│   │   │   │   │   │  ├── nav-right
+│   │   │   │   │   │   ├── nav-right/
 │   │   │   │   │   ├── navigation/
-│   │   │   │   │   │  ├── nav-content
-│   │   │   │   │   │  ├── nav-logo
+│   │   │   │   │   │   ├── nav-content/
+│   │   │   │   │   │   ├── nav-logo/
 │   │   │   ├── shared/
 │   │   │   │   ├── components/
-│   │   │   │   │   ├── breadcrumbs
-│   │   │   │   │   ├── full-screen
-│   │   │   │   │   ├── spinner
+│   │   │   │   │   ├── breadcrumbs/
+│   │   │   │   │   ├── full-screen/
+│   │   │   │   │   ├── spinner/
 │   │   │   │   ├── shared-module.ts
-│   │   |    ├── app.component.html
-│   │   |    ├── app.component.scss
-│   │   |    ├── app.component.ts
-│   │   |    ├── app.config.ts
-│   │   |    ├── app-routing.module.ts
+│   │   ├── app.component.*
+│   │   ├── app.config.ts
+│   │   ├── app-routing.module.ts
 │   ├── assets/
 │   ├── environments/
 │   ├── fake-data/
-│   ├── scss/
-│   │   ├── fonts/
-│   │   ├── layout/
-│   │   │   ├── dark.scss
-│   │   │   ├── rtl.scss
-│   │   ├── menu/
-│   │   │   ├── menu-list.scss
-│   │   ├── mixins/
-│   │   │   ├── alert.scss
-│   │   │   ├── ...
-│   │   ├── other/
-│   │   │   ├── calendar.scss
-│   │   │   ├── ...
-│   │   ├── plugins/
-│   │   │   ├── adv-notification.scss
-│   │   │   ├── ...
-│   │   ├── theme-elements/
-│   │   │   ├── authentication.scss
-│   │   │   ├── ...
-│   │   ├── widget/
-│   │   │   ├── widget.scss
-│   │   ├── custom.scss
-│   │   ├── variables.scss
-│   │   ├── ...
-│   ├── _index.html
-│   ├── _main.ts
-│   ├── ...
+│   ├── scss/ ...
 ├── angular.json
 ├── package.json
-├── ...
-
-
-Fontionnalités implémentées:
-1-pageD'accueil
-2-Catalogue de produits
-3-Détails Produit
-4-panier d'achat
-5-Authentification
-6-espace utilisateur
-7-processus de commande
-
-Captures d'écran du projet
-
-<img width="1231" height="516" alt="image" src="https://github.com/user-attachments/assets/1bdf0d53-dcd7-4059-90e8-1ceef8528456" />
 
 
 
+🚀 Fonctionnalités implémentées
+
+✅ Page d'accueil
+
+✅ Catalogue de produits
+
+✅ Page Détails Produit
+
+✅ Panier d'achat
+
+✅ Authentification et inscription
+
+✅ Espace utilisateur
+
+✅ Processus de commande
+
+🖼️ Captures d’écran
+<div align="center"> <img width="1352" height="639" src="https://github.com/user-attachments/assets/6352df0f-3b7a-4232-991f-ccac6e190814" /> <img width="1351" height="641" src="https://github.com/user-attachments/assets/2510a8b5-4173-40e1-a018-687ba7e08a9f" /> <img width="1585" height="772" src="https://github.com/user-attachments/assets/76fdc272-2ffc-41eb-be04-0a0e66ccbf5c" /> <img width="1585" height="775" src="https://github.com/user-attachments/assets/e295ac47-c4e2-490b-803a-faf251b642f4" /> <img width="1588" height="779" src="https://github.com/user-attachments/assets/8ef550fc-e4f1-4a58-bfc1-55c4aa758798" /> <img width="1586" height="767" src="https://github.com/user-attachments/assets/0e0203cd-3457-42ad-aa65-af8098f3a945" /> </div>
 
 
 
  
 
  
+
 
