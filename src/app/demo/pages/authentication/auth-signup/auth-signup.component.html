@@ -11,15 +11,32 @@
         <div class="mb-4">
           <i class="feather icon-user-plus auth-icon"></i>
         </div>
+        <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
         <h3 class="mb-4">Sign up</h3>
         <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Username" />
+          <input type="text" class="form-control" placeholder="Prénom" formControlName="firstName"/>
         </div>
         <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="Email" />
+          <input type="text" class="form-control" placeholder="Nom" formControlName="lastName" />
+        </div>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="CIN" formControlName="cin" />
+        </div>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Phone" formControlName="phone" />
+        </div>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Adresse" formControlName="adress"/>
+        </div>
+        <div class="input-group mb-3">
+          <input type="email" class="form-control" placeholder="Email" formControlName="email"/>
         </div>
         <div class="input-group mb-4">
-          <input type="password" class="form-control" placeholder="Password" />
+          <input type="password" class="form-control" placeholder="Password" formControlName="password" />
+        </div>
+
+        <div class="input-group mb-4">
+          <input type="password" class="form-control" placeholder="Confirm Password" formControlName="confirmPassword" />
         </div>
         <div class="form-group text-start mb-4">
           <div class="checkbox checkbox-fill d-inline">
@@ -37,12 +54,33 @@
             </label>
           </div>
         </div>
-        <button class="btn btn-primary shadow-2 mb-4">Sign up</button>
+        <button class="btn btn-primary shadow-2 mb-4" [disabled]="registerForm.invalid" >Sign up</button>
         <p class="mb-0 text-muted">
           Already have an account?
           <a [routerLink]="['/login']">Log in</a>
         </p>
+      </form>
       </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="showMessage" class="modal-overlay">
+  <div class="modal-box">
+
+   @if (messageType=='success') { <div class="modal-icon">
+      ✅
+    </div>}
+    @else{<div class="modal-icon">
+      ⚠️
+    </div>
+  }
+
+    <h2>SignUp @if(messageType=="error"){échouée} @else {réussi}</h2>
+    <p class="modal-text">{{messageText}}</p>
+
+    <div class="modal-actions">
+      <button class="btn-close" (click)="closeRegisterModal()">Compris</button>
     </div>
   </div>
 </div>

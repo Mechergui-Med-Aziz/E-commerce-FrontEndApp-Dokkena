@@ -3,9 +3,49 @@
       <h2 class="section-title">Toutes les Produits </h2>
       <p class="section-subtitle">Découvrez toutes nos produits du moment</p>
       
+      <div class="products-controls">
+        <div class="search-container">
+          <div class="search-input-wrapper">
+            <i class="fa fa-search search-icon"></i>
+            <input 
+              type="text" 
+              class="search-input" 
+              placeholder="Rechercher un produit..."
+              [(ngModel)]="searchQuery"
+              (input)="filterProducts()">
+            <button *ngIf="searchQuery" class="clear-search" (click)="clearSearch()">
+              <i class="fa fa-times"></i>
+            </button>
+          </div>
+        </div>
+        
+        <div class="sort-container">
+          <div class="sort-select-wrapper">
+            <i class="fa fa-sort sort-icon"></i>
+            <select 
+              class="sort-select" 
+              [(ngModel)]="selectedSortOption"
+              (change)="sortProducts()">
+              <option value="---">-----</option>
+              <option value="price-asc">Prix: Croissant</option>
+              <option value="price-desc">Prix: Décroissant</option>
+              <option value="rating">Meilleures notes</option>
+              <option value="name">Nom: A-Z</option>
+              <option value="sale">En promotion</option>
+            </select>
+            <i class="fa fa-chevron-down select-arrow"></i>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Résultats de recherche -->
+      <div *ngIf="searchQuery" class="search-results-info">
+        <p>{{ filteredProducts.length }} produit(s) trouvé(s) pour "<strong>{{ searchQuery }}</strong>"</p>
+        <button class="clear-results-btn" (click)="clearSearch()">Effacer la recherche</button>
+      </div>
       <div class="products-grid">
         <div 
-          *ngFor="let product of products" 
+          *ngFor="let product of displayedProducts" 
           class="product-card"
           [class.on-sale]="product.isOnSale">
           
@@ -38,6 +78,12 @@
             <button class="add-to-cart-btn" (click)="addToBasket(product)">🛒 Ajouter au panier</button>
           </div>
         </div>
+      </div>
+      <div *ngIf="displayedProducts.length === 0" class="no-products-message">
+        <i class="fa fa-search no-results-icon"></i>
+        <h3>Aucun produit trouvé</h3>
+        <p>Essayez de modifier vos critères de recherche ou de tri.</p>
+        <button class="reset-filters-btn" (click)="resetFilters()">Réinitialiser les filtres</button>
       </div>
     </div>
   </section>

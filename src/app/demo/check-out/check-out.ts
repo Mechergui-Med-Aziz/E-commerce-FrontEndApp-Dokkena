@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CartItem } from 'src/app/classes/cart-item';
 import { AuthService } from 'src/app/services/auth-service';
 import { BasketService } from 'src/app/services/basket-service';
 
 @Component({
   selector: 'app-check-out',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './check-out.html',
   styleUrl: './check-out.scss',
   providers: [BasketService,AuthService],
@@ -69,6 +69,10 @@ pay(){
 closeLoginModal() {
   this.isLoggedIn = false;
   this.router.navigate(['/login']);
+}
+
+closeModal() {
+  this.isLoggedIn = false;
 }
 
 }

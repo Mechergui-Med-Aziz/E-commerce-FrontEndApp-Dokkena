@@ -18,6 +18,8 @@ export class Profile {
     id:0,
     firstName: '',
     lastName: '',
+    cin: 0,
+    phone: 0,
     email: '',
     adress: ''
   };

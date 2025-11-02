@@ -76,70 +76,187 @@
     }
   }
   
-
   .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.45);
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
-    backdrop-filter: blur(2px);
     z-index: 1000;
+    animation: fadeIn 0.3s ease-out;
+  
+    .modal-box {
+      background: white;
+      border-radius: 12px;
+      padding: 2.5rem 2rem;
+      max-width: 420px;
+      width: 90%;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      animation: slideUp 0.3s ease-out;
+  
+      // Variante succès
+      &.success-modal {
+        .modal-icon {
+          color: #4caf50;
+          background: #e8f5e9;
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 1.5rem;
+          font-size: 2.5rem;
+          animation: successPulse 2s ease-in-out;
+        }
+  
+        h2 {
+          color: #2e7d32;
+          margin-bottom: 1rem;
+          font-size: 1.5rem;
+          font-weight: 600;
+        }
+  
+        .modal-text {
+          color: #666;
+          line-height: 1.5;
+          margin-bottom: 2rem;
+          font-size: 1rem;
+        }
+  
+        .modal-actions {
+          display: flex;
+          justify-content: center;
+  
+          .btn-success {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 0.75rem 2.5rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+  
+            &:hover {
+              background: #388e3c;
+              transform: translateY(-2px);
+              box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+            }
+  
+            &:active {
+              transform: translateY(0);
+            }
+  
+            &:focus {
+              outline: 2px solid #a5d6a7;
+              outline-offset: 2px;
+            }
+          }
+        }
+      }
+    }
   }
   
-  .modal-box {
-    background: #fff;
-    width: 360px;
-    padding: 25px;
-    border-radius: 14px;
-    text-align: center;
-    animation: fadeIn 0.3s ease;
-    box-shadow: 0 7px 20px rgba(0, 0, 0, 0.15);
-  }
-  
-  .modal-icon {
-    font-size: 42px;
-    margin-bottom: 12px;
-  }
-  
-  .modal-text {
-    font-size: 14px;
-    color: #555;
-    margin-bottom: 20px;
-  }
-  
-  .modal-actions {
-    display: flex;
-    justify-content: center;
-  }
-  
-  .btn-close {
-    background: #2563eb;
-    color: white;
-    border: none;
-    padding: 10px 24px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: 0.2s ease;
-  }
-  
-  .btn-close:hover {
-    background: #1e4fc4;
-  }
-  
-  @keyframes fadeIn {
-    from {
-      transform: translateY(-8px);
+  // Animations spécifiques au succès
+  @keyframes successPulse {
+    0% {
+      transform: scale(0.8);
       opacity: 0;
     }
-    to {
-      transform: translateY(0);
+    50% {
+      transform: scale(1.1);
+    }
+    70% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(1);
       opacity: 1;
     }
   }
   
+  @keyframes checkmark {
+    0% {
+      transform: scale(0);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  // Animation de l'icône ✅
+  .success-modal .modal-icon {
+    animation: checkmark 0.6s ease-in-out;
+  }
+  
+  // Animations de base
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  // Version alternative avec icône plus stylisée
+  .success-modal.alternative {
+    .modal-icon {
+      background: linear-gradient(135deg, #4caf50, #66bb6a);
+      color: white;
+      box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+    }
+  
+    .btn-success {
+      background: linear-gradient(135deg, #4caf50, #66bb6a);
+      
+      &:hover {
+        background: linear-gradient(135deg, #388e3c, #4caf50);
+      }
+    }
+  }
+  
+  // Responsive
+  @media (max-width: 480px) {
+    .modal-overlay {
+      .modal-box.success-modal {
+        padding: 2rem 1.5rem;
+        margin: 1rem;
+        
+        .modal-icon {
+          width: 70px;
+          height: 70px;
+          font-size: 2rem;
+          margin-bottom: 1.2rem;
+        }
+  
+        h2 {
+          font-size: 1.3rem;
+        }
+  
+        .btn-success {
+          width: 100%;
+          max-width: 200px;
+          padding: 1rem;
+        }
+      }
+    }
+  }

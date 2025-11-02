@@ -23,11 +23,17 @@ export class Game implements OnInit {
      showToast = false;
      toastMessage = '';
      toastType='success';
+     searchQuery: string = '';
+     selectedSortOption: string = 'featured';
+     filteredProducts: any[] = [];
+     displayedProducts: any[] = [];
   
     ngOnInit(): void {
       this.productService.getProductsByCategory("Game").pipe(share()).subscribe((data)=>{
         this.products=[...data];
         console.log(data);
+        this.filteredProducts = [...data];
+          this.displayedProducts = [...data];
       });
     }
   
@@ -74,5 +80,60 @@ export class Game implements OnInit {
     openDetails(product: Product) {
       this.router.navigate(['/product-details'], { state: {data: product} });
     }
+
+    filterProducts(): void {
+      if (!this.searchQuery) {
+        this.filteredProducts = [...this.products];
+      } else {
+        const query = this.searchQuery.toLowerCase();
+        this.filteredProducts = this.products.filter(product => 
+          product.name.toLowerCase().includes(query) ||
+          product.category.toLowerCase().includes(query) ||
+          (product.description && product.description.toLowerCase().includes(query))
+        );
+      }
+      this.sortProducts();
+    }
+
+    sortProducts(): void {
+      let sortedProducts = [...this.filteredProducts];
+      
+      switch(this.selectedSortOption) {
+        case 'price-asc':
+          sortedProducts.sort((a, b) => a.price - b.price);
+          break;
+        case 'price-desc':
+          sortedProducts.sort((a, b) => b.price - a.price);
+          break;
+        case 'rating':
+          sortedProducts.sort((a, b) => b.rating - a.rating);
+          break;
+        case 'name':
+          sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
+          break;
+        case 'sale':
+          sortedProducts = sortedProducts.filter(product => product.isOnSale);
+          break;
+          case '---':
+            sortedProducts = [...this.filteredProducts];
+            break;
+        default:
+          break;
+      }
+      
+      this.displayedProducts = sortedProducts;
+    }
+
+    clearSearch(): void {
+      this.searchQuery = '';
+      this.filterProducts();
+    }
+
+    resetFilters(): void {
+      this.searchQuery = '';
+      this.selectedSortOption = 'featured';
+      this.filterProducts();
+    }
+
 
 }

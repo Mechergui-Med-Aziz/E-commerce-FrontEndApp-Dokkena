@@ -1,4 +1,16 @@
 export class User {
+    public get phone(): number {
+        return this._phone;
+    }
+    public set phone(value: number) {
+        this._phone = value;
+    }
+    public get cin(): number {
+        return this._cin;
+    }
+    public set cin(value: number) {
+        this._cin = value;
+    }
     public get adress(): string {
         return this._adress;
     }
@@ -40,6 +52,8 @@ export class User {
         private _id: number,
         private _firstName: string,
         private _lastName: string,
+        private _cin: number,
+        private _phone: number,
         private _email: string,
         private _password: string,
         private _adress: string

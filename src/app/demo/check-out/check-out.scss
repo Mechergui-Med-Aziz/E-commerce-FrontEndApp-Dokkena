@@ -192,80 +192,222 @@
     }
   }
 
-  /* Overlay */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 50;
-}
-
-/* Modal box */
-.modal-box {
-  background: #fff;
-  width: 32%;
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  border-top: 4px solid #ef4444; /* rouge */
-  text-align: center;
-  animation: fadeIn 0.25s ease-in-out;
-}
-
-/* Title */
-.modal-box h2 {
-  font-size: 22px;
-  font-weight: 700;
-  color: #1f2937;
-  margin-bottom: 10px;
-}
-
-/* Message text */
-.modal-box p {
-  color: #4b5563;
-  margin-bottom: 20px;
-  font-size: 15px;
-}
-
-/* Buttons container */
-.modal-actions {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-}
-
-/* Button Style */
-.btn-close {
-  background: #9ca3af;
-  color: #fff;
-  padding: 10px 24px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  transition: background .2s ease;
-}
-
-.btn-close:hover {
-  background: #6b7280;
-}
-
-/* Icon color */
-.modal-icon {
-  color: #ef4444;
-  margin-bottom: 15px;
-}
-
-/* Animation */
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
-}
-
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-out;
   
+    .modal-box {
+      background: white;
+      border-radius: 16px;
+      padding: 2.5rem;
+      max-width: 440px;
+      width: 90%;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      animation: slideUp 0.4s ease-out;
   
+      // Variante authentification
+      &.auth-modal {
+        .modal-icon {
+          margin-bottom: 1.5rem;
+          
+          .auth-icon {
+            width: 64px;
+            height: 64px;
+            color: #6366f1;
+            stroke-width: 1.5;
+            animation: iconFloat 3s ease-in-out infinite;
+          }
+        }
+  
+        h2 {
+          color: #1f2937;
+          margin-bottom: 1rem;
+          font-size: 1.5rem;
+          font-weight: 700;
+          line-height: 1.3;
+        }
+  
+        .modal-text {
+          color: #6b7280;
+          line-height: 1.6;
+          margin-bottom: 2rem;
+          font-size: 1.05rem;
+        }
+  
+        .modal-actions {
+          display: flex;
+          gap: 1rem;
+          justify-content: center;
+          margin-bottom: 1.5rem;
+  
+          .btn-primary {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 0.875rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 140px;
+  
+            &:hover {
+              background: #4f46e5;
+              transform: translateY(-2px);
+              box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
+            }
+  
+            &:active {
+              transform: translateY(0);
+            }
+  
+            &:focus {
+              outline: 2px solid #c7d2fe;
+              outline-offset: 2px;
+            }
+          }
+  
+          .btn-secondary {
+            background: transparent;
+            color: #6b7280;
+            border: 2px solid #e5e7eb;
+            padding: 0.875rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+  
+            &:hover {
+              background: #f9fafb;
+              border-color: #d1d5db;
+              transform: translateY(-1px);
+            }
+  
+            &:active {
+              transform: translateY(0);
+            }
+  
+            &:focus {
+              outline: 2px solid #e5e7eb;
+              outline-offset: 2px;
+            }
+          }
+        }
+  
+        .modal-footer {
+          padding-top: 1.5rem;
+          border-top: 1px solid #f3f4f6;
+  
+          p {
+            color: #6b7280;
+            font-size: 0.95rem;
+            margin: 0;
+  
+            .link {
+              color: #6366f1;
+              text-decoration: none;
+              font-weight: 500;
+              transition: color 0.2s ease;
+  
+              &:hover {
+                color: #4f46e5;
+                text-decoration: underline;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  // Animations
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(40px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+  
+  @keyframes iconFloat {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+  
+  // Version alternative
+  .auth-modal.alternative {
+    .modal-icon .auth-icon {
+      color: #059669;
+    }
+  
+    .btn-primary {
+      background: #059669;
+      
+      &:hover {
+        background: #047857;
+      }
+    }
+  
+    .link {
+      color: #059669;
+      
+      &:hover {
+        color: #047857;
+      }
+    }
+  }
+  
+  // Responsive
+  @media (max-width: 480px) {
+    .modal-overlay {
+      .modal-box.auth-modal {
+        padding: 2rem 1.5rem;
+        margin: 1rem;
+  
+        .modal-actions {
+          flex-direction: column;
+          gap: 0.75rem;
+  
+          .btn-primary,
+          .btn-secondary {
+            width: 100%;
+            padding: 1rem;
+          }
+        }
+  
+        .modal-icon .auth-icon {
+          width: 56px;
+          height: 56px;
+        }
+  
+        h2 {
+          font-size: 1.3rem;
+        }
+      }
+    }
+  }

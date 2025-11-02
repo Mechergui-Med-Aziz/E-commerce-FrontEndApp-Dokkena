@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { User } from '../classes/user';
 import * as bcrypt from 'bcryptjs';
 import * as CryptoJS from 'crypto-js';
+import { map, Observable } from 'rxjs';
 
 
 @Injectable({
@@ -20,6 +21,12 @@ export class AuthService {
 
   getUserById(id:number){
     return this.http.get(`${this.apiUrl}/${id}`)
+  }
+
+  getUserByCin(cin: number): Observable<boolean> {
+    return this.http.get<any[]>(`${this.apiUrl}?cin=${cin}`).pipe(
+      map(users => users.length > 0) // true si user existe
+    );
   }
 
   registerUser(userData:User){

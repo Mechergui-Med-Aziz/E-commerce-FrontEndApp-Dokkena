@@ -63,13 +63,32 @@
         }
         </div>
         <ul class="pro-body">
-          @if(user){<li [routerLink]="['/profile']">
-            <a href="javascript:" class="dropdown-item" >
-              <i class="feather icon-user"></i>
-              Profile
+
+          @if (user) {
+            <li routerLink="/profile">
+              <a class="dropdown-item">
+                <i class="feather icon-user"></i>
+                Mon Profil
+              </a>
+            </li>
+          } @else {
+            <li routerLink="/login">
+              <a class="dropdown-item">
+                <i class="feather icon-log-in"></i>
+                Se connecter
+              </a>
+            </li>
+          }
+        
+          <li (click)="toggleFullscreen()">
+            <a class="dropdown-item full-screen">
+              <i class="feather" [ngClass]="screenFull ? 'icon-minimize' : 'icon-maximize'"></i>
+              Plein écran
             </a>
-          </li>}
+          </li>
+        
         </ul>
+        
       </div>
     </div>
   </li>
