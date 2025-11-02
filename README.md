@@ -24,19 +24,19 @@ datta-able-angular/
 ├── src/<br>
 │   ├── app/<br>
 │   │   ├── classes/<br>
-│   │   │   ├── cart-item.ts
-│   │   │   ├── category.ts
-│   │   │   ├── product.ts
-│   │   │   ├── user.ts
-│   │   ├── demo/ 
-│   │   │   ├── checkout
-│   │   │   ├── categories
-│   │   │   │   ├── beauty/
-│   │   │   │   ├── electronic/
-│   │   │   │   ├── fashion/
-│   │   │   │   ├── game/
-│   │   │   │   ├── kitchen/
-│   │   │   │   ├── sport/
+│   │   │   ├── cart-item.ts<br>
+│   │   │   ├── category.ts<br>
+│   │   │   ├── product.ts<br>
+│   │   │   ├── user.ts<br>
+│   │   ├── demo/ <br>
+│   │   │   ├── checkout<br>
+│   │   │   ├── categories<br>
+│   │   │   │   ├── beauty/<br>
+│   │   │   │   ├── electronic/<br>
+│   │   │   │   ├── fashion/<br>
+│   │   │   │   ├── game/<br>
+│   │   │   │   ├── kitchen/<br>
+│   │   │   │   ├── sport/<br>
 │   │   │   ├── home/
 │   │   │   ├── pages/
 │   │   │   │   ├── auth-signin/
@@ -104,6 +104,7 @@ datta-able-angular/
  
 
  
+
 
 
 
