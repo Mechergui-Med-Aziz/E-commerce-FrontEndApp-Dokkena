@@ -18,7 +18,7 @@ JSON Web Server
 
 Tailwind CSS
 
-📂 Structure du proje
+📂 Structure du projet
 
 datta-able-angular/ 
 ├── src/
@@ -104,5 +104,6 @@ datta-able-angular/
  
 
  
+
 
 
