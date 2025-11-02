@@ -21,9 +21,9 @@ Tailwind CSS
 📂 Structure du projet
 
 datta-able-angular/ 
-├── src/
-│   ├── app/
-│   │   ├── classes/
+├── src/<br>
+│   ├── app/<br>
+│   │   ├── classes/<br>
 │   │   │   ├── cart-item.ts
 │   │   │   ├── category.ts
 │   │   │   ├── product.ts
@@ -104,6 +104,7 @@ datta-able-angular/
  
 
  
+
 
 
 
