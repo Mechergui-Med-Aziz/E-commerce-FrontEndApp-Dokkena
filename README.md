@@ -37,46 +37,46 @@ datta-able-angular/
 │   │   │   │   ├── game/<br>
 │   │   │   │   ├── kitchen/<br>
 │   │   │   │   ├── sport/<br>
-│   │   │   ├── home/
-│   │   │   ├── pages/
-│   │   │   │   ├── auth-signin/
-│   │   │   │   ├── auth-signup/
-│   │   │   ├── payment/
-│   │   │   ├── product-details/
-│   │   │   ├── product-list/
-│   │   │   ├── profile/
-│   │   ├── guards/
-│   │   │   ├── profile-guard
-│   │   ├── services/ 
-│   │   │   ├── auth-service
-│   │   │   ├── basket-service
-│   │   │   ├── category-service
-│   │   │   ├── product-service
-│   │   ├── theme/
-│   │   │   ├── layout/
-│   │   │   │   ├── guest/
-│   │   │   │   ├── nav-elements/
-│   │   │   │   │   ├── footer/
-│   │   │   │   │   ├── nav-bar/
-│   │   │   │   │   │   ├── nav-right/
-│   │   │   │   │   ├── navigation/
-│   │   │   │   │   │   ├── nav-content/
-│   │   │   │   │   │   ├── nav-logo/
-│   │   │   ├── shared/
-│   │   │   │   ├── components/
-│   │   │   │   │   ├── breadcrumbs/
-│   │   │   │   │   ├── full-screen/
-│   │   │   │   │   ├── spinner/
-│   │   │   │   ├── shared-module.ts
-│   │   ├── app.component.*
-│   │   ├── app.config.ts
-│   │   ├── app-routing.module.ts
-│   ├── assets/
-│   ├── environments/
-│   ├── fake-data/
-│   ├── scss/ ...
-├── angular.json
-├── package.json
+│   │   │   ├── home/<br>
+│   │   │   ├── pages/<br>
+│   │   │   │   ├── auth-signin/<br>
+│   │   │   │   ├── auth-signup/<br>
+│   │   │   ├── payment/<br>
+│   │   │   ├── product-details/<br>
+│   │   │   ├── product-list/<br>
+│   │   │   ├── profile/<br>
+│   │   ├── guards/<br>
+│   │   │   ├── profile-guard<br>
+│   │   ├── services/ <br>
+│   │   │   ├── auth-service<br>
+│   │   │   ├── basket-service<br>
+│   │   │   ├── category-service<br>
+│   │   │   ├── product-service<br>
+│   │   ├── theme/<br>
+│   │   │   ├── layout/<br>
+│   │   │   │   ├── guest/<br>
+│   │   │   │   ├── nav-elements/<br>
+│   │   │   │   │   ├── footer/<br>
+│   │   │   │   │   ├── nav-bar/<br>
+│   │   │   │   │   │   ├── nav-right/<br>
+│   │   │   │   │   ├── navigation/<br>
+│   │   │   │   │   │   ├── nav-content/<br>
+│   │   │   │   │   │   ├── nav-logo/<br>
+│   │   │   ├── shared/<br>
+│   │   │   │   ├── components/<br>
+│   │   │   │   │   ├── breadcrumbs/<br>
+│   │   │   │   │   ├── full-screen/<br>
+│   │   │   │   │   ├── spinner/<br>
+│   │   │   │   ├── shared-module.ts<br>
+│   │   ├── app.component.*<br>
+│   │   ├── app.config.ts<br>
+│   │   ├── app-routing.module.ts<br>
+│   ├── assets/<br>
+│   ├── environments/<br>
+│   ├── fake-data/<br>
+│   ├── scss/ ...<br>
+├── angular.json<br>
+├── package.json<br>
 
 
 
@@ -104,6 +104,7 @@ datta-able-angular/
  
 
  
+
 
 
 
