@@ -7,7 +7,7 @@ const apiServer = jsonServer.create();
 const router = jsonServer.router('db.json');
 const middlewares = jsonServer.defaults();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 
 // Serve Angular build files
 app.use(express.static(path.join(__dirname, 'dist')));
