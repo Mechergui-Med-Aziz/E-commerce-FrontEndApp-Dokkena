@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class CategoryService {
-  private apiUrl="http://localhost:3000/category"
+  private apiUrl="https://dbchallengeserver.onrender.com/category"
 
   constructor(private http: HttpClient) { }
 
