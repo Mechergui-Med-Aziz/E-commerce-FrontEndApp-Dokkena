@@ -2,16 +2,30 @@
     min-height: 100vh;
   }
   
+  
+  // Slider Styles
+  .home-container {
+    min-height: 100vh;
+  }
+  
   // Slider Styles
   .slider-section {
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
+    
+    @media (max-width: 768px) {
+      margin-bottom: 1rem;
+    }
   }
   
   .slider-container {
     position: relative;
     overflow: hidden;
-    border-radius: 0 0 20px 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 0 0 15px 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    
+    @media (max-width: 768px) {
+      border-radius: 0 0 10px 10px;
+    }
   }
   
   .slider-wrapper {
@@ -20,8 +34,24 @@
   
   .slider {
     display: flex;
-    transition: transform 0.5s ease-in-out;
+    transition: transform 0.4s ease-in-out;
     height: 500px;
+    
+    @media (max-width: 1024px) {
+      height: 450px;
+    }
+    
+    @media (max-width: 768px) {
+      height: 400px;
+    }
+    
+    @media (max-width: 480px) {
+      height: 350px;
+    }
+    
+    @media (max-width: 360px) {
+      height: 300px;
+    }
   }
   
   .slide {
@@ -41,6 +71,23 @@
     padding: 0 2rem;
     align-items: center;
     gap: 3rem;
+    
+    @media (max-width: 1024px) {
+      gap: 2rem;
+      padding: 0 1.5rem;
+    }
+    
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 1.5rem;
+      padding: 0 1rem;
+    }
+    
+    @media (max-width: 480px) {
+      gap: 1rem;
+      padding: 0 0.5rem;
+    }
   }
   
   .slide-image {
@@ -51,24 +98,63 @@
       max-height: 400px;
       object-fit: contain;
       border-radius: 10px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      
+      @media (max-width: 1024px) {
+        max-height: 350px;
+      }
+      
+      @media (max-width: 768px) {
+        max-height: 250px;
+        border-radius: 8px;
+      }
+      
+      @media (max-width: 480px) {
+        max-height: 200px;
+        border-radius: 6px;
+      }
     }
   }
   
   .slide-info {
     padding: 2rem;
+    
+    @media (max-width: 1024px) {
+      padding: 1.5rem;
+    }
+    
+    @media (max-width: 768px) {
+      padding: 1rem;
+      order: -1; // Met le texte au-dessus de l'image sur mobile
+    }
+    
+    @media (max-width: 480px) {
+      padding: 0.5rem;
+    }
   }
   
   .promo-badge {
     background: #ff4444;
     color: white;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 0.875rem;
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
     margin-bottom: 1rem;
     display: inline-block;
+    
+    @media (max-width: 768px) {
+      padding: 5px 10px;
+      font-size: 0.7rem;
+      margin-bottom: 0.8rem;
+    }
+    
+    @media (max-width: 480px) {
+      padding: 4px 8px;
+      font-size: 0.65rem;
+      margin-bottom: 0.6rem;
+    }
   }
   
   .slide-title {
@@ -76,6 +162,25 @@
     font-weight: 700;
     margin-bottom: 1rem;
     line-height: 1.1;
+    word-wrap: break-word;
+    
+    @media (max-width: 1024px) {
+      font-size: 2.5rem;
+    }
+    
+    @media (max-width: 768px) {
+      font-size: 2rem;
+      margin-bottom: 0.8rem;
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 1.5rem;
+      margin-bottom: 0.6rem;
+    }
+    
+    @media (max-width: 360px) {
+      font-size: 1.3rem;
+    }
   }
   
   .slide-description {
@@ -83,6 +188,29 @@
     margin-bottom: 2rem;
     opacity: 0.9;
     line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    
+    @media (max-width: 1024px) {
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      -webkit-line-clamp: 2;
+    }
+    
+    @media (max-width: 768px) {
+      font-size: 1rem;
+      margin-bottom: 1.2rem;
+      -webkit-line-clamp: 2;
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      -webkit-line-clamp: 2;
+      line-height: 1.4;
+    }
   }
   
   .slide-pricing {
@@ -90,24 +218,71 @@
     align-items: center;
     gap: 1rem;
     margin-bottom: 2rem;
+    flex-wrap: wrap;
+    
+    @media (max-width: 768px) {
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      gap: 0.8rem;
+    }
+    
+    @media (max-width: 480px) {
+      margin-bottom: 1.2rem;
+      gap: 0.6rem;
+    }
     
     .current-price {
       font-size: 2.5rem;
       font-weight: 700;
+      
+      @media (max-width: 1024px) {
+        font-size: 2rem;
+      }
+      
+      @media (max-width: 768px) {
+        font-size: 1.8rem;
+      }
+      
+      @media (max-width: 480px) {
+        font-size: 1.5rem;
+      }
     }
     
     .original-price {
       font-size: 1.5rem;
       text-decoration: line-through;
       opacity: 0.7;
+      
+      @media (max-width: 1024px) {
+        font-size: 1.3rem;
+      }
+      
+      @media (max-width: 768px) {
+        font-size: 1.1rem;
+      }
+      
+      @media (max-width: 480px) {
+        font-size: 1rem;
+      }
     }
     
     .discount-badge {
       background: #ffd700;
       color: #333;
-      padding: 8px 12px;
+      padding: 6px 10px;
       border-radius: 6px;
       font-weight: 700;
+      font-size: 0.9rem;
+      
+      @media (max-width: 768px) {
+        padding: 5px 8px;
+        font-size: 0.8rem;
+      }
+      
+      @media (max-width: 480px) {
+        padding: 4px 6px;
+        font-size: 0.75rem;
+      }
     }
   }
   
@@ -122,10 +297,29 @@
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  
+    min-width: 180px;
+    
     &:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+    
+    @media (max-width: 1024px) {
+      padding: 14px 30px;
+      font-size: 1rem;
+      min-width: 160px;
+    }
+    
+    @media (max-width: 768px) {
+      padding: 12px 25px;
+      font-size: 0.95rem;
+      min-width: 140px;
+    }
+    
+    @media (max-width: 480px) {
+      padding: 10px 20px;
+      font-size: 0.9rem;
+      min-width: 120px;
     }
   }
   
@@ -145,22 +339,63 @@
     display: flex;
     align-items: center;
     justify-content: center;
-  
+    
     &:hover {
       background: rgba(255, 255, 255, 0.3);
       transform: translateY(-50%) scale(1.1);
     }
-  
+    
     &.prev {
       left: 20px;
     }
-  
+    
     &.next {
       right: 20px;
     }
-  
+    
     .arrow {
       line-height: 1;
+    }
+    
+    @media (max-width: 1024px) {
+      width: 50px;
+      height: 50px;
+      font-size: 1.7rem;
+    }
+    
+    @media (max-width: 768px) {
+      width: 45px;
+      height: 45px;
+      font-size: 1.5rem;
+      
+      &.prev {
+        left: 10px;
+      }
+      
+      &.next {
+        right: 10px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      width: 40px;
+      height: 40px;
+      font-size: 1.3rem;
+      
+      &.prev {
+        left: 5px;
+      }
+      
+      &.next {
+        right: 5px;
+      }
+    }
+    
+    // Cacher les flèches sur très petits écrans si nécessaire
+    @media (max-width: 360px) {
+      width: 35px;
+      height: 35px;
+      font-size: 1.1rem;
     }
   }
   
@@ -171,6 +406,16 @@
     transform: translateX(-50%);
     display: flex;
     gap: 10px;
+    
+    @media (max-width: 768px) {
+      bottom: 15px;
+      gap: 8px;
+    }
+    
+    @media (max-width: 480px) {
+      bottom: 10px;
+      gap: 6px;
+    }
   }
   
   .dot {
@@ -181,12 +426,60 @@
     background: rgba(255, 255, 255, 0.5);
     cursor: pointer;
     transition: all 0.3s ease;
-  
+    
     &.active {
       background: white;
       transform: scale(1.2);
     }
+    
+    @media (max-width: 768px) {
+      width: 10px;
+      height: 10px;
+    }
+    
+    @media (max-width: 480px) {
+      width: 8px;
+      height: 8px;
+    }
   }
+  
+  // Touch gestures support
+  .slider {
+    touch-action: pan-y pinch-zoom;
+  }
+  
+  .slider-wrapper {
+    // Empêcher la sélection de texte pendant le swipe
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }
+  
+  // Améliorations pour le chargement
+  .slide-image {
+    position: relative;
+    min-height: 200px;
+    
+    @media (max-width: 768px) {
+      min-height: 150px;
+    }
+  }
+  
+  // Animation de chargement pour les images
+  .slide-image img {
+    transition: opacity 0.3s ease;
+  }
+  
+  .slide-image img[loading] {
+    opacity: 40;
+  }
+  
+  .slide-image img:not([loading]) {
+    opacity: 1;
+  }
+  
+  // ... (le reste de votre CSS existant pour les autres sections)
   
   // Categories Section
   .categories-section {

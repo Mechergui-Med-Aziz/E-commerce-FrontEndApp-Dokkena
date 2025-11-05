@@ -38,11 +38,10 @@
           
           <!-- Dots indicator -->
           <div class="slider-dots">
-            <button 
-              *ngFor="let product of getProductsOnSale(); let i = index" 
-              class="dot" 
-              [class.active]="i === currentSlide"
-              (click)="goToSlide(i)">
+            <button *ngFor="let product of getProductsOnSale(); let i = index" 
+                    class="dot" 
+                    [class.active]="i === currentSlide" 
+                    (click)="goToSlide(i)">
             </button>
           </div>
         </div>

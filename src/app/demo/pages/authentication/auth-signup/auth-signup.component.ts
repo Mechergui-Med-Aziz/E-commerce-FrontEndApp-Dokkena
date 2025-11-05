@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators, ɵInternalFormsSharedModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { User } from 'src/app/classes/user';
@@ -11,11 +11,12 @@ import { AuthService } from 'src/app/services/auth-service';
   templateUrl: './auth-signup.component.html',
   styleUrls: ['./auth-signup.component.scss']
 })
-export class AuthSignupComponent {
+export class AuthSignupComponent implements OnInit{
 
   showMessage=false;
   messageText="";
   messageType="";
+  users:User[]=[];
 
   registerForm = this.formBuilder.group({
     id: [0],
@@ -32,13 +33,21 @@ export class AuthSignupComponent {
 
   constructor(private formBuilder :FormBuilder,private authService:AuthService,private router:Router) { }
 
+  ngOnInit(): void {
+      this.authService.getAllUsers().subscribe((data: User[]) => {
+      this.users = data;
+  })
+  }
   onRegister(): void {
     if (this.registerForm.valid) {
-      let exists=this.authService.getUserByCin(this.registerForm.value.cin!)
+      let exists=this.users.find(user=>user.cin==Number(this.registerForm.value.cin));
       console.log('Checking CIN existence:', exists);
-      if(!exists){
+      if(exists==null){
+        let maxId=Math.max(...this.users.map(user=>Number(user.id!))) +1;
       let formData = {...this.registerForm.value} ;
       formData.cin = Number(formData.cin);
+      formData.id = maxId.toString();
+      formData.phone = Number(formData.phone);
       delete formData.confirmPassword;
       console.log('Registration Data:', formData);
       this.authService.registerUser(formData as User).subscribe(

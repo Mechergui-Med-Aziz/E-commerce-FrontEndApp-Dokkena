@@ -23,10 +23,13 @@ export class AuthService {
     return this.http.get(`${this.apiUrl}/${id}`)
   }
 
-  getUserByCin(cin: number): Observable<boolean> {
-    return this.http.get<any[]>(`${this.apiUrl}?cin=${cin}`).pipe(
-      map(users => users.length > 0) // true si user existe
-    );
+  getAllUsers():Observable<User[]>{
+    return this.http.get<User[]>(this.apiUrl);
+  }
+
+  getUserByCin(cin: number){
+    let user=this.http.get(`${this.apiUrl}?cin=${cin}`);
+    return user 
   }
 
   registerUser(userData:User){
@@ -56,7 +59,7 @@ export class AuthService {
     const token = this.generateToken(user);
 
     localStorage.setItem("token", token);
-    localStorage.setItem("id", JSON.stringify(user.id));
+    localStorage.setItem("id", user.id);
 
     return user;
   }
