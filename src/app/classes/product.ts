@@ -59,10 +59,10 @@ export class Product {
     public set name(value: string) {
         this._name = value;
     }
-    public get id(): number {
+    public get id(): string {
         return this._id;
     }
-    public set id(value: number) {
+    public set id(value: string) {
         this._id = value;
     }
     public get image(): string {
@@ -74,7 +74,7 @@ export class Product {
 
     constructor(
 
-        private _id: number,
+        private _id: string,
         private _name: string,
         private _price: number,
         private _image: string,

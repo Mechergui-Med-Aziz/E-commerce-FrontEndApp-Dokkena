@@ -15,7 +15,7 @@ export class Profile {
 
   updated=false;
   user = {
-    id:0,
+    id:"",
     firstName: '',
     lastName: '',
     cin: 0,
@@ -37,7 +37,12 @@ export class Profile {
   
 
   updateProfile(){
-    let newUser={...this.user,password:this.newPassword} as User; 
+    let newUser={...this.user} as User; 
+    if(this.newPassword.trim()!==''){
+      newUser.password=this.newPassword;
+    }
+    newUser.cin=Number(newUser.cin);
+    newUser.phone=Number(newUser.phone);
     this.authService.updateUser(Number(this.user.id),newUser).subscribe(response=>{
       this.updated=true;
     });

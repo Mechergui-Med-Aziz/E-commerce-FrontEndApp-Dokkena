@@ -36,7 +36,7 @@ export class BasketService {
         this.basketUpdated.next([...this.basket]);
       }
 
-      removeItem(productId: number): void {
+      removeItem(productId: string): void {
         this.basket = this.basket.filter(item => item.product.id !== productId);
         sessionStorage.setItem('basket',JSON.stringify(this.basket));
         this.basketUpdated.next([...this.basket]);

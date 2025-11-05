@@ -53,7 +53,7 @@ getTotal() {
   return this.getSubtotal() + this.deliveryFee;
 }
 
-removeItemFromBasket(productId: number) {
+removeItemFromBasket(productId: string) {
   this.basketService.removeItem(productId);
 }
 
