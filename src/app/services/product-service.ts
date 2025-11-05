@@ -9,7 +9,9 @@ import { CartItem } from '../classes/cart-item';
   providedIn: 'root'
 })
 export class ProductService {
+
   private apiUrl="https://dbchallengeserver.onrender.com/product"
+  //private apiUrl="https://dbchallengeserver.onrender.com/product"
   
  
   constructor(private http:HttpClient) {

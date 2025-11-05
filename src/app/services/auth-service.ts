@@ -11,6 +11,7 @@ import { map, Observable } from 'rxjs';
 })
 export class AuthService {
   private apiUrl="https://dbchallengeserver.onrender.com/user"
+  //private apiUrl="https://dbchallengeserver.onrender.com/user"
   secretKey="DokkenaECommerceWebSite"
 
   constructor(private http:HttpClient) { }
