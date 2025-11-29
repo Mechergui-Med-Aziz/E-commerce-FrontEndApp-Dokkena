@@ -40,6 +40,8 @@ export class Profile {
     let newUser={...this.user} as User; 
     if(this.newPassword.trim()!==''){
       newUser.password=this.newPassword;
+    }else{
+      newUser.password=null;
     }
     newUser.cin=Number(newUser.cin);
     newUser.phone=Number(newUser.phone);

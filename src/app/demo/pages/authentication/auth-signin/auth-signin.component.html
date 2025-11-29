@@ -26,7 +26,7 @@
             <label for="checkbox-fill-a1" class="cr">Save Details</label>
           </div>
         </div>
-        <button class="btn btn-primary mb-4">Login</button>
+        <button class="btn btn-primary mb-4" [disabled]="loginForm.invalid">Login</button>
         <p class="mb-2 text-muted">
           Forgot password?
           <a href="javascript:">Reset</a>

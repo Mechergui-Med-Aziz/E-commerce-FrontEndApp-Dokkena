@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import {  Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, map, Observable } from 'rxjs';
 import { Product } from '../classes/product';
 import { CartItem } from '../classes/cart-item';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -10,8 +11,10 @@ import { CartItem } from '../classes/cart-item';
 })
 export class ProductService {
 
-  private apiUrl="https://dbchallengeserver.onrender.com/product"
   //private apiUrl="https://dbchallengeserver.onrender.com/product"
+  //private apiUrl="https://dbchallengeserver.onrender.com/product"
+
+  private apiUrl=environment.apiUrl+"product";
   
  
   constructor(private http:HttpClient) {
@@ -20,15 +23,42 @@ export class ProductService {
 
 
   getAllProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.apiUrl);
+    return this.http.get<Product[]>(`${this.apiUrl}/all`).pipe(
+      map(response => {
+        console.log('Response:', response);
+        return response as Product[];
+      }),
+      catchError(error => {
+        console.error('Error:', error);
+        throw error;
+      })
+    );
   }
 
   getProductById(id:number){
-    return this.http.get(`${this.apiUrl}/${id}`)
+    return this.http.get(`${this.apiUrl}/id/${id}`).pipe(
+      map(response => {
+        console.log('Response:', response);
+        return response as Product;
+      }),
+      catchError(error => {
+        console.error('Error:', error);
+        throw error;
+      })
+    );
   }
 
   getProductsOnSale():Observable<Product[]>{
-    return this.http.get<Product[]>(`${this.apiUrl}?isOnSale=true`)
+    return this.http.get<Product[]>(`${this.apiUrl}/onSale`).pipe(
+      map(response => {
+        console.log('Response:', response);
+        return response as Product[];
+      }),
+      catchError(error => {
+        console.error('Error:', error);
+        throw error;
+      })
+    )
   }
 
   getDiscountPercentage(originalPrice:number,price:number):number{
@@ -36,7 +66,16 @@ export class ProductService {
   }
 
   getFeaturedProducts(){
-    return this.http.get(`${this.apiUrl}?isFeatured=true`)
+    return this.http.get(`${this.apiUrl}/featured`).pipe(
+      map(response => {
+        console.log('Response:', response);
+        return response as Product[];
+      }),
+      catchError(error => {
+        console.error('Error:', error);
+        throw error;
+      })
+    );
   }
 
   deleteProduct(id:number):Observable<void>{
@@ -44,6 +83,15 @@ export class ProductService {
   }
 
   getProductsByCategory(category:string):Observable<Product[]>{
-    return this.http.get<Product[]>(`${this.apiUrl}?category=${category}`)
+    return this.http.get<Product[]>(`${this.apiUrl}/category/${category}`).pipe(
+      map(response=>{
+        console.log('Response:', response);
+        return response as Product[];
+      }),
+      catchError(error=>{
+        console.error('Error:', error);
+        throw error;
+      }
+    ));
   }
 }

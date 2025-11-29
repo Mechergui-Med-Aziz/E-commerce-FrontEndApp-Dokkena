@@ -1,3 +1,5 @@
+import { Category } from "./category";
+
 export class Product {
     public get image2(): string {
         return this._image2;
@@ -41,10 +43,10 @@ export class Product {
     public set description(value: string) {
         this._description = value;
     }
-    public get category(): string {
+    public get category(): Category {
         return this._category;
     }
-    public set category(value: string) {
+    public set category(value: Category) {
         this._category = value;
     }
     public get price(): number {
@@ -80,7 +82,7 @@ export class Product {
         private _image: string,
         private _image2: string,
         private _image3: string,
-        private _category: string,
+        private _category: Category,
         private _description: string,
         private _isFeatured: boolean,
         private _isOnSale: boolean,

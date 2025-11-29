@@ -57,9 +57,9 @@ removeItemFromBasket(productId: string) {
   this.basketService.removeItem(productId);
 }
 
-pay(){
+goToPay(){
   if(this.authService.isAuthenticated()){
-    this.router.navigate(['/payment']);
+    this.router.navigate(['/payment'],{queryParams:{total:this.getTotal()}});
     }
     else{
     this.isLoggedIn = true;

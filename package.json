@@ -5,10 +5,8 @@
   "scripts": {
     "ng": "ng",
     "start:local": "ng serve",
-    "build": "ng build --configuration production",
-    "start": "node server.js",
-    
     "build": "ng build",
+    "start": "node server.js",
     "build-prod": "ng build --configuration production --base-href /demos/admin-templates/datta-able/angular/free/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
@@ -30,6 +28,7 @@
     "@angular/router": "20.0.5",
     "@ng-bootstrap/ng-bootstrap": "19.0.0",
     "@popperjs/core": "2.11.8",
+    "@stripe/stripe-js": "^8.5.3",
     "apexcharts": "4.7.0",
     "bcryptjs": "^3.0.2",
     "bootstrap": "^5.3.8",

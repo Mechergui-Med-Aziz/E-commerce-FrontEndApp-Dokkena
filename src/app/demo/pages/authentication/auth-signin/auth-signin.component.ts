@@ -20,13 +20,13 @@ export class AuthSigninComponent {
   constructor(private formBuilder: FormBuilder,private authService:AuthService,private router:Router) { }
 
   onSubmit(){
-    this.authService.login(this.loginForm.value.email,this.loginForm.value.password).then(user=>{
-      console.log(user);
-      if(user){
+    this.authService.login(this.loginForm.value.email,this.loginForm.value.password).subscribe(response=>{
+      //console.log(user);
+      if(response.success){
         this.router.navigate(['/home']);
       }else{
         this.notLoggedIn=true;
-        this.loginForm.reset();
+        this.loginForm.get('password')?.reset();
       }
     });
   }

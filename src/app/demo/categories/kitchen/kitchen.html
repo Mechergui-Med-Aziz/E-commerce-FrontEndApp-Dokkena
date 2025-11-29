@@ -49,12 +49,12 @@
         <div 
           *ngFor="let product of displayedProducts" 
           class="product-card"
-          [class.on-sale]="product.isOnSale">
+          [class.on-sale]="product.onSale">
           
           <div class="product-image">
             <img [src]="product.image" [alt]="product.name" loading="lazy">
             <div class="product-badges">
-              <span *ngIf="product.isOnSale" class="badge sale-badge">
+              <span *ngIf="product.onSale" class="badge sale-badge">
                 -{{ getDiscountPercentage(product) }}%
               </span>
             </div>
@@ -63,7 +63,7 @@
           
           <div class="product-info">
             <h3 class="product-name">{{ product.name }}</h3>
-            <p class="product-category">{{ product.category }}</p>
+            <p class="product-category">{{ product.category.name }}</p>
             
             <div class="product-rating">
               <span class="stars">{{ getStarRating(product.rating) }}</span>

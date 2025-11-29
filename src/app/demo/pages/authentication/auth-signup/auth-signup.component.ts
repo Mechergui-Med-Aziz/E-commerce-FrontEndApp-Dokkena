@@ -11,7 +11,7 @@ import { AuthService } from 'src/app/services/auth-service';
   templateUrl: './auth-signup.component.html',
   styleUrls: ['./auth-signup.component.scss']
 })
-export class AuthSignupComponent implements OnInit{
+export class AuthSignupComponent {
 
   showMessage=false;
   messageText="";
@@ -33,54 +33,66 @@ export class AuthSignupComponent implements OnInit{
 
   constructor(private formBuilder :FormBuilder,private authService:AuthService,private router:Router) { }
 
-  ngOnInit(): void {
-      this.authService.getAllUsers().subscribe((data: User[]) => {
-      this.users = data;
-  })
-  }
+ 
   onRegister(): void {
-    if (this.registerForm.valid) {
-      let exists=this.users.find(user=>user.cin==Number(this.registerForm.value.cin));
-      console.log('Checking CIN existence:', exists);
-      if(exists==null){
-        let maxId=Math.max(...this.users.map(user=>Number(user.id!))) +1;
-      let formData = {...this.registerForm.value} ;
-      formData.cin = Number(formData.cin);
-      formData.id = maxId.toString();
-      formData.phone = Number(formData.phone);
-      delete formData.confirmPassword;
-      console.log('Registration Data:', formData);
-      this.authService.registerUser(formData as User).subscribe(
-        response => {
-          this.messageText='Compte créer avec succès ! Vous pouvez maintenant vous connecter.';
-          this.messageType='success';
-          this.authService.login(this.registerForm.value.email!,this.registerForm.value.password!)
-        },
-        error => {
-          this.messageText="Erreur d'enregistrement d'utilisateur";
-          this.messageType='error';
-        }
-      );
+
+    if (this.registerForm.invalid) {
+      this.messageText = 'Form invalide. Veuillez vérifier les champs.';
+      this.messageType = 'error';
+      this.showMessage = true;
+      return;
     }
-      else{
-        console.log(exists)
-      this.messageText='Un compte avec ce CIN existe déjà.';
-      this.messageType='error';
-      
-    }}else {
-      Object.keys(this.registerForm.controls).forEach(key => {
-        const control = this.registerForm.get(key);
-        if (control && control.errors) {
-          console.log(`❌ ${key} errors:`, control.errors);
+  
+    const cin = Number(this.registerForm.value.cin);
+    const email = this.registerForm.value.email!;
+  
+    this.authService.getUserByCinAndEmail(cin, email).subscribe({
+  
+      next: (user) => {
+  
+        if (user != null) {
+          this.messageText = 'Un compte avec ce CIN et email existe déjà.';
+          this.messageType = 'error';
+          this.showMessage = true;
+          return; 
         }
-      })
-      console.log(this.registerForm.errors);
-        this.messageText='Form invalide. Veuillez vérifier les champs.';
-        this.messageType='error';
+  
         
+        let formData = { ...this.registerForm.value };
+        formData.cin = Number(formData.cin);
+        formData.phone = Number(formData.phone);
+        delete formData.confirmPassword;
+        delete formData.id;
+  
+        this.authService.registerUser(formData as User).subscribe({
+          next: () => {
+            this.messageText = 'Compte créé avec succès ! Vous pouvez maintenant vous connecter.';
+            this.messageType = 'success';
+            this.showMessage = true;
+  
+            
+            this.authService.login(email, this.registerForm.value.password!).subscribe();
+          },
+          error: () => {
+            this.messageText = "Erreur d'enregistrement d'utilisateur";
+            this.messageType = 'error';
+            this.showMessage = true;
+          }
+        });
+  
+      },
+  
+      error: () => {
+        this.messageText = 'Erreur lors de la vérification du compte';
+        this.messageType = 'error';
+        this.showMessage = true;
       }
-      this.showMessage=true;
-    }
+    });
+  }
+  
+  
+  
+  
 
     passwordMatchValidator(form: any) {
       const password = form.get('password')?.value;

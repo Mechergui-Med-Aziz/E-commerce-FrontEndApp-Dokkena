@@ -25,7 +25,7 @@ export class Electronic implements OnInit {
      toastType='success';
 
      searchQuery: string = '';
-     selectedSortOption: string = 'featured';
+     selectedSortOption: string = '---';
      filteredProducts: any[] = [];
      displayedProducts: any[] = [];
   
@@ -36,13 +36,7 @@ export class Electronic implements OnInit {
         this.filteredProducts = [...data];
         this.displayedProducts = [...data];
       });
-    }
-  
-    getFeaturedProducts(): Product[] {
-      return this.products.filter(product => product.isFeatured);
-    }
-  
-  
+    }  
   
     getDiscountPercentage(product: Product): number {
       if (!product.originalPrice) return 0;
@@ -90,7 +84,7 @@ export class Electronic implements OnInit {
         const query = this.searchQuery.toLowerCase();
         this.filteredProducts = this.products.filter(product => 
           product.name.toLowerCase().includes(query) ||
-          product.category.toLowerCase().includes(query) ||
+          product.category.name.toLowerCase().includes(query) ||
           (product.description && product.description.toLowerCase().includes(query))
         );
       }
@@ -114,7 +108,7 @@ export class Electronic implements OnInit {
           sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
           break;
         case 'sale':
-          sortedProducts = sortedProducts.filter(product => product.isOnSale);
+          sortedProducts = sortedProducts.filter(product => product.onSale);
           break;
           case '---':
             sortedProducts = [...this.filteredProducts];
@@ -133,7 +127,7 @@ export class Electronic implements OnInit {
 
     resetFilters(): void {
       this.searchQuery = '';
-      this.selectedSortOption = 'featured';
+      this.selectedSortOption = '---';
       this.filterProducts();
     }
 

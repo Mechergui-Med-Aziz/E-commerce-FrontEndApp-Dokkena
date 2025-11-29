@@ -44,10 +44,10 @@
       <div class="product-info">
   
         <div class="product-header">
-          <span class="category-badge">{{ data.category }}</span>
+          <span class="category-badge">{{ data.category.name }}</span>
           <div class="badges">
-            <span class="badge featured" *ngIf="data.isFeatured">⭐ Produit vedette</span>
-            <span class="badge sale" *ngIf="data.isOnSale">🔥 Promotion</span>
+            <span class="badge featured" *ngIf="data.featured">⭐ Produit vedette</span>
+            <span class="badge sale" *ngIf="data.onSale">🔥 Promotion</span>
           </div>
         </div>
   
@@ -67,8 +67,8 @@
   
         <div class="pricing">
           <span class="current-price">{{ data.price }} DT</span>
-          <span class="original-price" *ngIf="data.isOnSale">{{ data.originalPrice }} DT</span>
-          <span class="discount" *ngIf="data.isOnSale">{{ calculateDiscount() }}%</span>
+          <span class="original-price" *ngIf="data.onSale">{{ data.originalPrice }} DT</span>
+          <span class="discount" *ngIf="data.onSale">{{ calculateDiscount() }}%</span>
         </div>
   
         <div class="description">

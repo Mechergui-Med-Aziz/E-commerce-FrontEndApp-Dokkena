@@ -8,6 +8,7 @@ import { CategoryService } from 'src/app/services/category-service';
 import { Router, RouterModule } from '@angular/router';
 import { CartItem } from 'src/app/classes/cart-item';
 import { BasketService } from 'src/app/services/basket-service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -23,6 +24,7 @@ export class Home implements OnInit {
   currentSlide = 0;
   sliderInterval: undefined | ReturnType<typeof setInterval>;
   productsOnSale:Product[]=[];
+  featuredProducts:Product[]=[];
   //basket:CartItem[]=[];
   showToast = false;
   toastMessage = '';
@@ -31,14 +33,23 @@ export class Home implements OnInit {
  constructor(private productService:ProductService,private categoryService:CategoryService, private basketService:BasketService,private router:Router) { }
 
 
-  ngOnInit() {
-    this.productService.getAllProducts().subscribe((data: Product[]) => {
-      this.products = [...data];
-      console.log(this.products);
-      this.productsOnSale=data.filter(product=>product.isOnSale==true);
-      console.log(this.productsOnSale);
-      //this.showToastMessage('Test du toast');
-    });
+ ngOnInit() {
+  forkJoin({
+    allProducts: this.productService.getAllProducts(),
+    productsOnSale: this.productService.getProductsOnSale(),
+    featuredProducts: this.productService.getFeaturedProducts()
+  }).subscribe(({ allProducts, productsOnSale,featuredProducts }) => {
+
+    this.products = [...allProducts];
+    this.productsOnSale = [...productsOnSale];
+    this.featuredProducts = [...featuredProducts];
+
+    console.log('Tous les produits : ', this.products);
+    console.log('Produits en promotion : ', this.productsOnSale);
+    console.log('Produits vedettes : ', this.featuredProducts);
+
+    // this.showToastMessage('Test du toast');
+  });
 
     this.categoryService.getAllCategories().subscribe((data: Category[]) => {
       this.categories = [...data];
@@ -76,13 +87,7 @@ export class Home implements OnInit {
   }
 
   // Méthodes utilitaires
-  getFeaturedProducts(): Product[] {
-    return this.products.filter(product => product.isFeatured);
-  }
-
-  getProductsOnSale(): Product[] {
-    return this.products.filter(product => product.isOnSale);
-  }
+  
 
   getDiscountPercentage(product: Product): number {
     if (!product.originalPrice) return 0;

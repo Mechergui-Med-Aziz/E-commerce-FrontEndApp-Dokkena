@@ -34,9 +34,11 @@ export class NavRightComponent implements OnInit, OnDestroy{
   }
   ngOnInit(): void {
     let id=Number(localStorage.getItem("id"));
+    if(id){
     this.authService.getUserById(id).subscribe((data: User) => {
       this.user = data;
     });
+  }
     this.basket=this.basketService.getBasket();
     this.basketService.basketUpdated.subscribe((basket:CartItem[])=>{
       this.basket=basket;
