@@ -53,6 +53,9 @@ const routes: Routes = [
       {
         path: 'register',
         loadComponent: () => import('./demo/pages/authentication/auth-signup/auth-signup.component').then((c) => c.AuthSignupComponent)
+      },{
+        path: 'reset-password',
+        loadComponent: () => import('./demo/pages/reset-password/reset-password').then((c) => c.ResetPassword)
       }
     ]
   }

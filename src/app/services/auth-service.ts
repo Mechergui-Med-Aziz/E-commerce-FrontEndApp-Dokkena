@@ -108,10 +108,13 @@ export class AuthService {
   getUserByCinAndEmail(cin:number,email:string){
     cin=Number(cin);
     console.log('Fetching user with CIN:', cin, 'and Email:', email);
-    return this.http.get(`${this.apiUrl}user/cin-email/${cin}/${email}`).pipe(
+    return this.http.get(`${this.apiUrl}user/cin-email`,{params:{
+      cin: cin,
+      email: email
+    }}).pipe(
       map(response => {
         console.log('Response:', response);
-        return response as User;
+        return response;
       }),
       catchError(error => {
         console.error('Error:', error);
@@ -120,14 +123,22 @@ export class AuthService {
     );
   }
 
+  resetPassword(email: string) {
+    return this.http.post(`${this.apiUrl}user/reset-password`, email, this.options).pipe(
+      map(response => response),
+      catchError(error => {
+        return of(error.error);
+      })
+    );
+  }
+  
+
   login( email:string, password: string ) {
     let credentials = { email: email, password: password };
     return this.http.post<any>(`${this.apiUrl}auth/login`, credentials).pipe(
       map(response => {
-        // En cas de succès, la réponse contient le token et autres informations.
         if (response.token) {
           localStorage.setItem('token', response.token);
-          localStorage.setItem('email', response.email);
           localStorage.setItem('id', response.id);
           return { success: true };
         }
@@ -135,33 +146,18 @@ export class AuthService {
       }),
       catchError(error => {
         console.log(error);
-        // Ici on récupère l'erreur customisée renvoyée par le backend.
         let errorMsg = "Erreur lors de la connexion !";
         if (error.error && error.error.error) {
-          console.log(error.error);
-          console.log(error.error.error);
-          errorMsg = error.error.error;
+          //console.log(error.error);
+          //console.log(error.error.error);
+          //errorMsg = error.error.error;
         }
         return of({ success: false, error: errorMsg });
       })
     );
-
-    /*const users: any = await this.http.get(`${this.apiUrl}?email=${email}`).toPromise();
-    
-    if (!users || users.length === 0) return null;
-
-    const user = users[0];
-    const match = bcrypt.compareSync(password, user.password);
-
-    if (!match) return null;
-
-    const token = this.generateToken(user);
-
-    localStorage.setItem("token", token);
-    localStorage.setItem("id", user.id);
-
-    return user;*/
   }
+
+
 
   
 
@@ -173,7 +169,6 @@ export class AuthService {
   logout() {
     localStorage.removeItem("token");
     localStorage.removeItem("id");
-    localStorage.removeItem("email");
   }
 
   isAuthenticated(): boolean {

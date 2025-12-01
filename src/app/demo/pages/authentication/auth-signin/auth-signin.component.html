@@ -29,7 +29,7 @@
         <button class="btn btn-primary mb-4" [disabled]="loginForm.invalid">Login</button>
         <p class="mb-2 text-muted">
           Forgot password?
-          <a href="javascript:">Reset</a>
+          <a [routerLink]="['/reset-password']">Reset</a>
         </p>
         <p class="mb-0 text-muted">
           Don’t have an account?
