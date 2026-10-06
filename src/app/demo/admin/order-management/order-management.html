@@ -1,0 +1,1080 @@
+<div class="orders-page">
+
+    <!-- ========================================== -->
+    <!-- HEADER -->
+    <!-- ========================================== -->
+  
+    <div class="page-header">
+  
+      <div class="header-left">
+  
+        <div class="page-icon">
+          <i class="fa-solid fa-bag-shopping"></i>
+        </div>
+  
+        <div>
+  
+          <h1>Commandes</h1>
+  
+          <p>
+            Gérez les commandes de vos clients
+          </p>
+  
+        </div>
+  
+      </div>
+  
+  
+      <button
+        class="refresh-button"
+        type="button"
+        (click)="loadOrders()"
+        [disabled]="loading"
+      >
+  
+        <i
+          class="fa-solid fa-rotate"
+          [class.spinning]="loading"
+        ></i>
+  
+        Actualiser
+  
+      </button>
+  
+    </div>
+  
+  
+    <!-- ========================================== -->
+    <!-- MESSAGES -->
+    <!-- ========================================== -->
+  
+    <div
+      class="alert success"
+      *ngIf="successMessage"
+    >
+  
+      <i class="fa-solid fa-circle-check"></i>
+  
+      <span>
+        {{ successMessage }}
+      </span>
+  
+      <button
+        type="button"
+        (click)="successMessage = ''"
+      >
+        ×
+      </button>
+  
+    </div>
+  
+  
+    <div
+      class="alert error"
+      *ngIf="errorMessage"
+    >
+  
+      <i class="fa-solid fa-circle-exclamation"></i>
+  
+      <span>
+        {{ errorMessage }}
+      </span>
+  
+      <button
+        type="button"
+        (click)="errorMessage = ''"
+      >
+        ×
+      </button>
+  
+    </div>
+  
+  
+    <!-- ========================================== -->
+    <!-- STATISTICS -->
+    <!-- ========================================== -->
+  
+    <div class="statistics">
+  
+      <!-- TOTAL -->
+  
+      <div class="stat-card">
+  
+        <div class="stat-icon total">
+          <i class="fa-solid fa-cart-shopping"></i>
+        </div>
+  
+        <div>
+  
+          <span class="stat-label">
+            Total commandes
+          </span>
+  
+          <strong>
+            {{ orders.length }}
+          </strong>
+  
+        </div>
+  
+      </div>
+  
+  
+      <!-- PENDING -->
+  
+      <div class="stat-card">
+  
+        <div class="stat-icon pending">
+          <i class="fa-solid fa-clock"></i>
+        </div>
+  
+        <div>
+  
+          <span class="stat-label">
+            En attente
+          </span>
+  
+          <strong>
+            {{ countByStatus('PENDING') }}
+          </strong>
+  
+        </div>
+  
+      </div>
+  
+  
+      <!-- PROCESSING -->
+  
+      <div class="stat-card">
+  
+        <div class="stat-icon processing">
+          <i class="fa-solid fa-box"></i>
+        </div>
+  
+        <div>
+  
+          <span class="stat-label">
+            En préparation
+          </span>
+  
+          <strong>
+            {{ countByStatus('PROCESSING') }}
+          </strong>
+  
+        </div>
+  
+      </div>
+  
+  
+      <!-- DELIVERED -->
+  
+      <div class="stat-card">
+  
+        <div class="stat-icon delivered">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+  
+        <div>
+  
+          <span class="stat-label">
+            Livrées
+          </span>
+  
+          <strong>
+            {{ countByStatus('DELIVERED') }}
+          </strong>
+  
+        </div>
+  
+      </div>
+  
+    </div>
+  
+  
+    <!-- ========================================== -->
+    <!-- FILTRES -->
+    <!-- ========================================== -->
+  
+    <div class="filters-card">
+  
+      <div class="filters-header">
+  
+        <div>
+  
+          <h2>
+            <i class="fa-solid fa-filter"></i>
+            Filtres
+          </h2>
+  
+          <span>
+            {{ filteredOrders.length }} commande(s)
+          </span>
+  
+        </div>
+  
+  
+        <button
+          type="button"
+          class="reset-button"
+          (click)="resetFilters()"
+        >
+  
+          <i class="fa-solid fa-rotate-left"></i>
+  
+          Réinitialiser
+  
+        </button>
+  
+      </div>
+  
+  
+      <div class="filters-grid">
+  
+        <!-- RECHERCHE -->
+  
+        <div class="filter-field search-field">
+  
+          <label>
+            Rechercher
+          </label>
+  
+          <div class="input-wrapper">
+  
+            <i class="fa-solid fa-magnifying-glass"></i>
+  
+            <input
+              type="text"
+              [(ngModel)]="searchTerm"
+              (ngModelChange)="applyFilters()"
+              placeholder="Nom, email ou téléphone..."
+            />
+  
+            <button
+              *ngIf="searchTerm"
+              type="button"
+              (click)="searchTerm = ''; applyFilters()"
+            >
+              ×
+            </button>
+  
+          </div>
+  
+        </div>
+  
+  
+        <!-- STATUS -->
+  
+        <div class="filter-field">
+  
+          <label>
+            Statut
+          </label>
+  
+          <select
+            [(ngModel)]="selectedStatus"
+            (ngModelChange)="applyFilters()"
+          >
+  
+            <option value="">
+              Tous les statuts
+            </option>
+  
+            <option
+              *ngFor="let status of statuses"
+              [value]="status.value"
+            >
+              {{ status.label }}
+            </option>
+  
+          </select>
+  
+        </div>
+  
+  
+        <!-- DATE DÉBUT -->
+  
+        <div class="filter-field">
+  
+          <label>
+            Date début
+          </label>
+  
+          <input
+            type="date"
+            [(ngModel)]="startDate"
+            (ngModelChange)="applyFilters()"
+          />
+  
+        </div>
+  
+  
+        <!-- DATE FIN -->
+  
+        <div class="filter-field">
+  
+          <label>
+            Date fin
+          </label>
+  
+          <input
+            type="date"
+            [(ngModel)]="endDate"
+            (ngModelChange)="applyFilters()"
+          />
+  
+        </div>
+  
+      </div>
+  
+    </div>
+  
+  
+    <!-- ========================================== -->
+    <!-- TABLE -->
+    <!-- ========================================== -->
+  
+    <div class="table-card">
+  
+  
+      <!-- LOADING -->
+  
+      <div
+        class="loading-container"
+        *ngIf="loading"
+      >
+  
+        <div class="loader"></div>
+  
+        <span>
+          Chargement des commandes...
+        </span>
+  
+      </div>
+  
+  
+      <!-- EMPTY -->
+  
+      <div
+        class="empty-state"
+        *ngIf="
+          !loading &&
+          filteredOrders.length === 0
+        "
+      >
+  
+        <div class="empty-icon">
+          <i class="fa-solid fa-cart-shopping"></i>
+        </div>
+  
+        <h3>
+          Aucune commande trouvée
+        </h3>
+  
+        <p>
+          Aucune commande ne correspond aux critères sélectionnés.
+        </p>
+  
+        <button
+          type="button"
+          (click)="resetFilters()"
+        >
+          Réinitialiser les filtres
+        </button>
+  
+      </div>
+  
+  
+      <!-- TABLE -->
+  
+      <div
+        class="table-wrapper"
+        *ngIf="
+          !loading &&
+          filteredOrders.length > 0
+        "
+      >
+  
+        <table>
+  
+          <thead>
+  
+            <tr>
+  
+              <th>
+                Commande
+              </th>
+  
+              <th>
+                Client
+              </th>
+  
+              <th>
+                Date
+              </th>
+  
+              <th>
+                Articles
+              </th>
+  
+              <th>
+                Total
+              </th>
+  
+              <th>
+                Statut
+              </th>
+  
+              <th>
+                Actions
+              </th>
+  
+            </tr>
+  
+          </thead>
+  
+  
+          <tbody>
+  
+            <tr
+              *ngFor="let order of paginatedOrders"
+            >
+  
+  
+              <!-- COMMANDE -->
+  
+              <td>
+  
+                <div class="order-id">
+  
+                  <strong>
+                    #{{ order.id }}
+                  </strong>
+  
+                  <span>
+                    {{ formatTime(order.orderDate) }}
+                  </span>
+  
+                </div>
+  
+              </td>
+  
+  
+              <!-- CLIENT -->
+  
+              <td>
+  
+                <div class="customer">
+  
+                  <div class="customer-avatar">
+  
+                    {{
+                      order.buyerName
+                        ? order.buyerName.charAt(0).toUpperCase()
+                        : '?'
+                    }}
+  
+                  </div>
+  
+                  <div>
+  
+                    <strong>
+                      {{ order.buyerName }}
+                    </strong>
+  
+                    <span>
+                      {{ order.email }}
+                    </span>
+  
+                    <small>
+                      {{ order.phone }}
+                    </small>
+  
+                  </div>
+  
+                </div>
+  
+              </td>
+  
+  
+              <!-- DATE -->
+  
+              <td>
+  
+                <div class="date">
+  
+                  <strong>
+                    {{ formatDate(order.orderDate) }}
+                  </strong>
+  
+                  <span>
+                    {{ formatTime(order.orderDate) }}
+                  </span>
+  
+                </div>
+  
+              </td>
+  
+  
+              <!-- ARTICLES -->
+  
+              <td>
+  
+                <div class="items-count">
+  
+                  <i class="fa-solid fa-box"></i>
+  
+                  {{ getItemsCount(order) }}
+  
+                  article(s)
+  
+                </div>
+  
+              </td>
+  
+  
+              <!-- TOTAL -->
+  
+              <td>
+  
+                <div class="price">
+  
+                  <strong>
+                    {{ formatPrice(getOrderTotal(order)) }}
+                  </strong>
+  
+                  <small>
+                    Livraison :
+                    {{ formatPrice(order.deliveryFees) }}
+                  </small>
+  
+                </div>
+  
+              </td>
+  
+  
+              <!-- STATUS -->
+  
+              <td>
+  
+                <div
+                  class="status-wrapper"
+                  [class]="getStatusClass(order.orderStatus)"
+                >
+  
+                  <span class="status-dot"></span>
+  
+                  <select
+                    [value]="order.orderStatus"
+                    (change)="changeStatus(order, $event)"
+                    [disabled]="updatingStatus"
+                  >
+  
+                    <option
+                      *ngFor="let status of statuses"
+                      [value]="status.value"
+                    >
+  
+                      {{ status.label }}
+  
+                    </option>
+  
+                  </select>
+  
+                </div>
+  
+              </td>
+  
+  
+              <!-- ACTIONS -->
+  
+              <td>
+  
+                <div class="actions">
+  
+                  <button
+                    type="button"
+                    class="action-button view"
+                    title="Voir la commande"
+                    (click)="openOrderDetails(order)"
+                  >
+  
+                    <i class="fa-solid fa-eye"></i>
+  
+                  </button>
+  
+  
+                  <button
+                    type="button"
+                    class="action-button delete"
+                    title="Supprimer"
+                    (click)="deleteOrder(order)"
+                    [disabled]="deletingOrder"
+                  >
+  
+                    <i class="fa-solid fa-trash"></i>
+  
+                  </button>
+  
+                </div>
+  
+              </td>
+  
+            </tr>
+  
+          </tbody>
+  
+        </table>
+  
+      </div>
+  
+  
+      <!-- ========================================== -->
+      <!-- PAGINATION -->
+      <!-- ========================================== -->
+  
+      <div
+        class="pagination"
+        *ngIf="
+          !loading &&
+          filteredOrders.length > 0
+        "
+      >
+  
+        <div class="page-size">
+  
+          <span>
+            Afficher
+          </span>
+  
+          <select
+            [(ngModel)]="pageSize"
+            (ngModelChange)="changePageSize()"
+          >
+  
+            <option [ngValue]="5">
+              5
+            </option>
+  
+            <option [ngValue]="10">
+              10
+            </option>
+  
+            <option [ngValue]="20">
+              20
+            </option>
+  
+            <option [ngValue]="50">
+              50
+            </option>
+  
+          </select>
+  
+          <span>
+            par page
+          </span>
+  
+        </div>
+  
+  
+        <div class="pagination-buttons">
+  
+          <button
+            type="button"
+            (click)="previousPage()"
+            [disabled]="currentPage === 1"
+          >
+  
+            <i class="fa-solid fa-chevron-left"></i>
+  
+          </button>
+  
+  
+          <button
+            type="button"
+            *ngFor="let page of getPages()"
+            [class.active]="page === currentPage"
+            (click)="goToPage(page)"
+          >
+  
+            {{ page }}
+  
+          </button>
+  
+  
+          <button
+            type="button"
+            (click)="nextPage()"
+            [disabled]="currentPage === totalPages"
+          >
+  
+            <i class="fa-solid fa-chevron-right"></i>
+  
+          </button>
+  
+        </div>
+  
+  
+        <div class="pagination-info">
+  
+          {{ getPaginationStart() }}
+  
+          -
+  
+          {{ getPaginationEnd() }}
+  
+          sur
+  
+          {{ filteredOrders.length }}
+  
+        </div>
+  
+      </div>
+  
+    </div>
+  
+  </div>
+  
+  
+  <!-- ================================================= -->
+  <!-- MODAL DÉTAIL COMMANDE -->
+  <!-- ================================================= -->
+  
+  <div
+    class="modal-overlay"
+    *ngIf="selectedOrder"
+    (click)="closeOrderDetails()"
+  >
+  
+    <div
+      class="order-modal"
+      (click)="$event.stopPropagation()"
+    >
+  
+  
+      <!-- HEADER -->
+  
+      <div class="modal-header">
+  
+        <div>
+  
+          <span>
+            Détails de la commande
+          </span>
+  
+          <h2>
+            #{{ selectedOrder.id }}
+          </h2>
+  
+        </div>
+  
+  
+        <button
+          type="button"
+          class="close-button"
+          (click)="closeOrderDetails()"
+        >
+  
+          <i class="fa-solid fa-xmark"></i>
+  
+        </button>
+  
+      </div>
+  
+  
+      <!-- CLIENT -->
+  
+      <div class="modal-section">
+  
+        <div class="section-title">
+  
+          <i class="fa-solid fa-user"></i>
+  
+          <h3>
+            Informations client
+          </h3>
+  
+        </div>
+  
+  
+        <div class="customer-details">
+  
+          <div>
+  
+            <span>
+              Nom
+            </span>
+  
+            <strong>
+              {{ selectedOrder.buyerName }}
+            </strong>
+  
+          </div>
+  
+  
+          <div>
+  
+            <span>
+              Email
+            </span>
+  
+            <strong>
+              {{ selectedOrder.email }}
+            </strong>
+  
+          </div>
+  
+  
+          <div>
+  
+            <span>
+              Téléphone
+            </span>
+  
+            <strong>
+              {{ selectedOrder.phone }}
+            </strong>
+  
+          </div>
+  
+        </div>
+  
+      </div>
+  
+  
+      <!-- LIVRAISON -->
+  
+      <div class="modal-section">
+  
+        <div class="section-title">
+  
+          <i class="fa-solid fa-location-dot"></i>
+  
+          <h3>
+            Adresse de livraison
+          </h3>
+  
+        </div>
+  
+  
+        <div class="address-box">
+  
+          <strong>
+            {{ selectedOrder.deliveryAddress }}
+          </strong>
+  
+          <span>
+  
+            {{ selectedOrder.city }},
+  
+            {{ selectedOrder.state }}
+  
+            {{ selectedOrder.postalCode }}
+  
+          </span>
+  
+  
+          <p
+            *ngIf="selectedOrder.deliveryInstruction"
+          >
+  
+            <i class="fa-solid fa-comment"></i>
+  
+            {{ selectedOrder.deliveryInstruction }}
+  
+          </p>
+  
+        </div>
+  
+      </div>
+  
+  
+      <!-- PRODUITS -->
+  
+      <div class="modal-section">
+  
+        <div class="section-title">
+  
+          <i class="fa-solid fa-box"></i>
+  
+          <h3>
+            Produits commandés
+          </h3>
+  
+        </div>
+  
+  
+        <div class="products-list">
+  
+          <div
+            class="product-row"
+            *ngFor="
+              let item of selectedOrder.items
+            "
+          >
+  
+            <img
+              [src]="getProductImage(item.product.image)"
+              [alt]="item.product.name"
+            />
+  
+  
+            <div class="product-info">
+  
+              <strong>
+                {{ item.product.name }}
+              </strong>
+  
+              <span>
+  
+                {{ formatPrice(item.product.price) }}
+  
+                ×
+  
+                {{ item.quantity }}
+  
+              </span>
+  
+            </div>
+  
+  
+            <strong class="product-total">
+  
+              {{
+                formatPrice(
+                  getItemTotal(item)
+                )
+              }}
+  
+            </strong>
+  
+          </div>
+  
+        </div>
+  
+      </div>
+  
+  
+      <!-- TOTAL -->
+  
+      <div class="order-summary">
+  
+        <div>
+  
+          <span>
+            Sous-total
+          </span>
+  
+          <strong>
+            {{ formatPrice(selectedOrder.orderPrice) }}
+          </strong>
+  
+        </div>
+  
+  
+        <div>
+  
+          <span>
+            Livraison
+          </span>
+  
+          <strong>
+            {{ formatPrice(selectedOrder.deliveryFees) }}
+          </strong>
+  
+        </div>
+  
+  
+        <div class="total-line">
+  
+          <span>
+            Total
+          </span>
+  
+          <strong>
+  
+            {{
+              formatPrice(
+                getOrderTotal(selectedOrder)
+              )
+            }}
+  
+          </strong>
+  
+        </div>
+  
+      </div>
+  
+  
+      <!-- STATUS -->
+  
+      <div class="modal-status">
+  
+        <label>
+          Statut de la commande
+        </label>
+  
+  
+        <div
+          class="modal-status-select"
+          [class]="
+            getStatusClass(
+              selectedOrder.orderStatus
+            )
+          "
+        >
+  
+          <span class="status-dot"></span>
+  
+  
+          <select
+            [value]="selectedOrder.orderStatus"
+            (change)="changeStatus(selectedOrder, $event)"
+          >
+  
+            <option
+              *ngFor="let status of statuses"
+              [value]="status.value"
+            >
+  
+              {{ status.label }}
+  
+            </option>
+  
+          </select>
+  
+        </div>
+  
+      </div>
+  
+  
+      <!-- FOOTER -->
+  
+      <div class="modal-footer">
+  
+        <button
+          type="button"
+          class="cancel-modal"
+          (click)="closeOrderDetails()"
+        >
+  
+          Fermer
+  
+        </button>
+  
+  
+        <button
+          type="button"
+          class="delete-modal"
+          (click)="deleteOrder(selectedOrder)"
+        >
+  
+          <i class="fa-solid fa-trash"></i>
+  
+          Supprimer
+  
+        </button>
+  
+      </div>
+  
+    </div>
+  
+  </div>

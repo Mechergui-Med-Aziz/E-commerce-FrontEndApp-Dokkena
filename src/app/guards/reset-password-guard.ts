@@ -2,15 +2,15 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth-service';
 
-export const profileGuardGuard: CanActivateFn = (route, state) => {
+export const resetPasswordGuard: CanActivateFn = (route, state) => {
   const router=inject(Router);
   const auth= inject(AuthService);
   const isAuthenticated=auth.isAuthenticated();
 
   if(isAuthenticated){
-    return true;}
+    router.navigate(['/home']);
+    return false;}
   else{
-    router.navigate(['/login']);
-    return false;
+    return true;
   }
 };

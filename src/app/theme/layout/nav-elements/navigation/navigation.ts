@@ -1,3 +1,6 @@
+import { AuthService } from "src/app/services/auth-service";
+import { HttpClient } from "@angular/common/http";
+
 export interface NavigationItem {
   id: string;
   title: string;
@@ -14,7 +17,44 @@ export interface NavigationItem {
 
   children?: NavigationItem[];
 }
+
+const http = null;
+const auth = new AuthService(http);
+
+
 export const NavigationItems: NavigationItem[] = [
+  {
+    id: 'admin',
+    title: 'Administration',
+    type: 'group',
+    icon: 'icon-navigation',
+    hidden: auth.isAuthenticated() ? false : true,
+    children: [
+      {
+        id: 'products',
+        title: 'Gestion des produits',
+        type: 'item',
+        url: '/product-management',
+        icon: 'feather icon-home',
+        classes: 'nav-item'
+      },
+      {
+        id: 'categories',
+        title: 'Gestion des catégories',
+        type: 'item',
+        url: '/category-management',
+        classes: 'nav-item',
+        icon: 'feather icon-list'
+      },{
+        id: 'orders',
+        title: 'Gestion des commandes',
+        type: 'item',
+        url: '/order-management',
+        classes: 'nav-item',
+        icon: 'feather icon-list'
+      }
+    ]
+  },
   {
     id: 'navigation',
     title: 'Navigation',

@@ -4,7 +4,8 @@ import { Routes, RouterModule } from '@angular/router';
 // project import
 import { Guest } from './theme/layout/guest/guest';
 import { NavElements } from './theme/layout/nav-elements/nav-elements';
-import { profileGuardGuard } from './guards/profile-guard-guard';
+import { profileGuard } from './guards/profile-guard';
+import { resetPasswordGuard } from './guards/reset-password-guard';
 
 const routes: Routes = [
   {
@@ -37,7 +38,20 @@ const routes: Routes = [
         path:'payment',
         loadComponent: () => import('./demo/payment/payment').then((c) => c.Payment)
       },{
-        path:'profile', canActivate: [profileGuardGuard],
+        path:'order-confirmation',canActivate:[],
+        loadComponent: () => import('./demo/order-confirmation/order-confirmation').then((c) => c.OrderConfirmationComponent)
+      },
+      {path:'product-management',canActivate:[profileGuard],
+        loadComponent: () => import('./demo/admin/product-management/product-management').then((c) => c.ProductManagementComponent)
+      },
+      {path:'category-management',canActivate:[profileGuard],
+        loadComponent: () => import('./demo/admin/category-management/category-management').then((c) => c.CategoryManagement)
+      },
+      {path:'order-management',canActivate:[],
+        loadComponent: () => import('./demo/admin/order-management/order-management').then((c) => c.OrderManagementComponent)
+      },
+      {
+        path:'profile', canActivate: [profileGuard],
         loadComponent: () => import('./demo/profile/profile').then((c) => c.Profile)
       }
     ]
@@ -54,7 +68,7 @@ const routes: Routes = [
         path: 'register',
         loadComponent: () => import('./demo/pages/authentication/auth-signup/auth-signup.component').then((c) => c.AuthSignupComponent)
       },{
-        path: 'reset-password',
+        path: 'reset-password', canActivate:[resetPasswordGuard],
         loadComponent: () => import('./demo/pages/reset-password/reset-password').then((c) => c.ResetPassword)
       }
     ]

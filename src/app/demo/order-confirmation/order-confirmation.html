@@ -1,0 +1,781 @@
+<div class="checkout-page">
+
+  <!-- ========================================= -->
+  <!-- HEADER -->
+  <!-- ========================================= -->
+
+  <div class="checkout-header">
+
+    <div class="header-content">
+
+      <div class="header-icon">
+        <i class="fa-solid fa-cart-shopping"></i>
+      </div>
+
+      <div>
+
+        <h1>
+          Finalisation de la commande
+        </h1>
+
+        <p>
+          Vérifiez vos informations avant de confirmer votre commande.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ========================================= -->
+  <!-- CONTAINER -->
+  <!-- ========================================= -->
+
+  <div class="checkout-container">
+
+
+    <!-- ========================================= -->
+    <!-- SUCCESS MESSAGE -->
+    <!-- ========================================= -->
+
+    <div
+      class="success-message"
+      *ngIf="successMessage"
+    >
+
+      <i class="fa-solid fa-circle-check"></i>
+
+      <span>
+        {{ successMessage }}
+      </span>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- ERROR MESSAGE -->
+    <!-- ========================================= -->
+
+    <div
+      class="error-message"
+      *ngIf="errorMessage"
+    >
+
+      <i class="fa-solid fa-circle-exclamation"></i>
+
+      <span>
+        {{ errorMessage }}
+      </span>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- FORM -->
+    <!-- ========================================= -->
+
+    <form
+      [formGroup]="orderForm"
+      (ngSubmit)="confirmOrder()"
+      class="checkout-form"
+    >
+
+
+      <!-- ========================================= -->
+      <!-- INFORMATIONS PERSONNELLES -->
+      <!-- ========================================= -->
+
+      <section class="form-section">
+
+        <div class="section-header">
+
+          <div class="section-icon">
+            <i class="fa-solid fa-user"></i>
+          </div>
+
+          <div>
+
+            <h2>
+              Informations personnelles
+            </h2>
+
+            <p>
+              Entrez vos coordonnées pour recevoir votre commande.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-grid">
+
+
+          <!-- PRÉNOM -->
+
+          <div class="form-group">
+
+            <label for="firstName">
+              Prénom
+              <span>*</span>
+            </label>
+
+            <div
+              class="input-wrapper"
+              [class.invalid]="isInvalid('firstName')"
+            >
+
+              <i class="fa-solid fa-user"></i>
+
+              <input
+                id="firstName"
+                type="text"
+                formControlName="firstName"
+                placeholder="Votre prénom"
+              />
+
+            </div>
+
+            <small
+              *ngIf="isInvalid('firstName')"
+              class="field-error"
+            >
+              Le prénom est obligatoire.
+            </small>
+
+          </div>
+
+
+          <!-- NOM -->
+
+          <div class="form-group">
+
+            <label for="lastName">
+              Nom
+              <span>*</span>
+            </label>
+
+            <div
+              class="input-wrapper"
+              [class.invalid]="isInvalid('lastName')"
+            >
+
+              <i class="fa-solid fa-user"></i>
+
+              <input
+                id="lastName"
+                type="text"
+                formControlName="lastName"
+                placeholder="Votre nom"
+              />
+
+            </div>
+
+            <small
+              *ngIf="isInvalid('lastName')"
+              class="field-error"
+            >
+              Le nom est obligatoire.
+            </small>
+
+          </div>
+
+
+          <!-- EMAIL -->
+
+          <div class="form-group">
+
+            <label for="email">
+              Adresse email
+              <span>*</span>
+            </label>
+
+            <div
+              class="input-wrapper"
+              [class.invalid]="isInvalid('email')"
+            >
+
+              <i class="fa-solid fa-envelope"></i>
+
+              <input
+                id="email"
+                type="email"
+                formControlName="email"
+                placeholder="exemple@email.com"
+              />
+
+            </div>
+
+            <small
+              *ngIf="isInvalid('email')"
+              class="field-error"
+            >
+              Veuillez saisir une adresse email valide.
+            </small>
+
+          </div>
+
+
+          <!-- TÉLÉPHONE -->
+
+          <div class="form-group">
+
+            <label for="phone">
+              Téléphone
+              <span>*</span>
+            </label>
+
+            <div
+              class="input-wrapper"
+              [class.invalid]="isInvalid('phone')"
+            >
+
+              <i class="fa-solid fa-phone"></i>
+
+              <input
+                id="phone"
+                type="tel"
+                formControlName="phone"
+                placeholder="Ex : 20123456"
+                maxlength="8"
+              />
+
+            </div>
+
+            <small
+              *ngIf="isInvalid('phone')"
+              class="field-error"
+            >
+              Le numéro doit contenir exactement 8 chiffres.
+            </small>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- ========================================= -->
+      <!-- ADRESSE DE LIVRAISON -->
+      <!-- ========================================= -->
+
+      <section class="form-section">
+
+        <div class="section-header">
+
+          <div class="section-icon">
+            <i class="fa-solid fa-location-dot"></i>
+          </div>
+
+          <div>
+
+            <h2>
+              Adresse de livraison
+            </h2>
+
+            <p>
+              Indiquez l'adresse à laquelle nous devons livrer votre commande.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-grid">
+
+
+          <!-- ADRESSE -->
+
+          <div class="form-group full-width">
+
+            <label for="address">
+              Adresse
+              <span>*</span>
+            </label>
+
+            <div
+              class="input-wrapper"
+              [class.invalid]="isInvalid('address')"
+            >
+
+              <i class="fa-solid fa-house"></i>
+
+              <input
+                id="address"
+                type="text"
+                formControlName="address"
+                placeholder="Numéro, rue, résidence..."
+              />
+
+            </div>
+
+            <small
+              *ngIf="isInvalid('address')"
+              class="field-error"
+            >
+              L'adresse est obligatoire.
+            </small>
+
+          </div>
+
+
+          <!-- GOUVERNORAT -->
+
+          <div class="form-group">
+
+            <label for="governorate">
+              Gouvernorat
+              <span>*</span>
+            </label>
+
+            <div
+              class="input-wrapper select-wrapper"
+              [class.invalid]="isInvalid('governorate')"
+            >
+
+              <i class="fa-solid fa-map"></i>
+
+              <select
+                id="governorate"
+                formControlName="governorate"
+              >
+
+                <option value="">
+                  Sélectionnez votre gouvernorat
+                </option>
+
+                <option value="Tunis">Tunis</option>
+                <option value="Ariana">Ariana</option>
+                <option value="Ben Arous">Ben Arous</option>
+                <option value="Manouba">Manouba</option>
+                <option value="Nabeul">Nabeul</option>
+                <option value="Zaghouan">Zaghouan</option>
+                <option value="Bizerte">Bizerte</option>
+                <option value="Béja">Béja</option>
+                <option value="Jendouba">Jendouba</option>
+                <option value="Le Kef">Le Kef</option>
+                <option value="Siliana">Siliana</option>
+                <option value="Sousse">Sousse</option>
+                <option value="Monastir">Monastir</option>
+                <option value="Mahdia">Mahdia</option>
+                <option value="Sfax">Sfax</option>
+                <option value="Kairouan">Kairouan</option>
+                <option value="Kasserine">Kasserine</option>
+                <option value="Sidi Bouzid">Sidi Bouzid</option>
+                <option value="Gabès">Gabès</option>
+                <option value="Médenine">Médenine</option>
+                <option value="Tataouine">Tataouine</option>
+                <option value="Gafsa">Gafsa</option>
+                <option value="Tozeur">Tozeur</option>
+                <option value="Kébili">Kébili</option>
+
+              </select>
+
+              <i class="fa-solid fa-chevron-down select-arrow"></i>
+
+            </div>
+
+            <small
+              *ngIf="isInvalid('governorate')"
+              class="field-error"
+            >
+              Veuillez sélectionner un gouvernorat.
+            </small>
+
+          </div>
+
+
+          <!-- VILLE -->
+
+          <div class="form-group">
+
+            <label for="city">
+              Ville
+              <span>*</span>
+            </label>
+
+            <div
+              class="input-wrapper"
+              [class.invalid]="isInvalid('city')"
+            >
+
+              <i class="fa-solid fa-city"></i>
+
+              <input
+                id="city"
+                type="text"
+                formControlName="city"
+                placeholder="Votre ville"
+              />
+
+            </div>
+
+            <small
+              *ngIf="isInvalid('city')"
+              class="field-error"
+            >
+              La ville est obligatoire.
+            </small>
+
+          </div>
+
+
+          <!-- CODE POSTAL -->
+
+          <div class="form-group">
+
+            <label for="postalCode">
+              Code postal
+              <span>*</span>
+            </label>
+
+            <div
+              class="input-wrapper"
+              [class.invalid]="isInvalid('postalCode')"
+            >
+
+              <i class="fa-solid fa-envelopes-bulk"></i>
+
+              <input
+                id="postalCode"
+                type="text"
+                formControlName="postalCode"
+                placeholder="Ex : 1000"
+                maxlength="4"
+              />
+
+            </div>
+
+            <small
+              *ngIf="isInvalid('postalCode')"
+              class="field-error"
+            >
+              Le code postal doit contenir 4 chiffres.
+            </small>
+
+          </div>
+
+
+          <!-- INSTRUCTIONS -->
+
+          <div class="form-group full-width">
+
+            <label for="notes">
+
+              Instructions de livraison
+
+              <span class="optional">
+                (optionnel)
+              </span>
+
+            </label>
+
+            <div class="textarea-wrapper">
+
+              <i class="fa-solid fa-comment-dots"></i>
+
+              <textarea
+                id="notes"
+                formControlName="notes"
+                rows="4"
+                placeholder="Ex : Appeler avant la livraison, laisser chez le gardien..."
+              ></textarea>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- ========================================= -->
+      <!-- MODE DE PAIEMENT -->
+      <!-- ========================================= -->
+
+      <section class="form-section">
+
+        <div class="section-header">
+
+          <div class="section-icon">
+            <i class="fa-solid fa-credit-card"></i>
+          </div>
+
+          <div>
+
+            <h2>
+              Mode de paiement
+            </h2>
+
+            <p>
+              Choisissez votre méthode de paiement.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="payment-options">
+
+
+          <!-- PAIEMENT CASH -->
+
+          <label
+            class="payment-option"
+            [class.selected]="
+              orderForm.get('paymentMethod')?.value === 'cash'
+            "
+          >
+
+            <input
+              type="radio"
+              formControlName="paymentMethod"
+              value="cash"
+            />
+
+            <div class="payment-icon">
+
+              <i class="fa-solid fa-money-bill-wave"></i>
+
+            </div>
+
+            <div class="payment-content">
+
+              <strong>
+                Paiement à la livraison
+              </strong>
+
+              <span>
+                Payez en espèces lors de la réception de votre commande.
+              </span>
+
+            </div>
+
+            <div class="payment-check">
+
+              <i class="fa-solid fa-circle-check"></i>
+
+            </div>
+
+          </label>
+
+
+
+          <!-- PAIEMENT CARTE -->
+
+          <label
+            class="payment-option"
+            [class.selected]="
+              orderForm.get('paymentMethod')?.value === 'card'
+            "
+          >
+
+            <input
+              type="radio"
+              formControlName="paymentMethod"
+              value="card"
+            />
+
+            <div class="payment-icon">
+
+              <i class="fa-solid fa-credit-card"></i>
+
+            </div>
+
+            <div class="payment-content">
+
+              <strong>
+                Carte bancaire
+              </strong>
+
+              <span>
+                Payez votre commande avec votre carte bancaire.
+              </span>
+
+            </div>
+
+            <div class="payment-check">
+
+              <i class="fa-solid fa-circle-check"></i>
+
+            </div>
+
+          </label>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- ========================================= -->
+      <!-- CONDITIONS -->
+      <!-- ========================================= -->
+
+      <section class="confirmation">
+
+        <label
+          class="terms"
+          [class.error]="isInvalid('termsAccepted')"
+        >
+
+          <input
+            type="checkbox"
+            formControlName="termsAccepted"
+          />
+
+          <span>
+
+            J'accepte les
+
+            <a
+              href="#"
+              (click)="$event.preventDefault()"
+            >
+              conditions générales de vente
+            </a>
+
+            et la
+
+            <a
+              href="#"
+              (click)="$event.preventDefault()"
+            >
+              politique de confidentialité
+            </a>.
+
+          </span>
+
+        </label>
+
+
+        <small
+          *ngIf="isInvalid('termsAccepted')"
+          class="terms-error"
+        >
+          Vous devez accepter les conditions générales de vente.
+        </small>
+
+      </section>
+
+
+
+      <!-- ========================================= -->
+      <!-- BOUTON -->
+      <!-- ========================================= -->
+
+      <div class="form-actions">
+
+        <button
+          type="submit"
+          class="confirm-button"
+          [disabled]="orderForm.invalid || loading"
+        >
+
+          <span *ngIf="!loading">
+            Confirmer ma commande
+          </span>
+
+          <span *ngIf="loading">
+            Création de la commande...
+          </span>
+
+          <i
+            *ngIf="!loading"
+            class="fa-solid fa-arrow-right"
+          ></i>
+
+          <i
+            *ngIf="loading"
+            class="fa-solid fa-spinner fa-spin"
+          ></i>
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+
+
+  <!-- ========================================= -->
+  <!-- MODAL COMMANDE CRÉÉE -->
+  <!-- ========================================= -->
+
+  <div
+    class="success-modal-overlay"
+    *ngIf="showSuccessModal"
+  >
+
+    <div
+      class="success-modal"
+      role="dialog"
+      aria-modal="true"
+    >
+
+      <!-- ICÔNE -->
+
+      <div class="success-modal-icon">
+
+        <i class="fa-solid fa-check"></i>
+
+      </div>
+
+
+      <!-- TITRE -->
+
+      <h2>
+        Commande confirmée !
+      </h2>
+
+
+      <!-- MESSAGE -->
+
+      <p>
+
+        Votre commande a été créée avec succès.
+
+      </p>
+
+
+      <p class="success-modal-info">
+
+        Merci pour votre confiance.
+
+        Votre commande sera préparée et livrée
+        dans les meilleurs délais.
+
+      </p>
+
+
+      <!-- BOUTON -->
+
+      <button
+        type="button"
+        class="success-modal-button"
+        (click)="closeSuccessModal()"
+      >
+
+        <span>
+          Retour à l'accueil
+        </span>
+
+        <i class="fa-solid fa-house"></i>
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

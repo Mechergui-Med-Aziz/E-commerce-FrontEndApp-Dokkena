@@ -8,12 +8,14 @@ import { environment } from 'src/environments/environment';
 
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
+
 })
 export class AuthService {
   //private apiUrl="https://dbchallengeserver.onrender.com/user"
   //private apiUrl="https://dbchallengeserver.onrender.com/user"
   private apiUrl=environment.apiUrl
+  n=''
 
   options = {
     headers: new HttpHeaders({
@@ -26,7 +28,7 @@ export class AuthService {
   constructor(private http:HttpClient) { }
 
   getUserByEmail(email:string){
-    return this.http.get(`${this.apiUrl}user/email/${email}`).pipe(
+    return this.http.get(`${this.apiUrl}api/user/email/${email}`).pipe(
       map(response => {
         console.log('Response:', response);
         return response as User;
@@ -39,7 +41,7 @@ export class AuthService {
   }
 
   getUserById(id:number){
-    return this.http.get(`${this.apiUrl}user/id/${id}`,this.options).pipe(
+    return this.http.get(`${this.apiUrl}api/user/id/${id}`,this.options).pipe(
       map(response => {
         console.log('Response:', response);
         return response as User;
@@ -52,7 +54,7 @@ export class AuthService {
   }
 
   getAllUsers():Observable<User[]>{
-    return this.http.get<User[]>(`${this.apiUrl}user/all`).pipe(
+    return this.http.get<User[]>(`${this.apiUrl}api/user/all`).pipe(
       map(response => {
         console.log('Response:', response);
         return response as User[];
@@ -65,7 +67,7 @@ export class AuthService {
   }
 
   getUserByCin(cin: number){
-    let user=this.http.get(`${this.apiUrl}user/cin/${cin}`).pipe(
+    let user=this.http.get(`${this.apiUrl}api/user/cin/${cin}`).pipe(
       map(response => {
         console.log('Response:', response);
         return response as User;
@@ -79,7 +81,7 @@ export class AuthService {
 
   registerUser(userData:User){
     
-    return this.http.post(`${this.apiUrl}user/register`,userData).pipe(
+    return this.http.post(`${this.apiUrl}api/user/register`,userData).pipe(
       map(response => {
         console.log(userData);
         console.log('Response:', response);
@@ -93,7 +95,7 @@ export class AuthService {
   }
 
   updateUser(id:number,userData:User){
-    return this.http.put(`${this.apiUrl}user/update`,userData).pipe(
+    return this.http.put(`${this.apiUrl}api/user/update`,userData).pipe(
       map(response => {
         console.log('Response:', response);
         return response as User;
@@ -108,7 +110,7 @@ export class AuthService {
   getUserByCinAndEmail(cin:number,email:string){
     cin=Number(cin);
     console.log('Fetching user with CIN:', cin, 'and Email:', email);
-    return this.http.get(`${this.apiUrl}user/cin-email`,{params:{
+    return this.http.get(`${this.apiUrl}api/user/cin-email`,{params:{
       cin: cin,
       email: email
     }}).pipe(
@@ -124,7 +126,7 @@ export class AuthService {
   }
 
   resetPassword(email: string) {
-    return this.http.post(`${this.apiUrl}user/reset-password`, email, this.options).pipe(
+    return this.http.post(`${this.apiUrl}api/user/reset-password`, email, this.options).pipe(
       map(response => response),
       catchError(error => {
         return of(error.error);
@@ -135,7 +137,7 @@ export class AuthService {
 
   login( email:string, password: string ) {
     let credentials = { email: email, password: password };
-    return this.http.post<any>(`${this.apiUrl}auth/login`, credentials).pipe(
+    return this.http.post<any>(`${this.apiUrl}api/auth/login`, credentials).pipe(
       map(response => {
         if (response.token) {
           localStorage.setItem('token', response.token);

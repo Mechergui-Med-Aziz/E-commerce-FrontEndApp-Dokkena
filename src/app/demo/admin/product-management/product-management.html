@@ -1,0 +1,615 @@
+  
+  <div class="admin-products">
+  
+<!-- MODAL NOTIFICATION -->
+
+<div
+  class="modal-overlay"
+  *ngIf="showModal"
+  (click)="closeModal()"
+>
+
+  <div
+    class="notification-modal"
+    [ngClass]="modalType"
+    role="alertdialog"
+    aria-modal="true"
+    (click)="$event.stopPropagation()"
+  >
+
+    <div class="modal-icon">
+
+      <span *ngIf="modalType === 'success'">
+        ✓
+      </span>
+
+      <span *ngIf="modalType === 'error'">
+        ✕
+      </span>
+
+      <span *ngIf="modalType === 'warning'">
+        !
+      </span>
+
+    </div>
+
+    <h2>
+      {{ modalTitle }}
+    </h2>
+
+    <p>
+      {{ modalMessage }}
+    </p>
+
+    <button
+      type="button"
+      class="modal-close-btn"
+      (click)="closeModal()"
+    >
+      Compris
+    </button>
+
+  </div>
+
+</div>
+  
+  
+    <!-- HEADER -->
+  
+    <div class="page-header">
+  
+      <!-- ton contenu actuel... -->
+  
+    </div>
+    <div class="page-header">
+  
+      <div>
+        <h1>Gestion des produits</h1>
+  
+        <p>
+          Ajouter, modifier et supprimer les produits
+          de votre boutique.
+        </p>
+      </div>
+  
+      <div class="product-count">
+        {{ products.length }} produits
+      </div>
+  
+    </div>
+  
+  
+    <!-- MESSAGES -->
+  
+    
+  
+  
+    <!-- FORM -->
+  
+    <div class="product-form-card">
+  
+      <div class="form-header">
+  
+        <h2>
+          {{ isEditing
+            ? 'Modifier le produit'
+            : 'Ajouter un produit'
+          }}
+        </h2>
+  
+        <button
+          *ngIf="isEditing"
+          type="button"
+          class="cancel-btn"
+          (click)="resetForm()"
+        >
+          Annuler
+        </button>
+  
+      </div>
+  
+  
+      <form
+        [formGroup]="productForm"
+        (ngSubmit)="
+          isEditing
+            ? updateProduct()
+            : createProduct()
+        "
+      >
+  
+        <!-- NAME -->
+  
+        <div class="form-group">
+  
+          <label>Nom du produit</label>
+  
+          <input
+            type="text"
+            formControlName="name"
+            placeholder="Ex: iPhone 15"
+          >
+  
+          <small
+            *ngIf="
+              productForm.get('name')?.invalid &&
+              productForm.get('name')?.touched
+            "
+          >
+            Le nom est obligatoire.
+          </small>
+  
+        </div>
+  
+  
+        <!-- PRICE -->
+  
+        <div class="form-row">
+  
+          <div class="form-group">
+  
+            <label>Prix</label>
+  
+            <input
+              type="number"
+              formControlName="price"
+              min="0"
+              step="0.01"
+            >
+  
+          </div>
+  
+  
+          <div class="form-group">
+  
+            <label>Prix original</label>
+  
+            <input
+              type="number"
+              formControlName="originalPrice"
+              min="0"
+              step="0.01"
+            >
+  
+          </div>
+          <div class="form-group">
+  
+            <label>Quantité</label>
+  
+            <input
+              type="number"
+              formControlName="quantity"
+              min="0"
+              step="1"
+            >
+  
+          </div>
+  
+        </div>
+  
+  
+        <!-- CATEGORY -->
+  
+        <div class="form-group">
+  
+          <label>Catégorie</label>
+  
+          <!--
+            Adapte ce select à tes catégories.
+            Si tu charges les catégories depuis ton backend,
+            remplace les options statiques par ton *ngFor.
+          -->
+  
+          <select formControlName="category">
+
+            <option [ngValue]="null">
+              Sélectionner une catégorie
+            </option>
+        
+            <option
+              *ngFor="let category of categories"
+              [ngValue]="category.id"
+            >
+              {{ category.name }}
+            </option>
+        
+          </select>
+        
+        </div>
+  
+  
+        <!-- DESCRIPTION -->
+  
+        <div class="form-group">
+  
+          <label>Description</label>
+  
+          <textarea
+            formControlName="description"
+            rows="5"
+            placeholder="Description du produit..."
+          ></textarea>
+  
+        </div>
+  
+  
+        <!-- IMAGES -->
+  
+        <div class="images-section">
+  
+          <h3>Images du produit</h3>
+  
+          <p>
+            Les images sont facultatives.
+            Vous pouvez ajouter jusqu'à 3 images.
+          </p>
+  
+  
+          <div class="images-grid">
+  
+            <!-- IMAGE 1 -->
+  
+            <div class="image-upload">
+  
+              <label>Image principale</label>
+  
+              <div
+                class="image-preview"
+                *ngIf="imagePreview"
+              >
+  
+                <img
+                  [src]="imagePreview"
+                  alt="Image principale"
+                >
+  
+              </div>
+  
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                (change)="onImageSelected($event)"
+              >
+  
+            </div>
+  
+  
+            <!-- IMAGE 2 -->
+  
+            <div class="image-upload">
+  
+              <label>Image 2</label>
+  
+              <div
+                class="image-preview"
+                *ngIf="imagePreview2"
+              >
+  
+                <img
+                  [src]="imagePreview2"
+                  alt="Image 2"
+                >
+  
+              </div>
+  
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                (change)="onImage2Selected($event)"
+              >
+  
+            </div>
+  
+  
+            <!-- IMAGE 3 -->
+  
+            <div class="image-upload">
+  
+              <label>Image 3</label>
+  
+              <div
+                class="image-preview"
+                *ngIf="imagePreview3"
+              >
+  
+                <img
+                  [src]="imagePreview3"
+                  alt="Image 3"
+                >
+  
+              </div>
+  
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                (change)="onImage3Selected($event)"
+              >
+  
+            </div>
+  
+          </div>
+  
+        </div>
+  
+  
+        <!-- OPTIONS -->
+  
+        <div class="options">
+  
+          <label class="checkbox">
+  
+            <input
+              type="checkbox"
+              formControlName="featured"
+            >
+  
+            <span>
+              Produit vedette
+            </span>
+  
+          </label>
+  
+  
+          <label class="checkbox">
+  
+            <input
+              type="checkbox"
+              formControlName="onSale"
+            >
+  
+            <span>
+              En promotion
+            </span>
+  
+          </label>
+  
+        </div>
+  
+  
+        <!-- BUTTON -->
+  
+        <button
+          type="submit"
+          class="submit-btn"
+          [disabled]="
+            productForm.invalid ||
+            loading
+          "
+        >
+  
+          <span *ngIf="!loading">
+  
+            {{
+              isEditing
+                ? 'Modifier le produit'
+                : 'Ajouter le produit'
+            }}
+  
+          </span>
+  
+          <span *ngIf="loading">
+            Enregistrement...
+          </span>
+  
+        </button>
+  
+      </form>
+  
+    </div>
+  
+  
+    <!-- PRODUCTS TABLE -->
+  
+    <div class="products-card">
+  
+      <div class="table-header">
+  
+        <h2>Liste des produits</h2>
+  
+        <button
+          type="button"
+          (click)="loadProducts()"
+        >
+          Actualiser
+        </button>
+  
+      </div>
+  
+  
+      <div
+        class="loading"
+        *ngIf="loading && products.length === 0"
+      >
+        Chargement des produits...
+      </div>
+  
+  
+      <div
+        class="empty"
+        *ngIf="
+          !loading &&
+          products.length === 0
+        "
+      >
+        Aucun produit trouvé.
+      </div>
+  
+  
+      <div
+        class="table-container"
+        *ngIf="products.length > 0"
+      >
+  
+        <table>
+  
+          <thead>
+  
+            <tr>
+  
+              <th>Image</th>
+  
+              <th>Produit</th>
+  
+              <th>Catégorie</th>
+  
+              <th>Prix</th>
+
+              <th>Quantité</th>
+  
+              <th>Promotion</th>
+  
+              <th>Featured</th>
+  
+              <th>Actions</th>
+  
+            </tr>
+  
+          </thead>
+  
+  
+          <tbody>
+  
+            <tr
+              *ngFor="let product of products"
+            >
+  
+              <!-- IMAGE -->
+  
+              <td>
+  
+                <img
+                  class="product-image"
+                  [src]="
+                    getImageUrl(product.image)
+                  "
+                  [alt]="product.name"
+                >
+              </td>
+  
+  
+              <!-- NAME -->
+  
+              <td>
+  
+                <strong>
+                  {{ product.name }}
+                </strong>
+  
+                <small>
+                  {{ product.description }}
+                </small>
+  
+              </td>
+  
+  
+              <!-- CATEGORY -->
+  
+              <td>
+  
+                {{ product.category?.name }}
+  
+              </td>
+  
+  
+              <!-- PRICE -->
+  
+              <td>
+  
+                <strong>
+                  {{ product.price | number:'1.2-2' }} DT
+                </strong>
+  
+                <span
+                  *ngIf="
+                    product.originalPrice >
+                    product.price
+                  "
+                  class="old-price"
+                >
+                  {{ product.originalPrice }}
+                  DT
+                </span>
+  
+              </td>
+              <td>{{product.quantity}}</td>
+  
+  
+              <!-- SALE -->
+  
+              <td>
+  
+                <span
+                  class="badge sale"
+                  *ngIf="product.onSale"
+                >
+                  Oui
+                </span>
+  
+                <span
+                  class="badge"
+                  *ngIf="!product.onSale"
+                >
+                  Non
+                </span>
+  
+              </td>
+  
+  
+              <!-- FEATURED -->
+  
+              <td>
+  
+                <span
+                  class="badge featured"
+                  *ngIf="product.featured"
+                >
+                  Oui
+                </span>
+  
+                <span
+                  class="badge"
+                  *ngIf="!product.featured"
+                >
+                  Non
+                </span>
+  
+              </td>
+  
+  
+              <!-- ACTIONS -->
+  
+              <td>
+  
+                <div class="actions">
+  
+                  <button
+                    type="button"
+                    class="edit-btn"
+                    (click)="editProduct(product)"
+                  >
+                    Modifier
+                  </button>
+  
+                  <button
+                    type="button"
+                    class="delete-btn"
+                    (click)="deleteProduct(product)"
+                  >
+                    Supprimer
+                  </button>
+  
+                </div>
+  
+              </td>
+  
+            </tr>
+  
+          </tbody>
+  
+        </table>
+  
+      </div>
+  
+    </div>
+  
+  </div>
