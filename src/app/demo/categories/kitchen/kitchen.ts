@@ -1,6 +1,6 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, OnInit, inject, PLATFORM_ID } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { catchError, of, share } from 'rxjs';
 import { Product } from 'src/app/classes/product';
 import { BasketService } from 'src/app/services/basket-service';
@@ -10,13 +10,13 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
 
 @Component({
   selector: 'app-kitchen',
-  imports: [SharedModule, CommonModule],
+  imports: [SharedModule, CommonModule, RouterModule],
   templateUrl: './kitchen.html',
   styleUrl: './kitchen.scss'
 })
 export class Kitchen implements OnInit {
   private platformId = inject(PLATFORM_ID);
-  private productService = inject(ProductService);
+  public productService = inject(ProductService);
   private basketService = inject(BasketService);
   private router = inject(Router);
   private seoService = inject(SeoService);

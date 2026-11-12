@@ -1,6 +1,6 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, OnInit, inject, PLATFORM_ID } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Product } from 'src/app/classes/product';
 import { BasketService } from 'src/app/services/basket-service';
 import { ProductService } from 'src/app/services/product-service';
@@ -9,7 +9,7 @@ import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-product-details',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './product-details.html',
   styleUrl: './product-details.scss'
 })
@@ -18,10 +18,11 @@ export class ProductDetails implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private basketService = inject(BasketService);
-  private productService = inject(ProductService);
+  public productService = inject(ProductService);
   private seoService = inject(SeoService);
 
   data?: Product;
+  similarProducts: Product[] = [];
   toastMessage = '';
   showToast = false;
   toastType = 'success';
@@ -45,6 +46,7 @@ export class ProductDetails implements OnInit {
       if (this.data.image) {
         this.selectedImage = this.data.image;
       }
+      this.loadSimilarProducts(this.data.category, this.data.id);
     }
 
     if (idToFetch && (!this.data || String(this.data.id) !== String(idToFetch))) {
@@ -59,10 +61,23 @@ export class ProductDetails implements OnInit {
                 this.selectedImage = product.image;
               }
               this.applySeo(product);
+              this.loadSimilarProducts(product.category, product.id);
             }
           }
         });
     }
+  }
+
+  private loadSimilarProducts(category?: string, currentId?: any): void {
+    if (!category) return;
+    this.productService
+      .getProductsByCategory(category)
+      .pipe(catchError(() => of([])))
+      .subscribe((products: Product[]) => {
+        this.similarProducts = products
+          .filter((p) => String(p.id) !== String(currentId))
+          .slice(0, 4);
+      });
   }
 
   private applySeo(product: any): void {

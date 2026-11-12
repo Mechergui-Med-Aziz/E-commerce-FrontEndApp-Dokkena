@@ -1,4 +1,6 @@
 <div class="home-container">
+    <h1 class="visually-hidden">Dokkena : Boutique en ligne High-Tech, Mode, Beauté, Cuisine, Sport et Gaming en Tunisie</h1>
+
     <!-- Hero Slider Section -->
     <section class="slider-section">
       <div class="slider-container">
@@ -7,11 +9,15 @@
             <div class="slide" *ngFor="let product of getProductsOnSale()">
               <div class="slide-content">
                 <div class="slide-image">
-                  <img [src]="product.image" [alt]="product.name" loading="lazy">
+                  <img [src]="product.image" [alt]="product.name + ' - Promotion Dokkena Tunisie'" loading="lazy">
                 </div>
                 <div class="slide-info">
                   <span class="promo-badge">PROMOTION</span>
-                  <h1 class="slide-title">{{ product.name }}</h1>
+                  <h2 class="slide-title">
+                    <a [routerLink]="['/product', productService.generateSlug(product)]" style="color: inherit; text-decoration: none;">
+                      {{ product.name }}
+                    </a>
+                  </h2>
                   <p class="slide-description">{{ product.description }}</p>
                   <div class="slide-pricing">
                     <span class="current-price">{{ product.price }}DT</span>
@@ -82,7 +88,9 @@
             [class.on-sale]="product.isOnSale">
             
             <div class="product-image">
-              <img [src]="product.image" [alt]="product.name" loading="lazy">
+              <a [routerLink]="['/product', productService.generateSlug(product)]" class="d-block">
+                <img [src]="product.image" [alt]="product.name + ' - Dokkena Tunisie'" loading="lazy">
+              </a>
               <div class="product-badges">
                 <span *ngIf="product.isOnSale" class="badge sale-badge">
                   -{{ getDiscountPercentage(product) }}%
@@ -95,7 +103,11 @@
             </div>
             
             <div class="product-info">
-              <h3 class="product-name">{{ product.name }}</h3>
+              <h3 class="product-name">
+                <a [routerLink]="['/product', productService.generateSlug(product)]" style="color: inherit; text-decoration: none;">
+                  {{ product.name }}
+                </a>
+              </h3>
               <p class="product-category">{{ product.category }}</p>
               
               <div class="product-rating">

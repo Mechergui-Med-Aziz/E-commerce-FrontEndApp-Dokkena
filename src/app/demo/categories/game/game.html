@@ -1,108 +1,176 @@
 <section class="featured-section">
-    <div class="container">
-        <h2 class="section-title">Tous les produits de la catégorie Jouet</h2>
-        <p class="section-subtitle">Parcourez l’intégralité des produits de Jouets disponibles</p>
-        
-        <div class="products-controls">
-          <div class="search-container">
-            <div class="search-input-wrapper">
-              <i class="fa fa-search search-icon"></i>
-              <input 
-                type="text" 
-                class="search-input" 
-                placeholder="Rechercher un produit de gaming..."
-                [(ngModel)]="searchQuery"
-                (input)="filterProducts()">
-              <button *ngIf="searchQuery" class="clear-search" (click)="clearSearch()">
-                <i class="fa fa-times"></i>
-              </button>
-            </div>
-          </div>
-          
-          <div class="sort-container">
-            <div class="sort-select-wrapper">
-              <i class="fa fa-sort sort-icon"></i>
-              <select 
-                class="sort-select" 
-                [(ngModel)]="selectedSortOption"
-                (change)="sortProducts()">
-                <option value="---">-----</option>
-                <option value="price-asc">Prix: Croissant</option>
-                <option value="price-desc">Prix: Décroissant</option>
-                <option value="rating">Meilleures notes</option>
-                <option value="name">Nom: A-Z</option>
-                <option value="sale">En promotion</option>
-              </select>
-              <i class="fa fa-chevron-down select-arrow"></i>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Résultats de recherche -->
-        <div *ngIf="searchQuery" class="search-results-info">
-          <p>{{ filteredProducts.length }} produit(s) trouvé(s) pour "<strong>{{ searchQuery }}</strong>"</p>
-          <button class="clear-results-btn" (click)="clearSearch()">Effacer la recherche</button>
-        </div>
-      
-      <div class="products-grid">
-        <div 
-          *ngFor="let product of displayedProducts" 
-          class="product-card"
-          [class.on-sale]="product.isOnSale">
-          
-          <div class="product-image">
-            <img [src]="product.image" [alt]="product.name" loading="lazy">
-            <div class="product-badges">
-              <span *ngIf="product.isOnSale" class="badge sale-badge">
-                -{{ getDiscountPercentage(product) }}%
-              </span>
-            </div>
-            <button class="quick-view-btn" (click)="openDetails(product)">👁️ Vue rapide</button>
-          </div>
-          
-          <div class="product-info">
-            <h3 class="product-name">{{ product.name }}</h3>
-            <p class="product-category">{{ product.category }}</p>
-            
-            <div class="product-rating">
-              <span class="stars">{{ getStarRating(product.rating) }}</span>
-              <span class="rating-value">({{ product.rating }})</span>
-            </div>
-            
-            <div class="product-pricing">
-              <span class="current-price">{{ product.price }}DT</span>
-              <span *ngIf="product.originalPrice" class="original-price">
-                {{ product.originalPrice }}DT
-              </span>
-            </div>
-            
-            <button class="add-to-cart-btn" (click)="addToBasket(product)">🛒 Ajouter au panier</button>
-          </div>
-        </div>
-      </div>
+  <div class="container">
+    <!-- Fil d'Ariane -->
+    <nav aria-label="breadcrumb" class="mb-3">
+      <ol class="breadcrumb" style="display: flex; gap: 8px; list-style: none; padding: 0; font-size: 14px; color: #64748b;">
+        <li><a routerLink="/" style="color: #4f46e5; text-decoration: none;">Accueil</a></li>
+        <li>/</li>
+        <li><a routerLink="/product-list" style="color: #4f46e5; text-decoration: none;">Catégories</a></li>
+        <li>/</li>
+        <li class="active" aria-current="page" style="color: #0f172a; font-weight: 500;">Gaming & Jeux Vidéo</li>
+      </ol>
+    </nav>
 
-      <div *ngIf="displayedProducts.length === 0" class="no-products-message">
-        <i class="fa fa-search no-results-icon"></i>
-        <h3>Aucun produit trouvé</h3>
-        <p>Essayez de modifier vos critères de recherche ou de tri.</p>
-        <button class="reset-filters-btn" (click)="resetFilters()">Réinitialiser les filtres</button>
+    <!-- H1 et Introduction SEO -->
+    <header class="category-header mb-4">
+      <h1 class="section-title">Gaming & Jeux Vidéo en Tunisie : Consoles, Claviers Gamer et Périphériques PC</h1>
+      <p class="section-subtitle" style="max-width: 900px; margin: 12px 0; line-height: 1.7; color: #475569; font-size: 15px;">
+        Entrez dans l'arène avec le rayon Gaming & Jeux Vidéo de Dokkena Tunisie. Retrouvez des claviers mécaniques rétroéclairés RGB, des souris gaming haute précision à capteur optique réactif, des casques surround avec micro anti-bruit, des manettes et des accessoires indispensables pour consoles et PC. Équipez votre setup de jeu au meilleur prix avec livraison express en Tunisie.
+      </p>
+    </header>
+    
+    <div class="products-controls">
+      <div class="search-container">
+        <div class="search-input-wrapper">
+          <i class="fa fa-search search-icon"></i>
+          <input 
+            type="text" 
+            class="search-input" 
+            placeholder="Rechercher un produit gaming..."
+            [(ngModel)]="searchQuery"
+            (input)="filterProducts()">
+          <button *ngIf="searchQuery" class="clear-search" (click)="clearSearch()">
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
       </div>
       
+      <div class="sort-container">
+        <div class="sort-select-wrapper">
+          <i class="fa fa-sort sort-icon"></i>
+          <select 
+            class="sort-select" 
+            [(ngModel)]="selectedSortOption"
+            (change)="sortProducts()">
+            <option value="featured">Tri par défaut</option>
+            <option value="price-asc">Prix: Croissant</option>
+            <option value="price-desc">Prix: Décroissant</option>
+            <option value="rating">Meilleures notes</option>
+            <option value="name">Nom: A-Z</option>
+            <option value="sale">En promotion</option>
+          </select>
+          <i class="fa fa-chevron-down select-arrow"></i>
+        </div>
+      </div>
     </div>
-  </section>
+    
+    <!-- Résultats de recherche -->
+    <div *ngIf="searchQuery" class="search-results-info">
+      <p>{{ filteredProducts.length }} produit(s) trouvé(s) pour "<strong>{{ searchQuery }}</strong>"</p>
+      <button class="clear-results-btn" (click)="clearSearch()">Effacer la recherche</button>
+    </div>
+    
+    <!-- Grille de produits avec liens crawlables -->
+    <div class="products-grid">
+      <div 
+        *ngFor="let product of displayedProducts" 
+        class="product-card"
+        [class.on-sale]="product.isOnSale">
+        
+        <div class="product-image">
+          <a [routerLink]="['/product', productService.generateSlug(product)]" class="d-block">
+            <img [src]="product.image" [alt]="product.name + ' - Gaming Dokkena Tunisie'" loading="lazy">
+          </a>
+          <div class="product-badges">
+            <span *ngIf="product.isOnSale" class="badge sale-badge">
+              -{{ getDiscountPercentage(product) }}%
+            </span>
+            <span *ngIf="product.isNew" class="badge new-badge">Nouveau</span>
+          </div>
+          <button class="quick-view-btn" (click)="openDetails(product)">👁️ Vue rapide</button>
+        </div>
+        
+        <div class="product-info">
+          <h2 class="product-name" style="font-size: 16px; margin: 0 0 8px;">
+            <a [routerLink]="['/product', productService.generateSlug(product)]" style="color: inherit; text-decoration: none;">
+              {{ product.name }}
+            </a>
+          </h2>
+          <p class="product-category">{{ product.category }}</p>
+          
+          <div class="product-rating">
+            <span class="stars">{{ getStarRating(product.rating) }}</span>
+            <span class="rating-value">({{ product.rating }})</span>
+          </div>
+          
+          <div class="product-pricing">
+            <span class="current-price">{{ product.price }}DT</span>
+            <span *ngIf="product.originalPrice" class="original-price">
+              {{ product.originalPrice }}DT
+            </span>
+          </div>
+          
+          <button class="add-to-cart-btn" (click)="addToBasket(product)">🛒 Ajouter au panier</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Message si aucun résultat -->
+    <div *ngIf="displayedProducts.length === 0" class="no-products-message">
+      <i class="fa fa-search no-results-icon"></i>
+      <h3>Aucun produit trouvé</h3>
+      <p>Essayez de modifier vos critères de recherche ou de tri.</p>
+      <button class="reset-filters-btn" (click)="resetFilters()">Réinitialiser les filtres</button>
+    </div>
 
-  @if(showToast){
-    <div id="toastMessage" [ngClass]="toastType">
-      <div class="toast-icon">
-        <i class="fa" [ngClass]="{
-          'fa-check-circle': toastType == 'success',
-          'fa-exclamation-circle': toastType == 'error'}"></i>
+    <!-- Contenu SEO de fond et Guide d'achat (300-500 mots) -->
+    <article class="category-seo-content mt-5" style="border-top: 1px solid #e2e8f0; padding-top: 36px; line-height: 1.8; color: #334155;">
+      <h2 style="font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 12px;">
+        Le meilleur équipement gamer pour joueurs exigeants en Tunisie
+      </h2>
+      <p>
+        Dans l'univers du gaming compétitif ou récréatif, chaque milliseconde compte. Un clavier mécanique avec des switches réactifs, une souris légère avec un capteur DPI ajustable et un casque audio spatialisé font toute la différence sur le champ de bataille virtuel. Dokkena sélectionne pour les gamers tunisiens des périphériques fiables, performants et endurants, adaptés aux longues sessions de jeu.
+      </p>
+
+      <h3 style="font-size: 18px; font-weight: 600; color: #0f172a; margin-top: 20px;">
+        Votre setup gaming livré chez vous rapidement en Tunisie
+      </h3>
+      <p>
+        Plus besoin d'attendre des semaines pour améliorer votre équipement gaming : nos articles sont expédiés en 24 à 48 heures vers le Grand Tunis, Sousse, Monastir, Sfax et l'ensemble du pays. Payez tranquillement en espèces à la livraison une fois le matériel entre vos mains, et profitez de la livraison offerte dès 100 TND d'achat.
+      </p>
+
+      <!-- FAQ Catégorie -->
+      <section class="category-faq mt-4" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px;">
+        <h3 style="font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 16px;">
+          Foire Aux Questions - Gaming
+        </h3>
+        <div style="margin-bottom: 16px;">
+          <h4 style="font-size: 16px; font-weight: 600; color: #1e293b; margin-bottom: 4px;">Les claviers et souris sont-ils compatibles consoles (PS5 / Xbox) ?</h4>
+          <p style="font-size: 14px; color: #475569; margin: 0;">La plupart des périphériques USB filaires sont compatibles consoles selon les jeux supportant le clavier/souris.</p>
+        </div>
+        <div style="margin-bottom: 16px;">
+          <h4 style="font-size: 16px; font-weight: 600; color: #1e293b; margin-bottom: 4px;">Comment fonctionne la garantie sur les produits gaming ?</h4>
+          <p style="font-size: 14px; color: #475569; margin: 0;">Tous les périphériques bénéficient d'une garantie constructeur contre les défauts matériels de fabrication.</p>
+        </div>
+        <div>
+          <h4 style="font-size: 16px; font-weight: 600; color: #1e293b; margin-bottom: 4px;">Y a-t-il des promotions sur le matériel gaming ?</h4>
+          <p style="font-size: 14px; color: #475569; margin: 0;">Oui, consultez notre filtre « En promotion » pour découvrir toutes les remises actuelles sur le gaming.</p>
+        </div>
+      </section>
+
+      <!-- Maillage interne vers d'autres univers -->
+      <div class="cross-categories mt-4" style="padding: 16px; background: #eef2ff; border-radius: 8px; font-size: 14px; color: #3730a3;">
+        <strong>Voir aussi :</strong>
+        <a routerLink="/categories/electronic" style="color: #4f46e5; margin-left: 8px; font-weight: 600;">High-Tech & Audio</a> •
+        <a routerLink="/categories/sport" style="color: #4f46e5; margin-left: 8px; font-weight: 600;">Sport & Forme</a> •
+        <a routerLink="/blog" style="color: #4f46e5; margin-left: 8px; font-weight: 600;">Blog Dokkena</a>
+      </div>
+    </article>
   </div>
-  <div class="toast-text">
-    {{ toastMessage }}
+</section>
+
+@if(showToast){
+  <div id="toastMessage" [ngClass]="toastType">
+    <div class="toast-icon">
+      <i class="fa" [ngClass]="{
+        'fa-check-circle': toastType == 'success',
+        'fa-exclamation-circle': toastType == 'error'}"></i>
+    </div>
+    <div class="toast-text">
+      {{ toastMessage }}
+    </div>
+    <div class="toast-close" (click)="showToast = false">
+      <i class="fa fa-times"></i>
+    </div>
   </div>
-  <div class="toast-close" (click)="showToast = false">
-    <i class="fa fa-times"></i>
-  </div>
-</div>
-  }
+}

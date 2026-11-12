@@ -18,7 +18,7 @@ import { catchError, of } from 'rxjs';
 })
 export class Home implements OnInit, OnDestroy {
   private platformId = inject(PLATFORM_ID);
-  private productService = inject(ProductService);
+  public productService = inject(ProductService);
   private categoryService = inject(CategoryService);
   private basketService = inject(BasketService);
   private router = inject(Router);

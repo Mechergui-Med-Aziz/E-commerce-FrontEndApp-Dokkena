@@ -1,106 +1,124 @@
 <section class="featured-section">
-    <div class="container">
-      <h2 class="section-title">Toutes les Produits </h2>
-      <p class="section-subtitle">Découvrez toutes nos produits du moment</p>
-      
-      <div class="products-controls">
-        <div class="search-container">
-          <div class="search-input-wrapper">
-            <i class="fa fa-search search-icon"></i>
-            <input 
-              type="text" 
-              class="search-input" 
-              placeholder="Rechercher un produit..."
-              [(ngModel)]="searchQuery"
-              (input)="filterProducts()">
-            <button *ngIf="searchQuery" class="clear-search" (click)="clearSearch()">
-              <i class="fa fa-times"></i>
-            </button>
-          </div>
-        </div>
-        
-        <div class="sort-container">
-          <div class="sort-select-wrapper">
-            <i class="fa fa-sort sort-icon"></i>
-            <select 
-              class="sort-select" 
-              [(ngModel)]="selectedSortOption"
-              (change)="sortProducts()">
-              <option value="---">-----</option>
-              <option value="price-asc">Prix: Croissant</option>
-              <option value="price-desc">Prix: Décroissant</option>
-              <option value="rating">Meilleures notes</option>
-              <option value="name">Nom: A-Z</option>
-              <option value="sale">En promotion</option>
-            </select>
-            <i class="fa fa-chevron-down select-arrow"></i>
-          </div>
+  <div class="container">
+    <!-- Fil d'Ariane -->
+    <nav aria-label="breadcrumb" class="mb-3">
+      <ol class="breadcrumb" style="display: flex; gap: 8px; list-style: none; padding: 0; font-size: 14px; color: #64748b;">
+        <li><a routerLink="/" style="color: #4f46e5; text-decoration: none;">Accueil</a></li>
+        <li>/</li>
+        <li class="active" aria-current="page" style="color: #0f172a; font-weight: 500;">Tous nos Produits</li>
+      </ol>
+    </nav>
+
+    <header class="mb-4">
+      <h1 class="section-title">Tous nos Produits : Le Catalogue Dokkena Tunisie</h1>
+      <p class="section-subtitle">Découvrez l'intégralité de nos collections High-Tech, Mode, Beauté, Cuisine, Sport et Gaming aux meilleurs prix.</p>
+    </header>
+    
+    <div class="products-controls">
+      <div class="search-container">
+        <div class="search-input-wrapper">
+          <i class="fa fa-search search-icon"></i>
+          <input 
+            type="text" 
+            class="search-input" 
+            placeholder="Rechercher un produit dans le catalogue..."
+            [(ngModel)]="searchQuery"
+            (input)="filterProducts()">
+          <button *ngIf="searchQuery" class="clear-search" (click)="clearSearch()">
+            <i class="fa fa-times"></i>
+          </button>
         </div>
       </div>
       
-      <!-- Résultats de recherche -->
-      <div *ngIf="searchQuery" class="search-results-info">
-        <p>{{ filteredProducts.length }} produit(s) trouvé(s) pour "<strong>{{ searchQuery }}</strong>"</p>
-        <button class="clear-results-btn" (click)="clearSearch()">Effacer la recherche</button>
-      </div>
-      <div class="products-grid">
-        <div 
-          *ngFor="let product of displayedProducts" 
-          class="product-card"
-          [class.on-sale]="product.isOnSale">
-          
-          <div class="product-image">
-            <img [src]="product.image" [alt]="product.name" loading="lazy">
-            <div class="product-badges">
-              <span *ngIf="product.isOnSale" class="badge sale-badge">
-                -{{ getDiscountPercentage(product) }}%
-              </span>
-            </div>
-            <button class="quick-view-btn" (click)="openDetails(product)">👁️ Vue rapide</button>
-          </div>
-          
-          <div class="product-info">
-            <h3 class="product-name">{{ product.name }}</h3>
-            <p class="product-category">{{ product.category }}</p>
-            
-            <div class="product-rating">
-              <span class="stars">{{ getStarRating(product.rating) }}</span>
-              <span class="rating-value">({{ product.rating }})</span>
-            </div>
-            
-            <div class="product-pricing">
-              <span class="current-price">{{ product.price }}DT</span>
-              <span *ngIf="product.originalPrice" class="original-price">
-                {{ product.originalPrice }}DT
-              </span>
-            </div>
-            
-            <button class="add-to-cart-btn" (click)="addToBasket(product)">🛒 Ajouter au panier</button>
-          </div>
+      <div class="sort-container">
+        <div class="sort-select-wrapper">
+          <i class="fa fa-sort sort-icon"></i>
+          <select 
+            class="sort-select" 
+            [(ngModel)]="selectedSortOption"
+            (change)="sortProducts()">
+            <option value="featured">Tri par défaut</option>
+            <option value="price-asc">Prix: Croissant</option>
+            <option value="price-desc">Prix: Décroissant</option>
+            <option value="rating">Meilleures notes</option>
+            <option value="name">Nom: A-Z</option>
+            <option value="sale">En promotion</option>
+          </select>
+          <i class="fa fa-chevron-down select-arrow"></i>
         </div>
-      </div>
-      <div *ngIf="displayedProducts.length === 0" class="no-products-message">
-        <i class="fa fa-search no-results-icon"></i>
-        <h3>Aucun produit trouvé</h3>
-        <p>Essayez de modifier vos critères de recherche ou de tri.</p>
-        <button class="reset-filters-btn" (click)="resetFilters()">Réinitialiser les filtres</button>
       </div>
     </div>
-  </section>
+    
+    <!-- Résultats de recherche -->
+    <div *ngIf="searchQuery" class="search-results-info">
+      <p>{{ filteredProducts.length }} produit(s) trouvé(s) pour "<strong>{{ searchQuery }}</strong>"</p>
+      <button class="clear-results-btn" (click)="clearSearch()">Effacer la recherche</button>
+    </div>
 
-  @if(showToast){
-    <div id="toastMessage" [ngClass]="toastType">
-      <div class="toast-icon">
-        <i class="fa" [ngClass]="{
-          'fa-check-circle': toastType == 'success',
-          'fa-exclamation-circle': toastType == 'error'}"></i>
+    <div class="products-grid">
+      <div 
+        *ngFor="let product of displayedProducts" 
+        class="product-card"
+        [class.on-sale]="product.isOnSale">
+        
+        <div class="product-image">
+          <a [routerLink]="['/product', productService.generateSlug(product)]" class="d-block">
+            <img [src]="product.image" [alt]="product.name + ' - Dokkena Tunisie'" loading="lazy">
+          </a>
+          <div class="product-badges">
+            <span *ngIf="product.isOnSale" class="badge sale-badge">
+              -{{ getDiscountPercentage(product) }}%
+            </span>
+          </div>
+          <button class="quick-view-btn" (click)="openDetails(product)">👁️ Vue rapide</button>
+        </div>
+        
+        <div class="product-info">
+          <h2 class="product-name" style="font-size: 16px; margin: 0 0 8px;">
+            <a [routerLink]="['/product', productService.generateSlug(product)]" style="color: inherit; text-decoration: none;">
+              {{ product.name }}
+            </a>
+          </h2>
+          <p class="product-category">{{ product.category }}</p>
+          
+          <div class="product-rating">
+            <span class="stars">{{ getStarRating(product.rating) }}</span>
+            <span class="rating-value">({{ product.rating }})</span>
+          </div>
+          
+          <div class="product-pricing">
+            <span class="current-price">{{ product.price }}DT</span>
+            <span *ngIf="product.originalPrice" class="original-price">
+              {{ product.originalPrice }}DT
+            </span>
+          </div>
+          
+          <button class="add-to-cart-btn" (click)="addToBasket(product)">🛒 Ajouter au panier</button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="displayedProducts.length === 0" class="no-products-message">
+      <i class="fa fa-search no-results-icon"></i>
+      <h3>Aucun produit trouvé</h3>
+      <p>Essayez de modifier vos critères de recherche ou de tri.</p>
+      <button class="reset-filters-btn" (click)="resetFilters()">Réinitialiser les filtres</button>
+    </div>
   </div>
-  <div class="toast-text">
-    {{ toastMessage }}
+</section>
+
+@if(showToast){
+  <div id="toastMessage" [ngClass]="toastType">
+    <div class="toast-icon">
+      <i class="fa" [ngClass]="{
+        'fa-check-circle': toastType == 'success',
+        'fa-exclamation-circle': toastType == 'error'}"></i>
+    </div>
+    <div class="toast-text">
+      {{ toastMessage }}
+    </div>
+    <div class="toast-close" (click)="showToast = false">
+      <i class="fa fa-times"></i>
+    </div>
   </div>
-  <div class="toast-close" (click)="showToast = false">
-    <i class="fa fa-times"></i>
-  </div>
-</div>
-  }
-  
+}

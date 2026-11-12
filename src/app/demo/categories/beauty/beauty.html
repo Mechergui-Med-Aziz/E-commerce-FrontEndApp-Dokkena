@@ -1,9 +1,24 @@
 <section class="featured-section">
   <div class="container">
-    <h2 class="section-title">Tous les produits de la catégorie Beauté</h2>
-    <p class="section-subtitle">Parcourez l'intégralité des produits de beauté disponibles</p>
+    <!-- Fil d'Ariane -->
+    <nav aria-label="breadcrumb" class="mb-3">
+      <ol class="breadcrumb" style="display: flex; gap: 8px; list-style: none; padding: 0; font-size: 14px; color: #64748b;">
+        <li><a routerLink="/" style="color: #4f46e5; text-decoration: none;">Accueil</a></li>
+        <li>/</li>
+        <li><a routerLink="/product-list" style="color: #4f46e5; text-decoration: none;">Catégories</a></li>
+        <li>/</li>
+        <li class="active" aria-current="page" style="color: #0f172a; font-weight: 500;">Beauté & Soins</li>
+      </ol>
+    </nav>
+
+    <!-- H1 et Introduction SEO -->
+    <header class="category-header mb-4">
+      <h1 class="section-title">Beauté & Soins en Tunisie : Cosmétiques, Parfums et Maquillage</h1>
+      <p class="section-subtitle" style="max-width: 900px; margin: 12px 0; line-height: 1.7; color: #475569; font-size: 15px;">
+        Prenez soin de votre peau et sublimez votre quotidien avec l'univers Beauté & Soins de Dokkena Tunisie. Retrouvez un vaste assortiment de soins du visage, soins corporels, sérums hydratants, parfums authentiques pour homme et femme, ainsi que du maquillage adapté à votre style. Profitez de nos promotions régulières et d'une livraison express partout en Tunisie avec possibilité de paiement en espèces à la réception de votre colis.
+      </p>
+    </header>
     
-   
     <div class="products-controls">
       <div class="search-container">
         <div class="search-input-wrapper">
@@ -27,7 +42,7 @@
             class="sort-select" 
             [(ngModel)]="selectedSortOption"
             (change)="sortProducts()">
-            <option value="---">-----</option>
+            <option value="featured">Tri par défaut</option>
             <option value="price-asc">Prix: Croissant</option>
             <option value="price-desc">Prix: Décroissant</option>
             <option value="rating">Meilleures notes</option>
@@ -45,7 +60,7 @@
       <button class="clear-results-btn" (click)="clearSearch()">Effacer la recherche</button>
     </div>
     
-    <!-- Grille de produits -->
+    <!-- Grille de produits avec liens crawlables -->
     <div class="products-grid">
       <div 
         *ngFor="let product of displayedProducts" 
@@ -53,7 +68,9 @@
         [class.on-sale]="product.isOnSale">
         
         <div class="product-image">
-          <img [src]="product.image" [alt]="product.name" loading="lazy">
+          <a [routerLink]="['/product', productService.generateSlug(product)]" class="d-block">
+            <img [src]="product.image" [alt]="product.name + ' - Beauté Dokkena Tunisie'" loading="lazy">
+          </a>
           <div class="product-badges">
             <span *ngIf="product.isOnSale" class="badge sale-badge">
               -{{ getDiscountPercentage(product) }}%
@@ -64,7 +81,11 @@
         </div>
         
         <div class="product-info">
-          <h3 class="product-name">{{ product.name }}</h3>
+          <h2 class="product-name" style="font-size: 16px; margin: 0 0 8px;">
+            <a [routerLink]="['/product', productService.generateSlug(product)]" style="color: inherit; text-decoration: none;">
+              {{ product.name }}
+            </a>
+          </h2>
           <p class="product-category">{{ product.category }}</p>
           
           <div class="product-rating">
@@ -91,6 +112,51 @@
       <p>Essayez de modifier vos critères de recherche ou de tri.</p>
       <button class="reset-filters-btn" (click)="resetFilters()">Réinitialiser les filtres</button>
     </div>
+
+    <!-- Contenu SEO de fond et Guide d'achat (300-500 mots) -->
+    <article class="category-seo-content mt-5" style="border-top: 1px solid #e2e8f0; padding-top: 36px; line-height: 1.8; color: #334155;">
+      <h2 style="font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 12px;">
+        Guide Beauté & Soins : Comment bien choisir vos cosmétiques en Tunisie
+      </h2>
+      <p>
+        Prendre soin de son corps et de son visage au quotidien requiert une routine adaptée au climat tunisien. Entre l'exposition au soleil en été, l'humidité côtière et l'air sec dans l'intérieur du pays, votre peau a besoin d'une hydratation constante et d'ingrédients doux et régénérants. Notre collection Beauté regroupe des formules testées, conçues pour préserver l'équilibre cutané sans agresser l'épiderme.
+      </p>
+
+      <h3 style="font-size: 18px; font-weight: 600; color: #0f172a; margin-top: 20px;">
+        Nos engagements pour vos commandes Beauté sur Dokkena
+      </h3>
+      <p>
+        Chez Dokkena, l'authenticité est primordiale : tous les produits cosmétiques, crèmes et parfums proviennent exclusivement de distributeurs de confiance. Vous bénéficiez d'une traçabilité irréprochable et d'emballages sécurisés pour éviter toute détérioration durant le transport. De plus, notre service logistique assure une livraison rapide sous 24 à 72 heures ouvrées sur toute la Tunisie, avec la gratuité des frais de port offerte dès 100 TND d'achat.
+      </p>
+
+      <!-- FAQ Catégorie -->
+      <section class="category-faq mt-4" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px;">
+        <h3 style="font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 16px;">
+          Foire Aux Questions - Beauté & Soins
+        </h3>
+        <div style="margin-bottom: 16px;">
+          <h4 style="font-size: 16px; font-weight: 600; color: #1e293b; margin-bottom: 4px;">Les produits de beauté sont-ils garantis authentiques ?</h4>
+          <p style="font-size: 14px; color: #475569; margin: 0;">Oui, Dokkena sélectionne rigoureusement ses fournisseurs pour garantir l'authenticité et la fraîcheur de tous les soins et cosmétiques mis en vente.</p>
+        </div>
+        <div style="margin-bottom: 16px;">
+          <h4 style="font-size: 16px; font-weight: 600; color: #1e293b; margin-bottom: 4px;">Puis-je payer en espèces à la livraison ?</h4>
+          <p style="font-size: 14px; color: #475569; margin: 0;">Absolument, le paiement à la livraison (Cash on Delivery) est disponible sur l'ensemble des gouvernorats tunisiens.</p>
+        </div>
+        <div>
+          <h4 style="font-size: 16px; font-weight: 600; color: #1e293b; margin-bottom: 4px;">Quels sont les délais de livraison pour un produit de beauté ?</h4>
+          <p style="font-size: 14px; color: #475569; margin: 0;">Vos commandes sont expédiées sous 24 heures et livrées à votre domicile en 24 à 72 heures ouvrées selon votre ville.</p>
+        </div>
+      </section>
+
+      <!-- Maillage interne vers d'autres univers -->
+      <div class="cross-categories mt-4" style="padding: 16px; background: #eef2ff; border-radius: 8px; font-size: 14px; color: #3730a3;">
+        <strong>Découvrez aussi nos autres univers Dokkena :</strong>
+        <a routerLink="/categories/fashion" style="color: #4f46e5; margin-left: 8px; font-weight: 600;">Mode & Vêtements</a> •
+        <a routerLink="/categories/electronic" style="color: #4f46e5; margin-left: 8px; font-weight: 600;">High-Tech</a> •
+        <a routerLink="/categories/kitchen" style="color: #4f46e5; margin-left: 8px; font-weight: 600;">Cuisine & Maison</a> •
+        <a routerLink="/product-list" style="color: #4f46e5; margin-left: 8px; font-weight: 600;">Catalogue Général</a>
+      </div>
+    </article>
   </div>
 </section>
 

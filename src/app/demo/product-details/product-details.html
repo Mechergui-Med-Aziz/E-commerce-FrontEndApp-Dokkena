@@ -1,119 +1,156 @@
 <div class="product-details" *ngIf="data">
-    <div class="product-container">
-  
-      <!-- Galerie d'images -->
-      <div class="product-gallery">
-        <div class="main-image">
-          <img 
-            [src]="selectedImage || data.image" 
-            [alt]="data.name"
-            (error)="handleImageError($event)"
-          >
+  <!-- Fil d'Ariane -->
+  <nav aria-label="breadcrumb" class="product-breadcrumbs mb-4">
+    <ol class="breadcrumb" style="display: flex; gap: 8px; list-style: none; padding: 0; font-size: 14px; color: #64748b;">
+      <li><a routerLink="/" style="color: #4f46e5; text-decoration: none;">Accueil</a></li>
+      <li>/</li>
+      <li>
+        <a [routerLink]="['/categories', (data.category || '').toLowerCase()]" style="color: #4f46e5; text-decoration: none;">
+          {{ data.category || 'Catalogue' }}
+        </a>
+      </li>
+      <li>/</li>
+      <li class="active" aria-current="page" style="color: #0f172a; font-weight: 500;">{{ data.name }}</li>
+    </ol>
+  </nav>
+
+  <div class="product-container">
+    <!-- Galerie d'images -->
+    <div class="product-gallery">
+      <div class="main-image">
+        <img 
+          [src]="selectedImage || data.image" 
+          [alt]="data.name + ' - Photo principale Dokkena Tunisie'"
+          (error)="handleImageError($event)"
+        >
+      </div>
+
+      <div class="image-thumbnails" *ngIf="hasMultipleImages()">
+        <div 
+          class="thumbnail" 
+          [class.active]="selectedImage === data.image"
+          (click)="selectImage(data.image)"
+        >
+          <img [src]="data.image" [alt]="data.name + ' - Vue 1'" (error)="handleImageError($event)">
         </div>
-  
-        <div class="image-thumbnails" *ngIf="hasMultipleImages()">
-          <div 
-            class="thumbnail" 
-            [class.active]="selectedImage === data.image"
-            (click)="selectImage(data.image)"
-          >
-            <img [src]="data.image" [alt]="data.name + ' - 1'" (error)="handleImageError($event)">
-          </div>
-  
-          <div 
-            class="thumbnail" 
-            *ngIf="data.image2"
-            [class.active]="selectedImage === data.image2"
-            (click)="selectImage(data.image2)"
-          >
-            <img [src]="data.image2" [alt]="data.name + ' - 2'" (error)="handleImageError($event)">
-          </div>
-  
-          <div 
-            class="thumbnail" 
-            *ngIf="data.image3"
-            [class.active]="selectedImage === data.image3"
-            (click)="selectImage(data.image3)"
-          >
-            <img [src]="data.image3" [alt]="data.name + ' - 3'" (error)="handleImageError($event)">
-          </div>
+
+        <div 
+          class="thumbnail" 
+          *ngIf="data.image2"
+          [class.active]="selectedImage === data.image2"
+          (click)="selectImage(data.image2)"
+        >
+          <img [src]="data.image2" [alt]="data.name + ' - Vue 2'" (error)="handleImageError($event)">
+        </div>
+
+        <div 
+          class="thumbnail" 
+          *ngIf="data.image3"
+          [class.active]="selectedImage === data.image3"
+          (click)="selectImage(data.image3)"
+        >
+          <img [src]="data.image3" [alt]="data.name + ' - Vue 3'" (error)="handleImageError($event)">
         </div>
       </div>
-  
-      <!-- Infos -->
-      <div class="product-info">
-  
-        <div class="product-header">
-          <span class="category-badge">{{ data.category }}</span>
-          <div class="badges">
-            <span class="badge featured" *ngIf="data.isFeatured">⭐ Produit vedette</span>
-            <span class="badge sale" *ngIf="data.isOnSale">🔥 Promotion</span>
-          </div>
+    </div>
+
+    <!-- Infos -->
+    <div class="product-info">
+      <div class="product-header">
+        <span class="category-badge">{{ data.category }}</span>
+        <div class="badges">
+          <span class="badge featured" *ngIf="data.isFeatured">⭐ Produit vedette</span>
+          <span class="badge sale" *ngIf="data.isOnSale">🔥 Promotion</span>
         </div>
-  
-        <h1 class="product-name">{{ data.name }}</h1>
-  
-        <div class="rating">
-          <div class="stars">
-            <span 
-              class="star" 
-              *ngFor="let star of [1,2,3,4,5]"
-              [class.filled]="star <= getStarRating()"
-              [class.half]="star === getStarRating() + 0.5"
-            >★</span>
-          </div>
-          <span class="rating-value">({{ data.rating }})</span>
+      </div>
+
+      <h1 class="product-name">{{ data.name }}</h1>
+
+      <div class="rating">
+        <div class="stars">
+          <span 
+            class="star" 
+            *ngFor="let star of [1,2,3,4,5]"
+            [class.filled]="star <= getStarRating()"
+            [class.half]="star === getStarRating() + 0.5"
+          >★</span>
         </div>
-  
-        <div class="pricing">
-          <span class="current-price">{{ data.price }} DT</span>
-          <span class="original-price" *ngIf="data.isOnSale">{{ data.originalPrice }} DT</span>
-          <span class="discount" *ngIf="data.isOnSale">{{ calculateDiscount() }}%</span>
+        <span class="rating-value">({{ data.rating }})</span>
+      </div>
+
+      <div class="pricing">
+        <span class="current-price">{{ data.price }} DT</span>
+        <span class="original-price" *ngIf="data.isOnSale">{{ data.originalPrice }} DT</span>
+        <span class="discount" *ngIf="data.isOnSale">{{ calculateDiscount() }}%</span>
+      </div>
+
+      <div class="description">
+        <h2 style="font-size: 18px; font-weight: 600; margin-bottom: 8px; color: #0f172a;">Description du produit</h2>
+        <p>{{ data.description }}</p>
+      </div>
+
+      <div class="product-actions">
+        <button class="btn-primary" (click)="addToBasket(data)">🛒 Ajouter au panier</button>
+      </div>
+
+      <!-- Bloc Réassurance E-commerce Dokkena -->
+      <div class="reassurance-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 24px; padding: 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+        <div class="reassurance-item" style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #334155;">
+          <span style="font-size: 18px;">💵</span>
+          <span><strong>Paiement à la livraison</strong> en espèces</span>
         </div>
-  
-        <div class="description">
-          <h3>Description</h3>
-          <p>{{ data.description }}</p>
+        <div class="reassurance-item" style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #334155;">
+          <span style="font-size: 18px;">🚚</span>
+          <span><strong>Livraison 24-72h</strong> (offerte dès 100 DT)</span>
         </div>
-  
-        <div class="product-actions">
-          
-  
-          <button class="btn-primary" (click)="addToBasket(data)">🛒 Ajouter au panier</button>
+        <div class="reassurance-item" style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #334155;">
+          <span style="font-size: 18px;">↩️</span>
+          <span><strong>Retour 15 jours</strong> garanti</span>
         </div>
-  
-        <div class="additional-info">
-          <div class="info-item">
-            <span class="label">📦 Livraison :</span>
-            <span>2-3 jours</span>
-          </div>
-          <div class="info-item">
-            <span class="label">↩️ Retour :</span>
-            <span>15 jours</span>
-          </div>
-          
+        <div class="reassurance-item" style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #334155;">
+          <span style="font-size: 18px;">🛡️</span>
+          <span><strong>Article 100% Neuf</strong> et vérifié</span>
         </div>
       </div>
     </div>
   </div>
-  
-  <div class="loading" *ngIf="!data">
-    Chargement du produit...
-  </div>
 
-  @if(showToast){
-    <div id="toastMessage" [ngClass]="toastType">
-      <div class="toast-icon">
-        <i class="fa" [ngClass]="{
-          'fa-check-circle': toastType == 'success',
-          'fa-exclamation-circle': toastType == 'error'}"></i>
-  </div>
-  <div class="toast-text">
-    {{ toastMessage }}
-  </div>
-  <div class="toast-close" (click)="showToast = false">
-    <i class="fa fa-times"></i>
-  </div>
+  <!-- Section Produits Similaires -->
+  <section class="similar-products-section" *ngIf="similarProducts.length > 0" style="margin-top: 48px; border-top: 1px solid #e2e8f0; padding-top: 32px;">
+    <h2 style="font-size: 24px; font-weight: 700; color: #0f172a; margin-bottom: 20px;">Produits similaires recommandés</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px;">
+      <div *ngFor="let sim of similarProducts" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; padding: 12px; display: flex; flex-direction: column;">
+        <a [routerLink]="['/product', productService.generateSlug(sim)]" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; flex-grow: 1;">
+          <div style="height: 160px; overflow: hidden; margin-bottom: 12px; display: flex; align-items: center; justify-content: center;">
+            <img [src]="sim.image" [alt]="sim.name + ' - Dokkena Tunisie'" style="max-height: 100%; max-width: 100%; object-fit: contain;" loading="lazy">
+          </div>
+          <h3 style="font-size: 15px; font-weight: 600; margin-bottom: 8px; color: #0f172a; line-height: 1.4; flex-grow: 1;">{{ sim.name }}</h3>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
+            <span style="font-weight: 700; color: #4f46e5; font-size: 16px;">{{ sim.price }} DT</span>
+            <span style="font-size: 12px; color: #64748b;">Voir le produit →</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
 </div>
-  }
-  
+
+<div class="loading" *ngIf="!data">
+  Chargement du produit...
+</div>
+
+@if(showToast){
+  <div id="toastMessage" [ngClass]="toastType">
+    <div class="toast-icon">
+      <i class="fa" [ngClass]="{
+        'fa-check-circle': toastType == 'success',
+        'fa-exclamation-circle': toastType == 'error'}"></i>
+    </div>
+    <div class="toast-text">
+      {{ toastMessage }}
+    </div>
+    <div class="toast-close" (click)="showToast = false">
+      <i class="fa fa-times"></i>
+    </div>
+  </div>
+}

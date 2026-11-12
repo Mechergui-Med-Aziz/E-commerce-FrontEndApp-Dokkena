@@ -1,106 +1,176 @@
 <section class="featured-section">
-    <div class="container">
-        <h2 class="section-title">Tous les produits de la catégorie Fashion</h2>
-        <p class="section-subtitle">Parcourez l’intégralité des produits de mode disponibles</p>
-        
-        <div class="products-controls">
-          <div class="search-container">
-            <div class="search-input-wrapper">
-              <i class="fa fa-search search-icon"></i>
-              <input 
-                type="text" 
-                class="search-input" 
-                placeholder="Rechercher un produit à la Mode..."
-                [(ngModel)]="searchQuery"
-                (input)="filterProducts()">
-              <button *ngIf="searchQuery" class="clear-search" (click)="clearSearch()">
-                <i class="fa fa-times"></i>
-              </button>
-            </div>
-          </div>
-          
-          <div class="sort-container">
-            <div class="sort-select-wrapper">
-              <i class="fa fa-sort sort-icon"></i>
-              <select 
-                class="sort-select" 
-                [(ngModel)]="selectedSortOption"
-                (change)="sortProducts()">
-                <option value="---">-----</option>
-                <option value="price-asc">Prix: Croissant</option>
-                <option value="price-desc">Prix: Décroissant</option>
-                <option value="rating">Meilleures notes</option>
-                <option value="name">Nom: A-Z</option>
-                <option value="sale">En promotion</option>
-              </select>
-              <i class="fa fa-chevron-down select-arrow"></i>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Résultats de recherche -->
-        <div *ngIf="searchQuery" class="search-results-info">
-          <p>{{ filteredProducts.length }} produit(s) trouvé(s) pour "<strong>{{ searchQuery }}</strong>"</p>
-          <button class="clear-results-btn" (click)="clearSearch()">Effacer la recherche</button>
-        </div>
-      
-      <div class="products-grid">
-        <div 
-          *ngFor="let product of displayedProducts" 
-          class="product-card"
-          [class.on-sale]="product.isOnSale">
-          
-          <div class="product-image">
-            <img [src]="product.image" [alt]="product.name" loading="lazy">
-            <div class="product-badges">
-              <span *ngIf="product.isOnSale" class="badge sale-badge">
-                -{{ getDiscountPercentage(product) }}%
-              </span>
-            </div>
-            <button class="quick-view-btn" (click)="openDetails(product)">👁️ Vue rapide</button>
-          </div>
-          
-          <div class="product-info">
-            <h3 class="product-name">{{ product.name }}</h3>
-            <p class="product-category">{{ product.category }}</p>
-            
-            <div class="product-rating">
-              <span class="stars">{{ getStarRating(product.rating) }}</span>
-              <span class="rating-value">({{ product.rating }})</span>
-            </div>
-            
-            <div class="product-pricing">
-              <span class="current-price">{{ product.price }}DT</span>
-              <span *ngIf="product.originalPrice" class="original-price">
-                {{ product.originalPrice }}DT
-              </span>
-            </div>
-            
-            <button class="add-to-cart-btn" (click)="addToBasket(product)">🛒 Ajouter au panier</button>
-          </div>
+  <div class="container">
+    <!-- Fil d'Ariane -->
+    <nav aria-label="breadcrumb" class="mb-3">
+      <ol class="breadcrumb" style="display: flex; gap: 8px; list-style: none; padding: 0; font-size: 14px; color: #64748b;">
+        <li><a routerLink="/" style="color: #4f46e5; text-decoration: none;">Accueil</a></li>
+        <li>/</li>
+        <li><a routerLink="/product-list" style="color: #4f46e5; text-decoration: none;">Catégories</a></li>
+        <li>/</li>
+        <li class="active" aria-current="page" style="color: #0f172a; font-weight: 500;">Mode & Habillement</li>
+      </ol>
+    </nav>
+
+    <!-- H1 et Introduction SEO -->
+    <header class="category-header mb-4">
+      <h1 class="section-title">Mode Homme & Femme en Tunisie : Vêtements, Chaussures et Accessoires</h1>
+      <p class="section-subtitle" style="max-width: 900px; margin: 12px 0; line-height: 1.7; color: #475569; font-size: 15px;">
+        Exprimez votre élégance avec la collection Mode et Habillement de Dokkena Tunisie. Découvrez un choix tendance de vêtements pour homme et femme, tenues décontractées, chaussures confortables, maroquinerie et accessoires pour toutes les occasions. Bénéficiez d'un excellent rapport style-prix et de la livraison express partout en Tunisie.
+      </p>
+    </header>
+    
+    <div class="products-controls">
+      <div class="search-container">
+        <div class="search-input-wrapper">
+          <i class="fa fa-search search-icon"></i>
+          <input 
+            type="text" 
+            class="search-input" 
+            placeholder="Rechercher un article de mode..."
+            [(ngModel)]="searchQuery"
+            (input)="filterProducts()">
+          <button *ngIf="searchQuery" class="clear-search" (click)="clearSearch()">
+            <i class="fa fa-times"></i>
+          </button>
         </div>
       </div>
-      <div *ngIf="displayedProducts.length === 0" class="no-products-message">
-        <i class="fa fa-search no-results-icon"></i>
-        <h3>Aucun produit trouvé</h3>
-        <p>Essayez de modifier vos critères de recherche ou de tri.</p>
-        <button class="reset-filters-btn" (click)="resetFilters()">Réinitialiser les filtres</button>
+      
+      <div class="sort-container">
+        <div class="sort-select-wrapper">
+          <i class="fa fa-sort sort-icon"></i>
+          <select 
+            class="sort-select" 
+            [(ngModel)]="selectedSortOption"
+            (change)="sortProducts()">
+            <option value="featured">Tri par défaut</option>
+            <option value="price-asc">Prix: Croissant</option>
+            <option value="price-desc">Prix: Décroissant</option>
+            <option value="rating">Meilleures notes</option>
+            <option value="name">Nom: A-Z</option>
+            <option value="sale">En promotion</option>
+          </select>
+          <i class="fa fa-chevron-down select-arrow"></i>
+        </div>
       </div>
     </div>
-  </section>
+    
+    <!-- Résultats de recherche -->
+    <div *ngIf="searchQuery" class="search-results-info">
+      <p>{{ filteredProducts.length }} produit(s) trouvé(s) pour "<strong>{{ searchQuery }}</strong>"</p>
+      <button class="clear-results-btn" (click)="clearSearch()">Effacer la recherche</button>
+    </div>
+    
+    <!-- Grille de produits avec liens crawlables -->
+    <div class="products-grid">
+      <div 
+        *ngFor="let product of displayedProducts" 
+        class="product-card"
+        [class.on-sale]="product.isOnSale">
+        
+        <div class="product-image">
+          <a [routerLink]="['/product', productService.generateSlug(product)]" class="d-block">
+            <img [src]="product.image" [alt]="product.name + ' - Mode Dokkena Tunisie'" loading="lazy">
+          </a>
+          <div class="product-badges">
+            <span *ngIf="product.isOnSale" class="badge sale-badge">
+              -{{ getDiscountPercentage(product) }}%
+            </span>
+            <span *ngIf="product.isNew" class="badge new-badge">Nouveau</span>
+          </div>
+          <button class="quick-view-btn" (click)="openDetails(product)">👁️ Vue rapide</button>
+        </div>
+        
+        <div class="product-info">
+          <h2 class="product-name" style="font-size: 16px; margin: 0 0 8px;">
+            <a [routerLink]="['/product', productService.generateSlug(product)]" style="color: inherit; text-decoration: none;">
+              {{ product.name }}
+            </a>
+          </h2>
+          <p class="product-category">{{ product.category }}</p>
+          
+          <div class="product-rating">
+            <span class="stars">{{ getStarRating(product.rating) }}</span>
+            <span class="rating-value">({{ product.rating }})</span>
+          </div>
+          
+          <div class="product-pricing">
+            <span class="current-price">{{ product.price }}DT</span>
+            <span *ngIf="product.originalPrice" class="original-price">
+              {{ product.originalPrice }}DT
+            </span>
+          </div>
+          
+          <button class="add-to-cart-btn" (click)="addToBasket(product)">🛒 Ajouter au panier</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Message si aucun résultat -->
+    <div *ngIf="displayedProducts.length === 0" class="no-products-message">
+      <i class="fa fa-search no-results-icon"></i>
+      <h3>Aucun produit trouvé</h3>
+      <p>Essayez de modifier vos critères de recherche ou de tri.</p>
+      <button class="reset-filters-btn" (click)="resetFilters()">Réinitialiser les filtres</button>
+    </div>
 
-  @if(showToast){
-    <div id="toastMessage" [ngClass]="toastType">
-      <div class="toast-icon">
-        <i class="fa" [ngClass]="{
-          'fa-check-circle': toastType == 'success',
-          'fa-exclamation-circle': toastType == 'error'}"></i>
+    <!-- Contenu SEO de fond et Guide d'achat (300-500 mots) -->
+    <article class="category-seo-content mt-5" style="border-top: 1px solid #e2e8f0; padding-top: 36px; line-height: 1.8; color: #334155;">
+      <h2 style="font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 12px;">
+        Tendances Mode et Prêt-à-porter en Tunisie sur Dokkena
+      </h2>
+      <p>
+        La mode en Tunisie allie élégance méditerranéenne et confort moderne. Que vous recherchiez des vêtements casual pour votre quotidien, des pièces habillées pour des événements ou des chaussures légères et résistantes, notre rayon Mode est pensé pour satisfaire toutes vos envies. Nos coupes sont sélectionnées pour garantir une allure soignée et un confort durable tout au long de la journée.
+      </p>
+
+      <h3 style="font-size: 18px; font-weight: 600; color: #0f172a; margin-top: 20px;">
+        Commandez vos articles de mode avec retours simples sous 15 jours
+      </h3>
+      <p>
+        Acheter des vêtements en ligne peut parfois soulever des doutes sur la coupe ou la taille. Chez Dokkena, votre sérénité est assurée : si un vêtement ne correspond pas exactement à vos attentes, vous disposez d'un délai de 15 jours pour demander un échange ou un remboursement. Profitez d'une commande sans risque avec livraison à domicile sur toute la Tunisie.
+      </p>
+
+      <!-- FAQ Catégorie -->
+      <section class="category-faq mt-4" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px;">
+        <h3 style="font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 16px;">
+          Foire Aux Questions - Mode & Vêtements
+        </h3>
+        <div style="margin-bottom: 16px;">
+          <h4 style="font-size: 16px; font-weight: 600; color: #1e293b; margin-bottom: 4px;">Puis-je échanger la taille d'un vêtement commandé ?</h4>
+          <p style="font-size: 14px; color: #475569; margin: 0;">Oui, contactez simplement notre service client dans les 15 jours suivant la réception pour planifier un échange de taille.</p>
+        </div>
+        <div style="margin-bottom: 16px;">
+          <h4 style="font-size: 16px; font-weight: 600; color: #1e293b; margin-bottom: 4px;">Comment sont calculés les frais de livraison pour la mode ?</h4>
+          <p style="font-size: 14px; color: #475569; margin: 0;">Le tarif est de 7 TND pour l'ensemble du panier, quel que soit le nombre d'articles, et offert dès 100 TND.</p>
+        </div>
+        <div>
+          <h4 style="font-size: 16px; font-weight: 600; color: #1e293b; margin-bottom: 4px;">Quel est le moyen de paiement le plus simple ?</h4>
+          <p style="font-size: 14px; color: #475569; margin: 0;">Le paiement en espèces lors de la livraison en main propre est le mode préféré de nos clients en Tunisie.</p>
+        </div>
+      </section>
+
+      <!-- Maillage interne vers d'autres univers -->
+      <div class="cross-categories mt-4" style="padding: 16px; background: #eef2ff; border-radius: 8px; font-size: 14px; color: #3730a3;">
+        <strong>Complétez votre look :</strong>
+        <a routerLink="/categories/beauty" style="color: #4f46e5; margin-left: 8px; font-weight: 600;">Parfums & Beauté</a> •
+        <a routerLink="/categories/sport" style="color: #4f46e5; margin-left: 8px; font-weight: 600;">Tenues de Sport</a> •
+        <a routerLink="/product-list" style="color: #4f46e5; margin-left: 8px; font-weight: 600;">Catalogue Dokkena</a>
+      </div>
+    </article>
   </div>
-  <div class="toast-text">
-    {{ toastMessage }}
+</section>
+
+@if(showToast){
+  <div id="toastMessage" [ngClass]="toastType">
+    <div class="toast-icon">
+      <i class="fa" [ngClass]="{
+        'fa-check-circle': toastType == 'success',
+        'fa-exclamation-circle': toastType == 'error'}"></i>
+    </div>
+    <div class="toast-text">
+      {{ toastMessage }}
+    </div>
+    <div class="toast-close" (click)="showToast = false">
+      <i class="fa fa-times"></i>
+    </div>
   </div>
-  <div class="toast-close" (click)="showToast = false">
-    <i class="fa fa-times"></i>
-  </div>
-</div>
-  }
+}
