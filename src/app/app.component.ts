@@ -1,5 +1,6 @@
 // Angular import
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 
 // project import
@@ -13,16 +14,18 @@ import { SpinnerComponent } from './theme/shared/components/spinner/spinner.comp
 })
 export class AppComponent implements OnInit {
   private router = inject(Router);
+  private platformId = inject(PLATFORM_ID);
 
-  title = 'datta-able';
+  title = 'Dokkena';
 
-  // life cycle hook
   ngOnInit() {
     this.router.events.subscribe((evt) => {
       if (!(evt instanceof NavigationEnd)) {
         return;
       }
-      window.scrollTo(0, 0);
+      if (isPlatformBrowser(this.platformId)) {
+        window.scrollTo(0, 0);
+      }
     });
   }
 }

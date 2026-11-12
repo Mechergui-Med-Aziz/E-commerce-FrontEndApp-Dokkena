@@ -1,6 +1,8 @@
-import { Component, OnDestroy, ViewEncapsulation, inject, input } from '@angular/core';
+import { Component, OnDestroy, ViewEncapsulation, inject, input, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Spinkit } from './spinkits';
 import { Router, NavigationStart, NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
   selector: 'app-spinner',
@@ -10,6 +12,8 @@ import { Router, NavigationStart, NavigationEnd, NavigationCancel, NavigationErr
 })
 export class SpinnerComponent implements OnDestroy {
   private router = inject(Router);
+  private platformId = inject(PLATFORM_ID);
+  readonly loadingService = inject(LoadingService);
 
   isSpinnerVisible = false;
   Spinkit = Spinkit;
@@ -22,39 +26,41 @@ export class SpinnerComponent implements OnDestroy {
     this.router.events.subscribe(
       (event) => {
         if (event instanceof NavigationStart) {
-          
           this.isSpinnerVisible = true;
-
-          
-          document.body.style.overflow = 'hidden';
-          document.body.style.pointerEvents = 'none';
-        } 
-        else if (
+          if (isPlatformBrowser(this.platformId)) {
+            document.body.style.overflow = 'hidden';
+            document.body.style.pointerEvents = 'none';
+          }
+        } else if (
           event instanceof NavigationEnd ||
           event instanceof NavigationCancel ||
           event instanceof NavigationError
         ) {
-          
           clearTimeout(this.timer);
           this.timer = setTimeout(() => {
             this.isSpinnerVisible = false;
-
-            document.body.style.overflow = '';
-            document.body.style.pointerEvents = '';
-          }, 1000);
+            if (isPlatformBrowser(this.platformId)) {
+              document.body.style.overflow = '';
+              document.body.style.pointerEvents = '';
+            }
+          }, 300);
         }
       },
       () => {
         this.isSpinnerVisible = false;
-        document.body.style.overflow = '';
-        document.body.style.pointerEvents = '';
+        if (isPlatformBrowser(this.platformId)) {
+          document.body.style.overflow = '';
+          document.body.style.pointerEvents = '';
+        }
       }
     );
   }
 
   ngOnDestroy(): void {
     clearTimeout(this.timer);
-    document.body.style.overflow = '';
-    document.body.style.pointerEvents = '';
+    if (isPlatformBrowser(this.platformId)) {
+      document.body.style.overflow = '';
+      document.body.style.pointerEvents = '';
+    }
   }
 }

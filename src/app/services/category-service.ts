@@ -1,20 +1,25 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Category } from '../classes/category';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
+  private http = inject(HttpClient);
+  private readonly apiUrl = `${environment.apiUrl}/category`;
 
-  private apiUrl="https://dbchallengeserver.onrender.com/category"
-  //private apiUrl="https://dbchallengeserver.onrender.com/category"
-
-  constructor(private http: HttpClient) { }
-
-  getAllCategories(){
-    return this.http.get(this.apiUrl);
+  getAllCategories(): Observable<Category[]> {
+    return this.http.get<Category[]>(this.apiUrl);
   }
-  
 
+  getCategoryById(id: string | number): Observable<Category> {
+    return this.http.get<Category>(`${this.apiUrl}/${id}`);
+  }
 
+  getCategoryByName(name: string): Observable<Category[]> {
+    return this.http.get<Category[]>(`${this.apiUrl}?name=${encodeURIComponent(name)}`);
+  }
 }

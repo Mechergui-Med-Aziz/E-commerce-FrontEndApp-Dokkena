@@ -1,9 +1,20 @@
-@if (isSpinnerVisible) {
-  <div id="http-loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50">
-    <div class="loader-bg">
+@if (isSpinnerVisible || loadingService.isLoading()) {
+  <div id="http-loader" class="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black/60 text-white backdrop-blur-sm transition-all" style="position: fixed; inset: 0; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px);">
+    <div class="loader-bg text-center p-4 rounded-xl max-w-md mx-auto" style="text-align: center; padding: 24px; border-radius: 12px; background: rgba(30, 41, 59, 0.95); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); color: #fff; max-width: 420px; margin: 0 16px;">
       @if (spinner() === Spinkit.skLine) {
-        <div class="sk-line-material" [class.colored]="!backgroundColor()">
+        <div class="sk-line-material mb-3" [class.colored]="!backgroundColor()" style="margin: 0 auto 16px auto;">
           <div class="sk-child sk-bounce1" [style.background-color]="backgroundColor()"></div>
+        </div>
+      }
+
+      <div class="font-medium text-base mb-1" style="font-weight: 600; font-size: 16px; margin-bottom: 6px; color: #f8fafc;">
+        Chargement de Dokkena...
+      </div>
+
+      @if (loadingService.isSlowApi()) {
+        <div class="mt-3 text-xs bg-amber-500/20 text-amber-200 border border-amber-500/30 rounded p-2" style="margin-top: 12px; font-size: 13px; line-height: 1.4; background: rgba(245, 158, 11, 0.15); color: #fde68a; border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; padding: 10px;">
+          <span style="font-size: 16px; display: inline-block; margin-right: 4px;">⏳</span>
+          <strong>Serveur en phase de réveil</strong> : Notre API sécurisée (Render) sort de veille. Cela peut prendre 20 à 45 secondes lors de la première visite. Merci pour votre patience !
         </div>
       }
     </div>
