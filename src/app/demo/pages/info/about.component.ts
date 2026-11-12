@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { SeoService } from 'src/app/services/seo-service';
 
 @Component({
   selector: 'app-about',
@@ -10,7 +11,7 @@ import { RouterModule } from '@angular/router';
     <div class="container py-4" style="max-width: 900px; margin: 0 auto; padding: 24px 16px;">
       <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb" style="display: flex; gap: 8px; list-style: none; padding: 0; font-size: 14px; color: #64748b;">
-          <li><a routerLink="/home" style="color: #4f46e5; text-decoration: none;">Accueil</a></li>
+          <li><a routerLink="/" style="color: #4f46e5; text-decoration: none;">Accueil</a></li>
           <li>/</li>
           <li class="active" aria-current="page" style="color: #0f172a;">À propos</li>
         </ol>
@@ -67,5 +68,19 @@ import { RouterModule } from '@angular/router';
     </div>
   `
 })
-export class AboutComponent {}
+export class AboutComponent implements OnInit {
+  private seoService = inject(SeoService);
+
+  ngOnInit(): void {
+    this.seoService.update({
+      title: 'À propos de Dokkena | Votre Boutique en Ligne de Confiance en Tunisie',
+      description: 'Découvrez l\'histoire et la mission de Dokkena, votre commerce de proximité en ligne en Tunisie. Large choix, prix justes, livraison rapide et service client dévoué.',
+      path: '/about'
+    });
+    this.seoService.setBreadcrumbJsonLd([
+      { name: 'Accueil', url: '/' },
+      { name: 'À propos', url: '/about' }
+    ]);
+  }
+}
 

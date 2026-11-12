@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { BLOG_POSTS, BlogPost } from 'src/app/services/blog-data';
+import { SeoService } from 'src/app/services/seo-service';
 
 @Component({
   selector: 'app-blog-detail',
@@ -11,7 +12,7 @@ import { BLOG_POSTS, BlogPost } from 'src/app/services/blog-data';
     <div class="container py-4" style="max-width: 860px; margin: 0 auto; padding: 24px 16px;">
       <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb" style="display: flex; gap: 8px; list-style: none; padding: 0; font-size: 14px; color: #64748b;">
-          <li><a routerLink="/home" style="color: #4f46e5; text-decoration: none;">Accueil</a></li>
+          <li><a routerLink="/" style="color: #4f46e5; text-decoration: none;">Accueil</a></li>
           <li>/</li>
           <li><a routerLink="/blog" style="color: #4f46e5; text-decoration: none;">Blog</a></li>
           <li>/</li>
@@ -69,12 +70,48 @@ import { BLOG_POSTS, BlogPost } from 'src/app/services/blog-data';
 })
 export class BlogDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
+  private seoService = inject(SeoService);
   post?: BlogPost;
 
   ngOnInit(): void {
     const slug = this.route.snapshot.paramMap.get('slug');
     if (slug) {
       this.post = BLOG_POSTS.find((p) => p.slug === slug);
+      if (this.post) {
+        const path = `/blog/${this.post.slug}`;
+        this.seoService.update({
+          title: `${this.post.title} | Blog Dokkena`,
+          description: this.post.excerpt,
+          path,
+          image: this.post.image,
+          type: 'article'
+        });
+        this.seoService.setBreadcrumbJsonLd([
+          { name: 'Accueil', url: '/' },
+          { name: 'Blog', url: '/blog' },
+          { name: this.post.title, url: path }
+        ]);
+        this.seoService.setJsonLd('schema-blogposting', {
+          '@context': 'https://schema.org',
+          '@type': 'BlogPosting',
+          headline: this.post.title,
+          description: this.post.excerpt,
+          image: [this.post.image],
+          datePublished: this.post.date,
+          author: {
+            '@type': 'Person',
+            name: this.post.author
+          },
+          publisher: {
+            '@type': 'Organization',
+            name: 'Dokkena',
+            logo: {
+              '@type': 'ImageObject',
+              url: 'https://dokkena.vercel.app/assets/images/logo-dark.png'
+            }
+          }
+        });
+      }
     }
   }
 }

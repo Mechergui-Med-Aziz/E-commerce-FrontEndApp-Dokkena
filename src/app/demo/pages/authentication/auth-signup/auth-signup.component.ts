@@ -1,42 +1,54 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators, ɵInternalFormsSharedModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { User } from 'src/app/classes/user';
 import { AuthService } from 'src/app/services/auth-service';
+import { SeoService } from 'src/app/services/seo-service';
 
 @Component({
   selector: 'app-auth-signup',
-  imports: [RouterModule, ɵInternalFormsSharedModule,ReactiveFormsModule,CommonModule,FormsModule],
+  imports: [RouterModule, ɵInternalFormsSharedModule, ReactiveFormsModule, CommonModule, FormsModule],
   templateUrl: './auth-signup.component.html',
   styleUrls: ['./auth-signup.component.scss']
 })
-export class AuthSignupComponent implements OnInit{
+export class AuthSignupComponent implements OnInit {
+  private formBuilder = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private seoService = inject(SeoService);
 
-  showMessage=false;
-  messageText="";
-  messageType="";
-  users:User[]=[];
+  showMessage = false;
+  messageText = '';
+  messageType = '';
+  users: User[] = [];
 
-  registerForm = this.formBuilder.group({
-    id: [0],
-    firstName: ['', Validators.required],
-    lastName: ['', Validators.required],
-    cin: ['', [Validators.required,  Validators.pattern('^[0-9]{8}$')]],
-    phone:['', [Validators.required, Validators.pattern('^[0-9]{8}$')]],
-    adress: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(8)]],
-    confirmPassword: ['', Validators.required],
-  }, { validator: this.passwordMatchValidator });
-  
-
-  constructor(private formBuilder :FormBuilder,private authService:AuthService,private router:Router) { }
+  registerForm = this.formBuilder.group(
+    {
+      id: [0],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      cin: ['', [Validators.required, Validators.pattern('^[0-9]{8}$')]],
+      phone: ['', [Validators.required, Validators.pattern('^[0-9]{8}$')]],
+      adress: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      confirmPassword: ['', Validators.required]
+    },
+    { validator: this.passwordMatchValidator }
+  );
 
   ngOnInit(): void {
-      this.authService.getAllUsers().subscribe((data: User[]) => {
+    this.seoService.update({
+      title: 'Créer un compte | Dokkena Tunisie',
+      description: 'Inscrivez-vous sur Dokkena pour profiter de promotions exclusives et suivre vos livraisons partout en Tunisie.',
+      path: '/register',
+      noindex: true
+    });
+
+    this.authService.getAllUsers().subscribe((data: User[]) => {
       this.users = data;
-  })
+    });
   }
   onRegister(): void {
     if (this.registerForm.valid) {

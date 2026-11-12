@@ -7,6 +7,7 @@ import { ProductService } from 'src/app/services/product-service';
 import { CategoryService } from 'src/app/services/category-service';
 import { Router, RouterModule } from '@angular/router';
 import { BasketService } from 'src/app/services/basket-service';
+import { SeoService } from 'src/app/services/seo-service';
 import { catchError, of } from 'rxjs';
 
 @Component({
@@ -21,6 +22,7 @@ export class Home implements OnInit, OnDestroy {
   private categoryService = inject(CategoryService);
   private basketService = inject(BasketService);
   private router = inject(Router);
+  private seoService = inject(SeoService);
 
   products: Product[] = [];
   categories: Category[] = [];
@@ -32,6 +34,13 @@ export class Home implements OnInit, OnDestroy {
   toastType = 'success';
 
   ngOnInit() {
+    this.seoService.update({
+      title: 'Dokkena | Boutique en ligne : High-Tech, Mode, Beauté, Sport en Tunisie',
+      description: 'Dokkena, boutique e-commerce en Tunisie. Large sélection High-Tech, Mode, Beauté, Cuisine, Gaming et Sport au meilleur prix avec livraison rapide.',
+      path: '/'
+    });
+    this.seoService.setOrganizationAndWebsiteJsonLd();
+
     this.productService
       .getAllProducts()
       .pipe(catchError(() => of([])))

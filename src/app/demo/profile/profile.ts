@@ -1,21 +1,26 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, OnInit, inject, PLATFORM_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from 'src/app/classes/user';
 import { AuthService } from 'src/app/services/auth-service';
+import { SeoService } from 'src/app/services/seo-service';
 
 @Component({
   selector: 'app-profile',
-  imports: [FormsModule,CommonModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './profile.html',
   styleUrl: './profile.scss'
 })
-export class Profile {
+export class Profile implements OnInit {
+  private platformId = inject(PLATFORM_ID);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private seoService = inject(SeoService);
 
-  updated=false;
+  updated = false;
   user = {
-    id:"",
+    id: '',
     firstName: '',
     lastName: '',
     cin: 0,
@@ -26,12 +31,22 @@ export class Profile {
 
   newPassword = '';
 
-  constructor(private authService: AuthService, private router:Router) {
-    const id = Number(localStorage.getItem("id"));
-    
-    this.authService.getUserById(id).subscribe((data: User) => {
-      this.user = data;
+  ngOnInit() {
+    this.seoService.update({
+      title: 'Mon Profil | Dokkena',
+      description: 'Gérez vos informations personnelles et vos commandes sur Dokkena Tunisie.',
+      path: '/profile',
+      noindex: true
     });
+
+    if (isPlatformBrowser(this.platformId)) {
+      const id = Number(localStorage.getItem('id'));
+      if (id) {
+        this.authService.getUserById(id).subscribe((data: User) => {
+          this.user = data;
+        });
+      }
+    }
   }
   
   

@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { SeoService } from 'src/app/services/seo-service';
 
 @Component({
   selector: 'app-faq',
@@ -10,7 +11,7 @@ import { RouterModule } from '@angular/router';
     <div class="container py-4" style="max-width: 900px; margin: 0 auto; padding: 24px 16px;">
       <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb" style="display: flex; gap: 8px; list-style: none; padding: 0; font-size: 14px; color: #64748b;">
-          <li><a routerLink="/home" style="color: #4f46e5; text-decoration: none;">Accueil</a></li>
+          <li><a routerLink="/" style="color: #4f46e5; text-decoration: none;">Accueil</a></li>
           <li>/</li>
           <li class="active" aria-current="page" style="color: #0f172a;">Foire Aux Questions</li>
         </ol>
@@ -50,5 +51,57 @@ import { RouterModule } from '@angular/router';
     </div>
   `
 })
-export class FaqComponent {}
+export class FaqComponent implements OnInit {
+  private seoService = inject(SeoService);
+
+  ngOnInit(): void {
+    this.seoService.update({
+      title: 'Foire Aux Questions (FAQ) | Réponses aux Questions Fréquentes Dokkena',
+      description: 'Trouvez toutes les réponses à vos questions sur les commandes Dokkena Tunisie : délais et frais de livraison, paiement en espèces ou en ligne, retours et garanties.',
+      path: '/faq'
+    });
+    this.seoService.setBreadcrumbJsonLd([
+      { name: 'Accueil', url: '/' },
+      { name: 'FAQ', url: '/faq' }
+    ]);
+    this.seoService.setJsonLd('schema-faq', {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Quels sont les délais et tarifs de livraison en Tunisie ?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Dokkena livre sur tout le territoire tunisien sous 24 à 72 heures ouvrées. Les frais de livraison s\'élèvent à 7 TND, et sont entièrement offerts pour toute commande atteignant ou dépassant 100 TND.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'Comment puis-je régler ma commande ?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Vous pouvez payer directement à la livraison en espèces auprès de notre livreur partenaire, ou régler en ligne par carte bancaire sécurisée.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'Comment retourner un produit non conforme ?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Vous disposez d\'un délai légal de 15 jours après réception pour demander l\'échange ou le remboursement d\'un article intact dans son emballage d\'origine.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'Les produits sont-ils authentiques et garantis ?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Absolument. Tous les produits vendus sur Dokkena proviennent de distributeurs officiels ou de partenaires certifiés. Les appareils électroniques bénéficient de la garantie constructeur.'
+          }
+        }
+      ]
+    });
+  }
+}
 

@@ -5,6 +5,7 @@ import { catchError, of, share } from 'rxjs';
 import { Product } from 'src/app/classes/product';
 import { BasketService } from 'src/app/services/basket-service';
 import { ProductService } from 'src/app/services/product-service';
+import { SeoService } from 'src/app/services/seo-service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 
 @Component({
@@ -18,6 +19,7 @@ export class Kitchen implements OnInit {
   private productService = inject(ProductService);
   private basketService = inject(BasketService);
   private router = inject(Router);
+  private seoService = inject(SeoService);
 
   products: Product[] = [];
   showToast = false;
@@ -30,6 +32,17 @@ export class Kitchen implements OnInit {
   displayedProducts: any[] = [];
 
   ngOnInit(): void {
+    this.seoService.update({
+      title: 'Cuisine & Maison en Tunisie : Petit Électroménager, Ustensiles | Dokkena',
+      description: 'Équipez votre cuisine sur Dokkena Tunisie : robots multifonctions, cafetières, mixeurs, casseroles et ustensiles indispensables pour la maison.',
+      path: '/categories/kitchen'
+    });
+    this.seoService.setBreadcrumbJsonLd([
+      { name: 'Accueil', url: '/' },
+      { name: 'Catégories', url: '/product-list' },
+      { name: 'Cuisine & Maison', url: '/categories/kitchen' }
+    ]);
+
     this.productService
       .getProductsByCategory('Kitchen')
       .pipe(
@@ -40,6 +53,7 @@ export class Kitchen implements OnInit {
         this.products = [...data];
         this.filteredProducts = [...data];
         this.displayedProducts = [...data];
+        this.seoService.setCategoryJsonLd('Cuisine & Maison', '/categories/kitchen', data);
       });
   }
 

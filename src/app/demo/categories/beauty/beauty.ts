@@ -5,6 +5,7 @@ import { catchError, of, share } from 'rxjs';
 import { Product } from 'src/app/classes/product';
 import { BasketService } from 'src/app/services/basket-service';
 import { ProductService } from 'src/app/services/product-service';
+import { SeoService } from 'src/app/services/seo-service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 
 @Component({
@@ -18,6 +19,7 @@ export class Beauty implements OnInit {
   private productService = inject(ProductService);
   private basketService = inject(BasketService);
   private router = inject(Router);
+  private seoService = inject(SeoService);
 
   products: Product[] = [];
   showToast = false;
@@ -30,6 +32,17 @@ export class Beauty implements OnInit {
   displayedProducts: any[] = [];
 
   ngOnInit(): void {
+    this.seoService.update({
+      title: 'Beauté & Soins en Tunisie : Parfums, Maquillage, Soins Visage | Dokkena',
+      description: 'Découvrez notre collection Beauté & Soins en Tunisie sur Dokkena : soins visage, maquillage, parfums et cosmétiques de grandes marques au meilleur prix.',
+      path: '/categories/beauty'
+    });
+    this.seoService.setBreadcrumbJsonLd([
+      { name: 'Accueil', url: '/' },
+      { name: 'Catégories', url: '/product-list' },
+      { name: 'Beauté & Soins', url: '/categories/beauty' }
+    ]);
+
     this.productService
       .getProductsByCategory('Beauty')
       .pipe(
@@ -40,6 +53,7 @@ export class Beauty implements OnInit {
         this.products = [...data];
         this.filteredProducts = [...data];
         this.displayedProducts = [...data];
+        this.seoService.setCategoryJsonLd('Beauté & Soins', '/categories/beauty', data);
       });
   }
 

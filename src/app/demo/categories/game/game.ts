@@ -5,6 +5,7 @@ import { catchError, of, share } from 'rxjs';
 import { Product } from 'src/app/classes/product';
 import { BasketService } from 'src/app/services/basket-service';
 import { ProductService } from 'src/app/services/product-service';
+import { SeoService } from 'src/app/services/seo-service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 
 @Component({
@@ -18,6 +19,7 @@ export class Game implements OnInit {
   private productService = inject(ProductService);
   private basketService = inject(BasketService);
   private router = inject(Router);
+  private seoService = inject(SeoService);
 
   products: Product[] = [];
   showToast = false;
@@ -30,6 +32,17 @@ export class Game implements OnInit {
   displayedProducts: any[] = [];
 
   ngOnInit(): void {
+    this.seoService.update({
+      title: 'Gaming & Jeux Vidéo en Tunisie : Consoles, Accessoires PC, Claviers | Dokkena',
+      description: 'Plongez dans l\'univers Gaming sur Dokkena Tunisie : claviers mécaniques, souris gamer, casques surround, manettes et accessoires de jeu aux prix les plus bas.',
+      path: '/categories/game'
+    });
+    this.seoService.setBreadcrumbJsonLd([
+      { name: 'Accueil', url: '/' },
+      { name: 'Catégories', url: '/product-list' },
+      { name: 'Gaming & Jeux Vidéo', url: '/categories/game' }
+    ]);
+
     this.productService
       .getProductsByCategory('Game')
       .pipe(
@@ -40,6 +53,7 @@ export class Game implements OnInit {
         this.products = [...data];
         this.filteredProducts = [...data];
         this.displayedProducts = [...data];
+        this.seoService.setCategoryJsonLd('Gaming & Jeux Vidéo', '/categories/game', data);
       });
   }
 

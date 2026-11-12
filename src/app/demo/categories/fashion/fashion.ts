@@ -5,6 +5,7 @@ import { catchError, of, share } from 'rxjs';
 import { Product } from 'src/app/classes/product';
 import { BasketService } from 'src/app/services/basket-service';
 import { ProductService } from 'src/app/services/product-service';
+import { SeoService } from 'src/app/services/seo-service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 
 @Component({
@@ -18,6 +19,7 @@ export class Fashion implements OnInit {
   private productService = inject(ProductService);
   private basketService = inject(BasketService);
   private router = inject(Router);
+  private seoService = inject(SeoService);
 
   products: Product[] = [];
   showToast = false;
@@ -30,6 +32,17 @@ export class Fashion implements OnInit {
   displayedProducts: any[] = [];
 
   ngOnInit(): void {
+    this.seoService.update({
+      title: 'Mode Homme & Femme en Tunisie : Vêtements, Chaussures, Tendances | Dokkena',
+      description: 'Découvrez la collection Mode Dokkena en Tunisie : vêtements homme, femme et enfants, chaussures tendance, sacs et accessoires au meilleur rapport qualité-prix.',
+      path: '/categories/fashion'
+    });
+    this.seoService.setBreadcrumbJsonLd([
+      { name: 'Accueil', url: '/' },
+      { name: 'Catégories', url: '/product-list' },
+      { name: 'Mode & Habillement', url: '/categories/fashion' }
+    ]);
+
     this.productService
       .getProductsByCategory('Fashion')
       .pipe(
@@ -40,6 +53,7 @@ export class Fashion implements OnInit {
         this.products = [...data];
         this.filteredProducts = [...data];
         this.displayedProducts = [...data];
+        this.seoService.setCategoryJsonLd('Mode & Habillement', '/categories/fashion', data);
       });
   }
 

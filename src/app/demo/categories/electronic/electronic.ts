@@ -5,6 +5,7 @@ import { catchError, of, share } from 'rxjs';
 import { Product } from 'src/app/classes/product';
 import { BasketService } from 'src/app/services/basket-service';
 import { ProductService } from 'src/app/services/product-service';
+import { SeoService } from 'src/app/services/seo-service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 
 @Component({
@@ -18,6 +19,7 @@ export class Electronic implements OnInit {
   private productService = inject(ProductService);
   private basketService = inject(BasketService);
   private router = inject(Router);
+  private seoService = inject(SeoService);
 
   products: Product[] = [];
   showToast = false;
@@ -30,6 +32,17 @@ export class Electronic implements OnInit {
   displayedProducts: any[] = [];
 
   ngOnInit(): void {
+    this.seoService.update({
+      title: 'High-Tech & Électronique en Tunisie : Smartphones, PC, Audio | Dokkena',
+      description: 'Achetez votre matériel High-Tech et Électronique en Tunisie au meilleur prix sur Dokkena : smartphones, accessoires PC, enceintes bluetooth et casques audio.',
+      path: '/categories/electronic'
+    });
+    this.seoService.setBreadcrumbJsonLd([
+      { name: 'Accueil', url: '/' },
+      { name: 'Catégories', url: '/product-list' },
+      { name: 'Électronique & High-Tech', url: '/categories/electronic' }
+    ]);
+
     this.productService
       .getProductsByCategory('Electronic')
       .pipe(
@@ -40,6 +53,7 @@ export class Electronic implements OnInit {
         this.products = [...data];
         this.filteredProducts = [...data];
         this.displayedProducts = [...data];
+        this.seoService.setCategoryJsonLd('Électronique & High-Tech', '/categories/electronic', data);
       });
   }
 

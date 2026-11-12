@@ -4,6 +4,7 @@
   "author": "CodedThemes",
   "scripts": {
     "ng": "ng",
+    "prebuild": "node scripts/generate-sitemap.mjs",
     "start:local": "ng serve",
     "build": "ng build",
     "start": "node server.js",

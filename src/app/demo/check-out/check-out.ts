@@ -1,29 +1,38 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CartItem } from 'src/app/classes/cart-item';
 import { AuthService } from 'src/app/services/auth-service';
 import { BasketService } from 'src/app/services/basket-service';
+import { SeoService } from 'src/app/services/seo-service';
 
 @Component({
   selector: 'app-check-out',
   imports: [CommonModule, RouterLink],
   templateUrl: './check-out.html',
-  styleUrl: './check-out.scss',
-  providers: [BasketService,AuthService],
+  styleUrl: './check-out.scss'
 })
 export class CheckOut implements OnInit {
-  constructor(private basketService:BasketService,private router:Router,private authService:AuthService) {}
-  cartItems:CartItem[]=[];
+  private basketService = inject(BasketService);
+  private router = inject(Router);
+  private authService = inject(AuthService);
+  private seoService = inject(SeoService);
+
+  cartItems: CartItem[] = [];
   deliveryFee = 7;
-  isLoggedIn=false;
+  isLoggedIn = false;
 
-  
+  ngOnInit() {
+    this.seoService.update({
+      title: 'Mon Panier & Commande | Dokkena',
+      description: 'Finalisez votre commande sur Dokkena Tunisie. Livraison rapide et paiement sécurisé.',
+      path: '/checkout',
+      noindex: true
+    });
 
-  ngOnInit(){
     this.cartItems = this.basketService.getBasket();
-    this.basketService.basketUpdated.subscribe((basket:CartItem[])=>{
-      this.cartItems=basket;
+    this.basketService.basketUpdated.subscribe((basket: CartItem[]) => {
+      this.cartItems = basket;
     });
   }
 

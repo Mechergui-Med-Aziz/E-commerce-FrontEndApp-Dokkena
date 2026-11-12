@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { BLOG_POSTS, BlogPost } from 'src/app/services/blog-data';
+import { SeoService } from 'src/app/services/seo-service';
 
 @Component({
   selector: 'app-blog-list',
@@ -11,7 +12,7 @@ import { BLOG_POSTS, BlogPost } from 'src/app/services/blog-data';
     <div class="container py-4" style="max-width: 1000px; margin: 0 auto; padding: 24px 16px;">
       <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb" style="display: flex; gap: 8px; list-style: none; padding: 0; font-size: 14px; color: #64748b;">
-          <li><a routerLink="/home" style="color: #4f46e5; text-decoration: none;">Accueil</a></li>
+          <li><a routerLink="/" style="color: #4f46e5; text-decoration: none;">Accueil</a></li>
           <li>/</li>
           <li class="active" aria-current="page" style="color: #0f172a;">Blog & Guides d'achat</li>
         </ol>
@@ -55,7 +56,20 @@ import { BLOG_POSTS, BlogPost } from 'src/app/services/blog-data';
     </div>
   `
 })
-export class BlogListComponent {
+export class BlogListComponent implements OnInit {
+  private seoService = inject(SeoService);
   posts: BlogPost[] = BLOG_POSTS;
+
+  ngOnInit(): void {
+    this.seoService.update({
+      title: 'Blog & Guides d\'Achat | Conseils High-Tech, Maison & Tendances Dokkena',
+      description: 'Découvrez nos guides d\'achat complets, comparatifs produits et conseils d\'experts pour réussir vos achats en ligne en Tunisie avec Dokkena.',
+      path: '/blog'
+    });
+    this.seoService.setBreadcrumbJsonLd([
+      { name: 'Accueil', url: '/' },
+      { name: 'Blog', url: '/blog' }
+    ]);
+  }
 }
 

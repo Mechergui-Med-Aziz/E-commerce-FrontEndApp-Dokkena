@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from 'src/app/classes/product';
 import { BasketService } from 'src/app/services/basket-service';
 import { ProductService } from 'src/app/services/product-service';
+import { SeoService } from 'src/app/services/seo-service';
 import { catchError, of } from 'rxjs';
 
 @Component({
@@ -18,6 +19,7 @@ export class ProductDetails implements OnInit {
   private route = inject(ActivatedRoute);
   private basketService = inject(BasketService);
   private productService = inject(ProductService);
+  private seoService = inject(SeoService);
 
   data?: Product;
   toastMessage = '';
@@ -38,6 +40,13 @@ export class ProductDetails implements OnInit {
     const queryId = this.route.snapshot.queryParamMap.get('id');
     const idToFetch = paramId ? this.productService.extractIdFromSlug(paramId) : queryId;
 
+    if (this.data) {
+      this.applySeo(this.data);
+      if (this.data.image) {
+        this.selectedImage = this.data.image;
+      }
+    }
+
     if (idToFetch && (!this.data || String(this.data.id) !== String(idToFetch))) {
       this.productService
         .getProductById(idToFetch)
@@ -49,12 +58,38 @@ export class ProductDetails implements OnInit {
               if (product?.image) {
                 this.selectedImage = product.image;
               }
+              this.applySeo(product);
             }
           }
         });
-    } else if (this.data?.image) {
-      this.selectedImage = this.data.image;
     }
+  }
+
+  private applySeo(product: any): void {
+    if (!product) return;
+    const name = product.name || product.title || 'Produit Dokkena';
+    const priceStr = product.price ? `${product.price} TND` : '';
+    const title = `${name} - Acheter au meilleur prix (${priceStr}) | Dokkena`;
+    const description = product.description && product.description.length > 20
+      ? `${name} : ${product.description.slice(0, 130)}... Achetez en ligne sur Dokkena Tunisie avec livraison rapide.`
+      : `Achetez ${name} au meilleur prix (${priceStr}) sur Dokkena Tunisie. Livraison rapide partout en Tunisie et paiement sécurisé.`;
+    const slug = this.productService.generateSlug(product);
+    const path = `/product/${slug}`;
+
+    this.seoService.update({
+      title,
+      description,
+      path,
+      image: product.image || product.imageUrl,
+      type: 'product'
+    });
+
+    this.seoService.setProductJsonLd(product, path);
+    this.seoService.setBreadcrumbJsonLd([
+      { name: 'Accueil', url: '/' },
+      { name: product.category || 'Catalogue', url: product.category ? `/categories/${product.category.toLowerCase()}` : '/product-list' },
+      { name, url: path }
+    ]);
   }
 
   selectImage(img: string) {

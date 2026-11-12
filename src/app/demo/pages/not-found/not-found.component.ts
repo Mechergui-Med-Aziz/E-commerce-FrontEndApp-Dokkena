@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { SeoService } from 'src/app/services/seo-service';
 
 @Component({
   selector: 'app-not-found',
@@ -15,7 +16,7 @@ import { RouterModule } from '@angular/router';
           Désolé, la page que vous recherchez n'existe pas ou a été déplacée. Dokkena vous propose de continuer votre shopping.
         </p>
         <div class="d-flex justify-content-center gap-2" style="display: flex; justify-content: center; gap: 12px;">
-          <a routerLink="/home" class="btn btn-primary" style="background-color: #4f46e5; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 500;">
+          <a routerLink="/" class="btn btn-primary" style="background-color: #4f46e5; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 500;">
             🏠 Retour à l'accueil
           </a>
           <a routerLink="/product-list" class="btn btn-outline-secondary" style="border: 1px solid #cbd5e1; color: #334155; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 500;">
@@ -26,5 +27,16 @@ import { RouterModule } from '@angular/router';
     </div>
   `
 })
-export class NotFoundComponent {}
+export class NotFoundComponent implements OnInit {
+  private seoService = inject(SeoService);
+
+  ngOnInit() {
+    this.seoService.update({
+      title: 'Page introuvable (404) | Dokkena',
+      description: 'La page demandée est introuvable.',
+      path: '/404',
+      noindex: true
+    });
+  }
+}
 

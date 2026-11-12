@@ -5,6 +5,7 @@ import { catchError, of, share } from 'rxjs';
 import { Product } from 'src/app/classes/product';
 import { BasketService } from 'src/app/services/basket-service';
 import { ProductService } from 'src/app/services/product-service';
+import { SeoService } from 'src/app/services/seo-service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 
 @Component({
@@ -18,6 +19,7 @@ export class Sport implements OnInit {
   private productService = inject(ProductService);
   private basketService = inject(BasketService);
   private router = inject(Router);
+  private seoService = inject(SeoService);
 
   products: Product[] = [];
   showToast = false;
@@ -30,6 +32,17 @@ export class Sport implements OnInit {
   displayedProducts: any[] = [];
 
   ngOnInit(): void {
+    this.seoService.update({
+      title: 'Sport & Fitness en Tunisie : Équipements, Vêtements, Musculation | Dokkena',
+      description: 'Découvrez les équipements de sport et fitness sur Dokkena Tunisie : tapis de course, haltères, accessoires de training et vêtements de sport au meilleur prix.',
+      path: '/categories/sport'
+    });
+    this.seoService.setBreadcrumbJsonLd([
+      { name: 'Accueil', url: '/' },
+      { name: 'Catégories', url: '/product-list' },
+      { name: 'Sport & Fitness', url: '/categories/sport' }
+    ]);
+
     this.productService
       .getProductsByCategory('Sport')
       .pipe(
@@ -40,6 +53,7 @@ export class Sport implements OnInit {
         this.products = [...data];
         this.filteredProducts = [...data];
         this.displayedProducts = [...data];
+        this.seoService.setCategoryJsonLd('Sport & Fitness', '/categories/sport', data);
       });
   }
 

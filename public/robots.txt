@@ -1,0 +1,27 @@
+# Robots.txt pour Dokkena (https://dokkena.vercel.app)
+User-agent: *
+Allow: /
+Allow: /categories/
+Allow: /product/
+Allow: /product-list
+Allow: /blog
+Allow: /about
+Allow: /contact
+Allow: /faq
+Allow: /delivery-returns
+Allow: /terms
+Allow: /privacy
+Allow: /legal
+
+# Pages transactionnelles et privées
+Disallow: /cart
+Disallow: /checkout
+Disallow: /payment
+Disallow: /profile
+Disallow: /auth/
+Disallow: /*?*sort=
+Disallow: /*?*filter=
+Disallow: /*?*q=
+
+Sitemap: https://dokkena.vercel.app/sitemap.xml
+

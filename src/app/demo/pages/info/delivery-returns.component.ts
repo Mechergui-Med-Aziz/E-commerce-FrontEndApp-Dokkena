@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { SeoService } from 'src/app/services/seo-service';
 
 @Component({
   selector: 'app-delivery-returns',
@@ -10,7 +11,7 @@ import { RouterModule } from '@angular/router';
     <div class="container py-4" style="max-width: 900px; margin: 0 auto; padding: 24px 16px;">
       <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb" style="display: flex; gap: 8px; list-style: none; padding: 0; font-size: 14px; color: #64748b;">
-          <li><a routerLink="/home" style="color: #4f46e5; text-decoration: none;">Accueil</a></li>
+          <li><a routerLink="/" style="color: #4f46e5; text-decoration: none;">Accueil</a></li>
           <li>/</li>
           <li class="active" aria-current="page" style="color: #0f172a;">Livraison et Retours</li>
         </ol>
@@ -51,5 +52,19 @@ import { RouterModule } from '@angular/router';
     </div>
   `
 })
-export class DeliveryReturnsComponent {}
+export class DeliveryReturnsComponent implements OnInit {
+  private seoService = inject(SeoService);
+
+  ngOnInit(): void {
+    this.seoService.update({
+      title: 'Livraison et Retours en Tunisie | Délais, Tarifs (7 TND ou Offert) & Retours Dokkena',
+      description: 'Tout savoir sur la livraison en Tunisie avec Dokkena : expédition 24/72h, 7 TND ou offerte dès 100 TND d\'achat, suivi en temps réel et retours 15 jours.',
+      path: '/delivery-returns'
+    });
+    this.seoService.setBreadcrumbJsonLd([
+      { name: 'Accueil', url: '/' },
+      { name: 'Livraison et Retours', url: '/delivery-returns' }
+    ]);
+  }
+}
 
