@@ -9,7 +9,7 @@
             <div class="slide" *ngFor="let product of getProductsOnSale()">
               <div class="slide-content">
                 <div class="slide-image">
-                  <img [src]="product.image" [alt]="product.name + ' - Promotion Dokkena Tunisie'" loading="lazy">
+                  <img [src]="product.image" [alt]="product.name + ' - Promotion Dokkena Tunisie'" width="450" height="400" fetchpriority="high" decoding="async">
                 </div>
                 <div class="slide-info">
                   <span class="promo-badge">PROMOTION</span>
@@ -89,7 +89,7 @@
             
             <div class="product-image">
               <a [routerLink]="['/product', productService.generateSlug(product)]" class="d-block">
-                <img [src]="product.image" [alt]="product.name + ' - Dokkena Tunisie'" loading="lazy">
+                <img [src]="product.image" [alt]="product.name + ' - Dokkena Tunisie'" width="260" height="260" loading="lazy" decoding="async">
               </a>
               <div class="product-badges">
                 <span *ngIf="product.isOnSale" class="badge sale-badge">

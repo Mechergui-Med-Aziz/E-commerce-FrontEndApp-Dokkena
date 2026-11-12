@@ -63,7 +63,7 @@
         
         <div class="product-image">
           <a [routerLink]="['/product', productService.generateSlug(product)]" class="d-block">
-            <img [src]="product.image" [alt]="product.name + ' - Dokkena Tunisie'" loading="lazy">
+            <img [src]="product.image" [alt]="product.name + ' - Dokkena Tunisie'" width="260" height="260" loading="lazy" decoding="async">
           </a>
           <div class="product-badges">
             <span *ngIf="product.isOnSale" class="badge sale-badge">

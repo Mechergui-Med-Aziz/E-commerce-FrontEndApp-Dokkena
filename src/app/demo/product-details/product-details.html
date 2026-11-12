@@ -21,6 +21,10 @@
         <img 
           [src]="selectedImage || data.image" 
           [alt]="data.name + ' - Photo principale Dokkena Tunisie'"
+          width="600"
+          height="400"
+          fetchpriority="high"
+          decoding="async"
           (error)="handleImageError($event)"
         >
       </div>
@@ -31,7 +35,7 @@
           [class.active]="selectedImage === data.image"
           (click)="selectImage(data.image)"
         >
-          <img [src]="data.image" [alt]="data.name + ' - Vue 1'" (error)="handleImageError($event)">
+          <img [src]="data.image" [alt]="data.name + ' - Vue 1'" width="80" height="80" loading="lazy" decoding="async" (error)="handleImageError($event)">
         </div>
 
         <div 
@@ -40,7 +44,7 @@
           [class.active]="selectedImage === data.image2"
           (click)="selectImage(data.image2)"
         >
-          <img [src]="data.image2" [alt]="data.name + ' - Vue 2'" (error)="handleImageError($event)">
+          <img [src]="data.image2" [alt]="data.name + ' - Vue 2'" width="80" height="80" loading="lazy" decoding="async" (error)="handleImageError($event)">
         </div>
 
         <div 
@@ -49,7 +53,7 @@
           [class.active]="selectedImage === data.image3"
           (click)="selectImage(data.image3)"
         >
-          <img [src]="data.image3" [alt]="data.name + ' - Vue 3'" (error)="handleImageError($event)">
+          <img [src]="data.image3" [alt]="data.name + ' - Vue 3'" width="80" height="80" loading="lazy" decoding="async" (error)="handleImageError($event)">
         </div>
       </div>
     </div>
