@@ -1,5 +1,6 @@
 // angular import
-import { Component, Input, output } from '@angular/core';
+import { Component, Input, output, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 // project import
@@ -12,12 +13,17 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
   styleUrls: ['./nav-logo.component.scss']
 })
 export class NavLogoComponent {
-  // public props
-  @Input() navCollapsed: boolean;
+  private platformId = inject(PLATFORM_ID);
+  @Input() navCollapsed = false;
   NavCollapse = output();
-  windowWidth = window.innerWidth;
+  windowWidth = 1024;
 
-  // public method
+  constructor() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.windowWidth = window.innerWidth;
+    }
+  }
+
   navCollapse() {
     if (this.windowWidth >= 992) {
       this.navCollapsed = !this.navCollapsed;

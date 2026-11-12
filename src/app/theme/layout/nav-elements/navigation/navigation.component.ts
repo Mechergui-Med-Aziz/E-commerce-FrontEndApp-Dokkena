@@ -1,5 +1,6 @@
 // angular import
-import { Component, output } from '@angular/core';
+import { Component, output, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 // project import
 import { SharedModule } from 'src/app/theme/shared/shared.module';
@@ -13,20 +14,19 @@ import { NavContentComponent } from './nav-content/nav-content.component';
   styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent {
-  // public props
+  private platformId = inject(PLATFORM_ID);
   NavCollapse = output();
   NavCollapsedMob = output();
-  navCollapsed: boolean;
-  navCollapsedMob: boolean;
-  windowWidth: number;
+  navCollapsed = false;
+  navCollapsedMob = false;
+  windowWidth = 1024;
 
-  // constructor
   constructor() {
-    this.windowWidth = window.innerWidth;
-    this.navCollapsedMob = false;
+    if (isPlatformBrowser(this.platformId)) {
+      this.windowWidth = window.innerWidth;
+    }
   }
 
-  // public method
   navCollapse() {
     if (this.windowWidth >= 992) {
       this.navCollapsed = !this.navCollapsed;

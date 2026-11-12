@@ -1,8 +1,7 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { Route, Router } from '@angular/router';
-import { share } from 'rxjs';
-import { CartItem } from 'src/app/classes/cart-item';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, OnInit, inject, PLATFORM_ID } from '@angular/core';
+import { Router } from '@angular/router';
+import { catchError, of, share } from 'rxjs';
 import { Product } from 'src/app/classes/product';
 import { BasketService } from 'src/app/services/basket-service';
 import { ProductService } from 'src/app/services/product-service';
@@ -10,131 +9,131 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
 
 @Component({
   selector: 'app-electronic',
-  imports: [SharedModule,CommonModule],
+  imports: [SharedModule, CommonModule],
   templateUrl: './electronic.html',
-  styleUrl: './electronic.scss',
-  providers: [ProductService]
+  styleUrl: './electronic.scss'
 })
 export class Electronic implements OnInit {
-  constructor(private productService:ProductService, private basketService:BasketService,private router:Router) {}
+  private platformId = inject(PLATFORM_ID);
+  private productService = inject(ProductService);
+  private basketService = inject(BasketService);
+  private router = inject(Router);
 
-   products:Product[]=[];
-  // basket:CartItem[]=[];
-     showToast = false;
-     toastMessage = '';
-     toastType='success';
+  products: Product[] = [];
+  showToast = false;
+  toastMessage = '';
+  toastType = 'success';
 
-     searchQuery: string = '';
-     selectedSortOption: string = 'featured';
-     filteredProducts: any[] = [];
-     displayedProducts: any[] = [];
-  
-    ngOnInit(): void {
-      this.productService.getProductsByCategory("Electronic").pipe(share()).subscribe((data)=>{
-        this.products=[...data];
-        console.log(data);
+  searchQuery = '';
+  selectedSortOption = 'featured';
+  filteredProducts: any[] = [];
+  displayedProducts: any[] = [];
+
+  ngOnInit(): void {
+    this.productService
+      .getProductsByCategory('Electronic')
+      .pipe(
+        share(),
+        catchError(() => of([]))
+      )
+      .subscribe((data) => {
+        this.products = [...data];
         this.filteredProducts = [...data];
         this.displayedProducts = [...data];
       });
+  }
+
+  filterProducts(): void {
+    if (!this.searchQuery) {
+      this.filteredProducts = [...this.products];
+    } else {
+      const query = this.searchQuery.toLowerCase();
+      this.filteredProducts = this.products.filter(
+        (product) =>
+          product.name.toLowerCase().includes(query) ||
+          product.category.toLowerCase().includes(query) ||
+          (product.description && product.description.toLowerCase().includes(query))
+      );
     }
-  
-    getFeaturedProducts(): Product[] {
-      return this.products.filter(product => product.isFeatured);
-    }
-  
-  
-  
-    getDiscountPercentage(product: Product): number {
-      if (!product.originalPrice) return 0;
-      return Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
-    }
-  
-    getStarRating(rating: number): string {
-      const fullStars = Math.floor(rating);
-      const halfStar = rating % 1 >= 0.5 ? 1 : 0;
-      const emptyStars = 5 - fullStars - halfStar;
-      
-      return '★'.repeat(fullStars) + '½'.repeat(halfStar) + '☆'.repeat(emptyStars);
+    this.sortProducts();
+  }
+
+  sortProducts(): void {
+    let sortedProducts = [...this.filteredProducts];
+
+    switch (this.selectedSortOption) {
+      case 'price-asc':
+        sortedProducts.sort((a, b) => a.price - b.price);
+        break;
+      case 'price-desc':
+        sortedProducts.sort((a, b) => b.price - a.price);
+        break;
+      case 'rating':
+        sortedProducts.sort((a, b) => b.rating - a.rating);
+        break;
+      case 'name':
+        sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'sale':
+        sortedProducts = sortedProducts.filter((product) => product.isOnSale);
+        break;
+      default:
+        break;
     }
 
-    addToBasket(product: Product) {
-      
-      if(!this.basketService.addToBasket(product)){
-        this.toastMessage = 'Ce produit est déja dans votre panier.';
-        this.toastType="error";
-      }
-      else{
-        this.toastMessage = 'Produit ajouté au panier.';
-        this.toastType="success"
-      }
-      this.showToastMessage(this.toastMessage);
+    this.displayedProducts = sortedProducts;
+  }
+
+  clearSearch(): void {
+    this.searchQuery = '';
+    this.filterProducts();
+  }
+
+  resetFilters(): void {
+    this.searchQuery = '';
+    this.selectedSortOption = 'featured';
+    this.filterProducts();
+  }
+
+  getFeaturedProducts(): Product[] {
+    return this.products.filter((product) => product.isFeatured);
+  }
+
+  getDiscountPercentage(product: Product): number {
+    if (!product.originalPrice) return 0;
+    return Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
+  }
+
+  getStarRating(rating: number): string {
+    const fullStars = Math.floor(rating || 0);
+    const halfStar = (rating || 0) % 1 >= 0.5 ? 1 : 0;
+    const emptyStars = Math.max(0, 5 - fullStars - halfStar);
+    return '★'.repeat(fullStars) + (halfStar ? '½' : '') + '☆'.repeat(emptyStars);
+  }
+
+  addToBasket(product: Product) {
+    if (!this.basketService.addToBasket(product)) {
+      this.toastMessage = 'Ce produit est déjà dans votre panier.';
+      this.toastType = 'error';
+    } else {
+      this.toastMessage = 'Produit ajouté au panier.';
+      this.toastType = 'success';
     }
-    showToastMessage(message: string): void {
-      this.toastMessage = message;
-      this.showToast = true;
-  
+    this.showToastMessage(this.toastMessage);
+  }
+
+  showToastMessage(message: string): void {
+    this.toastMessage = message;
+    this.showToast = true;
+
+    if (isPlatformBrowser(this.platformId)) {
       setTimeout(() => {
         this.showToast = false;
       }, 3000);
     }
+  }
 
-    openDetails(product: Product) {
-      this.router.navigate(['/product-details'], { state: {data: product} });
-    }
-
-
-    filterProducts(): void {
-      if (!this.searchQuery) {
-        this.filteredProducts = [...this.products];
-      } else {
-        const query = this.searchQuery.toLowerCase();
-        this.filteredProducts = this.products.filter(product => 
-          product.name.toLowerCase().includes(query) ||
-          product.category.toLowerCase().includes(query) ||
-          (product.description && product.description.toLowerCase().includes(query))
-        );
-      }
-      this.sortProducts();
-    }
-
-    sortProducts(): void {
-      let sortedProducts = [...this.filteredProducts];
-      
-      switch(this.selectedSortOption) {
-        case 'price-asc':
-          sortedProducts.sort((a, b) => a.price - b.price);
-          break;
-        case 'price-desc':
-          sortedProducts.sort((a, b) => b.price - a.price);
-          break;
-        case 'rating':
-          sortedProducts.sort((a, b) => b.rating - a.rating);
-          break;
-        case 'name':
-          sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
-          break;
-        case 'sale':
-          sortedProducts = sortedProducts.filter(product => product.isOnSale);
-          break;
-          case '---':
-            sortedProducts = [...this.filteredProducts];
-            break;
-        default:
-          break;
-      }
-      
-      this.displayedProducts = sortedProducts;
-    }
-
-    clearSearch(): void {
-      this.searchQuery = '';
-      this.filterProducts();
-    }
-
-    resetFilters(): void {
-      this.searchQuery = '';
-      this.selectedSortOption = 'featured';
-      this.filterProducts();
-    }
-
+  openDetails(product: Product) {
+    this.router.navigate(['/product', this.productService.generateSlug(product)], { state: { data: product } });
+  }
 }

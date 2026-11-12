@@ -1,62 +1,64 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy, inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { Product } from 'src/app/classes/product';
 import { Category } from 'src/app/classes/category';
 import { ProductService } from 'src/app/services/product-service';
 import { CategoryService } from 'src/app/services/category-service';
 import { Router, RouterModule } from '@angular/router';
-import { CartItem } from 'src/app/classes/cart-item';
 import { BasketService } from 'src/app/services/basket-service';
+import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule,SharedModule,RouterModule],
+  imports: [CommonModule, SharedModule, RouterModule],
   templateUrl: './home.html',
-  styleUrl: './home.scss',
-  providers:[ProductService,CategoryService]
+  styleUrl: './home.scss'
 })
+export class Home implements OnInit, OnDestroy {
+  private platformId = inject(PLATFORM_ID);
+  private productService = inject(ProductService);
+  private categoryService = inject(CategoryService);
+  private basketService = inject(BasketService);
+  private router = inject(Router);
 
-export class Home implements OnInit {
   products: Product[] = [];
   categories: Category[] = [];
   currentSlide = 0;
-  sliderInterval: undefined | ReturnType<typeof setInterval>;
-  productsOnSale:Product[]=[];
-  //basket:CartItem[]=[];
+  sliderInterval: any = null;
+  productsOnSale: Product[] = [];
   showToast = false;
   toastMessage = '';
-  toastType='success';
-
- constructor(private productService:ProductService,private categoryService:CategoryService, private basketService:BasketService,private router:Router) { }
-
+  toastType = 'success';
 
   ngOnInit() {
-    this.productService.getAllProducts().subscribe((data: Product[]) => {
-      this.products = [...data];
-      console.log(this.products);
-      this.productsOnSale=data.filter(product=>product.isOnSale==true);
-      console.log(this.productsOnSale);
-      //this.showToastMessage('Test du toast');
-    });
+    this.productService
+      .getAllProducts()
+      .pipe(catchError(() => of([])))
+      .subscribe((data: Product[]) => {
+        this.products = [...data];
+        this.productsOnSale = data.filter((product) => product.isOnSale === true);
+      });
 
-    this.categoryService.getAllCategories().subscribe((data: Category[]) => {
-      this.categories = [...data];
-      console.log(this.categories);
-    });
-    
-    this.startAutoSlide();
-  }
+    this.categoryService
+      .getAllCategories()
+      .pipe(catchError(() => of([])))
+      .subscribe((data: Category[]) => {
+        this.categories = [...data];
+      });
 
-  ngOnDestroy() {
-    // Nettoyer l'intervalle
-    if (this.sliderInterval) {
-      clearInterval(this.sliderInterval);
+    if (isPlatformBrowser(this.platformId)) {
+      this.startAutoSlide();
     }
   }
 
+  ngOnDestroy() {
+    if (this.sliderInterval) {
+      clearInterval(this.sliderInterval);
+      this.sliderInterval = null;
+    }
+  }
 
-  // Méthodes pour le slider
   startAutoSlide() {
     this.sliderInterval = setInterval(() => {
       this.nextSlide();
@@ -64,24 +66,27 @@ export class Home implements OnInit {
   }
 
   nextSlide() {
-    this.currentSlide = (this.currentSlide + 1) % this.productsOnSale.length;
+    if (this.productsOnSale.length > 0) {
+      this.currentSlide = (this.currentSlide + 1) % this.productsOnSale.length;
+    }
   }
 
   prevSlide() {
-    this.currentSlide = (this.currentSlide - 1 + this.productsOnSale.length) % this.productsOnSale.length;
+    if (this.productsOnSale.length > 0) {
+      this.currentSlide = (this.currentSlide - 1 + this.productsOnSale.length) % this.productsOnSale.length;
+    }
   }
 
   goToSlide(index: number) {
     this.currentSlide = index;
   }
 
-  // Méthodes utilitaires
   getFeaturedProducts(): Product[] {
-    return this.products.filter(product => product.isFeatured);
+    return this.products.filter((product) => product.isFeatured);
   }
 
   getProductsOnSale(): Product[] {
-    return this.products.filter(product => product.isOnSale);
+    return this.products.filter((product) => product.isOnSale);
   }
 
   getDiscountPercentage(product: Product): number {
@@ -90,37 +95,35 @@ export class Home implements OnInit {
   }
 
   getStarRating(rating: number): string {
-    const fullStars = Math.floor(rating);
-    const halfStar = rating % 1 >= 0.5 ? 1 : 0;
-    const emptyStars = 5 - fullStars - halfStar;
-    
-    return '★'.repeat(fullStars) + '½'.repeat(halfStar) + '☆'.repeat(emptyStars);
+    const fullStars = Math.floor(rating || 0);
+    const halfStar = (rating || 0) % 1 >= 0.5 ? 1 : 0;
+    const emptyStars = Math.max(0, 5 - fullStars - halfStar);
+    return '★'.repeat(fullStars) + (halfStar ? '½' : '') + '☆'.repeat(emptyStars);
   }
 
   addToBasket(product: Product) {
-      
-    if(!this.basketService.addToBasket(product)){
-      this.toastMessage = 'Ce produit est déja dans votre panier.';
-      this.toastType="error";
-    }
-    else{
+    if (!this.basketService.addToBasket(product)) {
+      this.toastMessage = 'Ce produit est déjà dans votre panier.';
+      this.toastType = 'error';
+    } else {
       this.toastMessage = 'Produit ajouté au panier.';
-      this.toastType="success"
+      this.toastType = 'success';
     }
     this.showToastMessage(this.toastMessage);
   }
+
   showToastMessage(message: string): void {
     this.toastMessage = message;
     this.showToast = true;
 
-    setTimeout(() => {
-      this.showToast = false;
-    }, 3000);
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        this.showToast = false;
+      }, 3000);
+    }
   }
 
   openDetails(product: Product) {
-    this.router.navigate(['/product-details'], { state: {data: product} });
+    this.router.navigate(['/product', this.productService.generateSlug(product)], { state: { data: product } });
   }
 }
-
-

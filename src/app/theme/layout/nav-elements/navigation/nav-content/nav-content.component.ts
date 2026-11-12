@@ -1,6 +1,6 @@
 // angular import
-import { Component, inject, output } from '@angular/core';
-import { Location } from '@angular/common';
+import { Component, inject, output, PLATFORM_ID } from '@angular/core';
+import { Location, isPlatformBrowser } from '@angular/common';
 
 // project import
 import { environment } from 'src/environments/environment';
@@ -16,43 +16,41 @@ import { NavGroupComponent } from './nav-group/nav-group.component';
 })
 export class NavContentComponent {
   private location = inject(Location);
+  private platformId = inject(PLATFORM_ID);
 
-  // public method
-  // version
-  title = 'Demo application for version numbering';
+  title = 'Dokkena Navigation';
   currentApplicationVersion = environment.appVersion;
 
-  navigations!: NavigationItem[];
-  wrapperWidth: number;
-  windowWidth = window.innerWidth;
+  navigations: NavigationItem[] = NavigationItems;
+  wrapperWidth = 0;
+  windowWidth = 1024;
 
   NavCollapsedMob = output();
 
-  // constructor
   constructor() {
-    this.navigations = NavigationItems;
+    if (isPlatformBrowser(this.platformId)) {
+      this.windowWidth = window.innerWidth;
+    }
   }
 
   fireOutClick() {
+    if (!isPlatformBrowser(this.platformId)) return;
     let current_url = this.location.path();
     if (this.location['_baseHref']) {
       current_url = this.location['_baseHref'] + this.location.path();
     }
     const link = "a.nav-link[ href='" + current_url + "' ]";
     const ele = document.querySelector(link);
-    if (ele !== null && ele !== undefined) {
+    if (ele) {
       const parent = ele.parentElement;
-      const up_parent = parent.parentElement.parentElement;
-      const last_parent = up_parent.parentElement;
-      if (parent.classList.contains('pcoded-hasmenu')) {
-        parent.classList.add('pcoded-trigger');
-        parent.classList.add('active');
-      } else if (up_parent.classList.contains('pcoded-hasmenu')) {
-        up_parent.classList.add('pcoded-trigger');
-        up_parent.classList.add('active');
-      } else if (last_parent.classList.contains('pcoded-hasmenu')) {
-        last_parent.classList.add('pcoded-trigger');
-        last_parent.classList.add('active');
+      const up_parent = parent?.parentElement?.parentElement;
+      const last_parent = up_parent?.parentElement;
+      if (parent?.classList.contains('pcoded-hasmenu')) {
+        parent.classList.add('pcoded-trigger', 'active');
+      } else if (up_parent?.classList.contains('pcoded-hasmenu')) {
+        up_parent.classList.add('pcoded-trigger', 'active');
+      } else if (last_parent?.classList.contains('pcoded-hasmenu')) {
+        last_parent.classList.add('pcoded-trigger', 'active');
       }
     }
   }
