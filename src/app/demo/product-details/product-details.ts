@@ -5,6 +5,9 @@ import { Product } from 'src/app/classes/product';
 import { BasketService } from 'src/app/services/basket-service';
 import { ProductService } from 'src/app/services/product-service';
 import { SeoService } from 'src/app/services/seo-service';
+import { AnalyticsService } from 'src/app/services/analytics-service';
+import { UserPreferenceService } from 'src/app/services/user-preference.service';
+import { environment } from 'src/environments/environment';
 import { catchError, of } from 'rxjs';
 
 @Component({
@@ -20,9 +23,13 @@ export class ProductDetails implements OnInit {
   private basketService = inject(BasketService);
   public productService = inject(ProductService);
   private seoService = inject(SeoService);
+  private analyticsService = inject(AnalyticsService);
+  private userPreferenceService = inject(UserPreferenceService);
 
   data?: Product;
   similarProducts: Product[] = [];
+  recentlyViewed: Product[] = [];
+  isInWishlist = false;
   toastMessage = '';
   showToast = false;
   toastType = 'success';
@@ -42,11 +49,7 @@ export class ProductDetails implements OnInit {
     const idToFetch = paramId ? this.productService.extractIdFromSlug(paramId) : queryId;
 
     if (this.data) {
-      this.applySeo(this.data);
-      if (this.data.image) {
-        this.selectedImage = this.data.image;
-      }
-      this.loadSimilarProducts(this.data.category, this.data.id);
+      this.handleProductLoaded(this.data);
     }
 
     if (idToFetch && (!this.data || String(this.data.id) !== String(idToFetch))) {
@@ -57,14 +60,70 @@ export class ProductDetails implements OnInit {
           next: (product: any) => {
             if (product) {
               this.data = product;
-              if (product?.image) {
-                this.selectedImage = product.image;
-              }
-              this.applySeo(product);
-              this.loadSimilarProducts(product.category, product.id);
+              this.handleProductLoaded(product);
             }
           }
         });
+    }
+
+    if (isPlatformBrowser(this.platformId)) {
+      this.recentlyViewed = this.userPreferenceService
+        .getRecentlyViewed()
+        .filter((p) => !this.data || String(p.id) !== String(this.data.id))
+        .slice(0, 4);
+    }
+  }
+
+  private handleProductLoaded(product: Product): void {
+    if (product.image) {
+      this.selectedImage = product.image;
+    }
+    this.applySeo(product);
+    this.loadSimilarProducts(product.category, product.id);
+
+    if (isPlatformBrowser(this.platformId)) {
+      this.userPreferenceService.addToRecentlyViewed(product);
+      this.isInWishlist = this.userPreferenceService.isInWishlist(product.id);
+      this.analyticsService.trackViewItem({
+        item_id: product.id,
+        item_name: product.name,
+        item_category: product.category,
+        price: product.price,
+        quantity: 1
+      });
+    }
+  }
+
+  toggleWishlist(): void {
+    if (!this.data) return;
+    this.isInWishlist = this.userPreferenceService.toggleWishlist(this.data.id);
+    this.showToastMessage(
+      this.isInWishlist
+        ? 'Produit ajouté à votre liste de souhaits !'
+        : 'Produit retiré de votre liste de souhaits.'
+    );
+  }
+
+  shareWhatsApp(): void {
+    if (!isPlatformBrowser(this.platformId) || !this.data) return;
+    const url = window.location.href;
+    const text = encodeURIComponent(`Regarde ce produit sur Dokkena : ${this.data.name} à ${this.data.price} DT ! ${url}`);
+    window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+  }
+
+  shareFacebook(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    const url = encodeURIComponent(window.location.href);
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+  }
+
+  copyLink(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    try {
+      navigator.clipboard.writeText(window.location.href);
+      this.showToastMessage('Lien du produit copié dans le presse-papier !');
+    } catch {
+      this.showToastMessage('Impossible de copier le lien.');
     }
   }
 
@@ -135,6 +194,13 @@ export class ProductDetails implements OnInit {
     } else {
       this.toastMessage = 'Produit ajouté au panier.';
       this.toastType = 'success';
+      this.analyticsService.trackAddToCart({
+        item_id: product.id,
+        item_name: product.name,
+        item_category: product.category,
+        price: product.price,
+        quantity: this.quantity
+      });
     }
     this.showToastMessage(this.toastMessage);
   }

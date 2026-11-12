@@ -7,10 +7,23 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { BreadcrumbsComponent } from '../../shared/components/breadcrumbs/breadcrumbs.component';
 import { Footer } from './footer/footer';
+import { AnnouncementBarComponent } from '../../shared/components/announcement-bar/announcement-bar.component';
+import { CookieBannerComponent } from '../../shared/components/cookie-banner/cookie-banner.component';
+import { WhatsappButtonComponent } from '../../shared/components/whatsapp-button/whatsapp-button.component';
 
 @Component({
   selector: 'app-nav-elements',
-  imports: [NavBarComponent, NavigationComponent, RouterModule, CommonModule, BreadcrumbsComponent, Footer],
+  imports: [
+    NavBarComponent,
+    NavigationComponent,
+    RouterModule,
+    CommonModule,
+    BreadcrumbsComponent,
+    Footer,
+    AnnouncementBarComponent,
+    CookieBannerComponent,
+    WhatsappButtonComponent
+  ],
   templateUrl: './nav-elements.html',
   styleUrl: './nav-elements.scss'
 })

@@ -4,6 +4,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule, Validators, ɵInternalFo
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from 'src/app/services/auth-service';
 import { SeoService } from 'src/app/services/seo-service';
+import { AnalyticsService } from 'src/app/services/analytics-service';
 
 @Component({
   selector: 'app-auth-signin',
@@ -16,6 +17,7 @@ export class AuthSigninComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
   private seoService = inject(SeoService);
+  private analyticsService = inject(AnalyticsService);
 
   loginForm = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
@@ -32,13 +34,13 @@ export class AuthSigninComponent implements OnInit {
     });
   }
 
-  onSubmit(){
-    this.authService.login(this.loginForm.value.email,this.loginForm.value.password).then(user=>{
-      console.log(user);
-      if(user){
-        this.router.navigate(['/home']);
-      }else{
-        this.notLoggedIn=true;
+  onSubmit() {
+    this.authService.login(this.loginForm.value.email, this.loginForm.value.password).then((user) => {
+      if (user) {
+        this.analyticsService.trackLogin('email');
+        this.router.navigate(['/']);
+      } else {
+        this.notLoggedIn = true;
         this.loginForm.reset();
       }
     });

@@ -5,6 +5,7 @@ import { CartItem } from 'src/app/classes/cart-item';
 import { AuthService } from 'src/app/services/auth-service';
 import { BasketService } from 'src/app/services/basket-service';
 import { SeoService } from 'src/app/services/seo-service';
+import { AnalyticsService } from 'src/app/services/analytics-service';
 
 @Component({
   selector: 'app-check-out',
@@ -17,6 +18,7 @@ export class CheckOut implements OnInit {
   private router = inject(Router);
   private authService = inject(AuthService);
   private seoService = inject(SeoService);
+  private analyticsService = inject(AnalyticsService);
 
   cartItems: CartItem[] = [];
   deliveryFee = 7;
@@ -36,52 +38,90 @@ export class CheckOut implements OnInit {
     });
   }
 
-
-
-increaseQty(i: number) {
-  this.cartItems[i].quantity++;
-}
-
-decreaseQty(i: number) {
-  if (this.cartItems[i].quantity > 1) this.cartItems[i].quantity--;
-}
-
-removeItem(i: number) {
-  this.cartItems.splice(i, 1);
-}
-
-getSubtotal() {
-  return this.cartItems
-    .reduce((sum, item) => sum + item.product.price * item.quantity, 0);
-}
-
-getTotal() {
-  if(this.cartItems.length===0){
-    this.deliveryFee=0;
+  isFreeShipping(): boolean {
+    return this.basketService.isFreeShipping();
   }
-  return this.getSubtotal() + this.deliveryFee;
-}
 
-removeItemFromBasket(productId: string) {
-  this.basketService.removeItem(productId);
-}
+  getRemainingForFreeShipping(): number {
+    return this.basketService.getRemainingForFreeShipping();
+  }
 
-pay(){
-  if(this.authService.isAuthenticated()){
-    this.router.navigate(['/payment']);
+  getFreeShippingProgress(): number {
+    return this.basketService.getFreeShippingProgress();
+  }
+
+  increaseQty(i: number) {
+    this.cartItems[i].quantity++;
+  }
+
+  decreaseQty(i: number) {
+    if (this.cartItems[i].quantity > 1) this.cartItems[i].quantity--;
+  }
+
+  removeItem(i: number) {
+    const item = this.cartItems[i];
+    if (item) {
+      this.analyticsService.trackRemoveFromCart({
+        item_id: item.product.id,
+        item_name: item.product.name,
+        price: item.product.price,
+        quantity: item.quantity
+      });
     }
-    else{
-    this.isLoggedIn = true;
+    this.cartItems.splice(i, 1);
+  }
+
+  getSubtotal(): number {
+    return this.cartItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+  }
+
+  getTotal(): number {
+    if (this.cartItems.length === 0) {
+      this.deliveryFee = 0;
+      return 0;
     }
-}
+    this.deliveryFee = this.isFreeShipping() ? 0 : 7;
+    return this.getSubtotal() + this.deliveryFee;
+  }
 
-closeLoginModal() {
-  this.isLoggedIn = false;
-  this.router.navigate(['/login']);
-}
+  removeItemFromBasket(productId: string) {
+    const item = this.cartItems.find((ci) => String(ci.product.id) === String(productId));
+    if (item) {
+      this.analyticsService.trackRemoveFromCart({
+        item_id: item.product.id,
+        item_name: item.product.name,
+        price: item.product.price,
+        quantity: item.quantity
+      });
+    }
+    this.basketService.removeItem(productId);
+  }
 
-closeModal() {
-  this.isLoggedIn = false;
-}
+  pay() {
+    this.analyticsService.trackBeginCheckout(
+      this.cartItems.map((ci) => ({
+        item_id: ci.product.id,
+        item_name: ci.product.name,
+        item_category: ci.product.category,
+        price: ci.product.price,
+        quantity: ci.quantity
+      })),
+      this.getTotal()
+    );
 
+    if (this.authService.isAuthenticated()) {
+      this.router.navigate(['/payment']);
+    } else {
+      this.isLoggedIn = true;
+    }
+  }
+
+  closeLoginModal() {
+    this.isLoggedIn = false;
+    this.router.navigate(['/login']);
+  }
+
+  closeModal() {
+    this.isLoggedIn = false;
+  }
 }

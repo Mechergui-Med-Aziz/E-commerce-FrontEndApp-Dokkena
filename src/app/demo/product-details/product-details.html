@@ -93,8 +93,30 @@
         <p>{{ data.description }}</p>
       </div>
 
-      <div class="product-actions">
-        <button class="btn-primary" (click)="addToBasket(data)">🛒 Ajouter au panier</button>
+      <div class="product-actions" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+        <button class="btn-primary" (click)="addToBasket(data)" style="flex: 1; min-width: 200px;">🛒 Ajouter au panier</button>
+        <button 
+          (click)="toggleWishlist()" 
+          [style.background]="isInWishlist ? '#fee2e2' : '#f1f5f9'"
+          [style.color]="isInWishlist ? '#ef4444' : '#475569'"
+          [style.border]="isInWishlist ? '1px solid #fca5a5' : '1px solid #cbd5e1'"
+          style="padding: 12px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s;">
+          {{ isInWishlist ? '❤️ Dans vos favoris' : '🤍 Favoris' }}
+        </button>
+      </div>
+
+      <!-- Boutons de Partage Social -->
+      <div class="product-share" style="margin-top: 16px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+        <span style="font-size: 13px; color: #64748b; font-weight: 500;">Partager :</span>
+        <button (click)="shareWhatsApp()" style="background: #25d366; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">
+          💬 WhatsApp
+        </button>
+        <button (click)="shareFacebook()" style="background: #1877f2; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">
+          📘 Facebook
+        </button>
+        <button (click)="copyLink()" style="background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer;">
+          🔗 Copier le lien
+        </button>
       </div>
 
       <!-- Bloc Réassurance E-commerce Dokkena -->
@@ -132,6 +154,25 @@
           <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
             <span style="font-weight: 700; color: #4f46e5; font-size: 16px;">{{ sim.price }} DT</span>
             <span style="font-size: 12px; color: #64748b;">Voir le produit →</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Produits Récemment Consultés -->
+  <section class="recently-viewed-section" *ngIf="recentlyViewed.length > 0" style="margin-top: 40px; border-top: 1px dashed #cbd5e1; padding-top: 28px;">
+    <h2 style="font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 16px;">Produits récemment consultés</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px;">
+      <div *ngFor="let rec of recentlyViewed" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; padding: 10px; display: flex; flex-direction: column;">
+        <a [routerLink]="['/product', productService.generateSlug(rec)]" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; flex-grow: 1;">
+          <div style="height: 130px; overflow: hidden; margin-bottom: 8px; display: flex; align-items: center; justify-content: center;">
+            <img [src]="rec.image" [alt]="rec.name + ' - Dokkena Tunisie'" style="max-height: 100%; max-width: 100%; object-fit: contain;" loading="lazy">
+          </div>
+          <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 6px; color: #0f172a; line-height: 1.3; flex-grow: 1;">{{ rec.name }}</h3>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
+            <span style="font-weight: 700; color: #4f46e5; font-size: 14px;">{{ rec.price }} DT</span>
+            <span style="font-size: 11px; color: #64748b;">Revoir →</span>
           </div>
         </a>
       </div>

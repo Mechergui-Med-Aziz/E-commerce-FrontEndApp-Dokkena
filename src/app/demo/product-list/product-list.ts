@@ -6,6 +6,7 @@ import { Product } from 'src/app/classes/product';
 import { BasketService } from 'src/app/services/basket-service';
 import { ProductService } from 'src/app/services/product-service';
 import { SeoService } from 'src/app/services/seo-service';
+import { AnalyticsService } from 'src/app/services/analytics-service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 
 @Component({
@@ -20,6 +21,7 @@ export class ProductList implements OnInit {
   private basketService = inject(BasketService);
   private router = inject(Router);
   private seoService = inject(SeoService);
+  private analyticsService = inject(AnalyticsService);
 
   products: Product[] = [];
   toastMessage = '';
@@ -77,6 +79,13 @@ export class ProductList implements OnInit {
     } else {
       this.toastMessage = 'Produit ajouté au panier.';
       this.toastType = 'success';
+      this.analyticsService.trackAddToCart({
+        item_id: product.id,
+        item_name: product.name,
+        item_category: product.category,
+        price: product.price,
+        quantity: 1
+      });
     }
     this.showToastMessage(this.toastMessage);
   }
@@ -101,6 +110,9 @@ export class ProductList implements OnInit {
       this.filteredProducts = [...this.products];
     } else {
       const query = this.searchQuery.toLowerCase();
+      if (this.searchQuery.trim().length > 2) {
+        this.analyticsService.trackSearch(this.searchQuery.trim());
+      }
       this.filteredProducts = this.products.filter(
         (product) =>
           product.name.toLowerCase().includes(query) ||

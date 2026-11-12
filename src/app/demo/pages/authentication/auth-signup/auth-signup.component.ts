@@ -5,6 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 import { User } from 'src/app/classes/user';
 import { AuthService } from 'src/app/services/auth-service';
 import { SeoService } from 'src/app/services/seo-service';
+import { AnalyticsService } from 'src/app/services/analytics-service';
 
 @Component({
   selector: 'app-auth-signup',
@@ -17,6 +18,7 @@ export class AuthSignupComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
   private seoService = inject(SeoService);
+  private analyticsService = inject(AnalyticsService);
 
   showMessage = false;
   messageText = '';
@@ -64,9 +66,10 @@ export class AuthSignupComponent implements OnInit {
       console.log('Registration Data:', formData);
       this.authService.registerUser(formData as User).subscribe(
         response => {
-          this.messageText='Compte créer avec succès ! Vous pouvez maintenant vous connecter.';
+          this.messageText='Compte créé avec succès ! Vous pouvez maintenant vous connecter.';
           this.messageType='success';
-          this.authService.login(this.registerForm.value.email!,this.registerForm.value.password!)
+          this.analyticsService.trackSignUp('email');
+          this.authService.login(this.registerForm.value.email!,this.registerForm.value.password!);
         },
         error => {
           this.messageText="Erreur d'enregistrement d'utilisateur";

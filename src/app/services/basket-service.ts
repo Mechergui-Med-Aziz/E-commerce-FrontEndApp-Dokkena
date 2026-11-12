@@ -79,6 +79,16 @@ export class BasketService {
     return this.getSubtotal() >= this.freeShippingThreshold;
   }
 
+  isFreeShipping(): boolean {
+    return this.hasFreeShipping();
+  }
+
+  getFreeShippingProgress(): number {
+    const subtotal = this.getSubtotal();
+    if (this.freeShippingThreshold <= 0) return 100;
+    return Math.min(100, Math.round((subtotal / this.freeShippingThreshold) * 100));
+  }
+
   getShippingCost(): number {
     if (this.basket.length === 0 || this.hasFreeShipping()) return 0;
     return 7; // 7 TND standard shipping fee in Tunisia

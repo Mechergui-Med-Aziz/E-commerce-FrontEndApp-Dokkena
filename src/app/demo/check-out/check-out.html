@@ -41,7 +41,25 @@
       <!-- ✅ Récapitulatif -->
       <div class="summary-box">
   
-        <h2>Récapitulatif</h2>
+        <h2>Récapitulatif de commande</h2>
+
+        <!-- Barre de progression Livraison Offerte -->
+        <div style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 6px;">
+            <span *ngIf="isFreeShipping()" style="color: #16a34a;">🎉 Livraison offerte !</span>
+            <span *ngIf="!isFreeShipping()" style="color: #4338ca;">
+              Encore <strong>{{ getRemainingForFreeShipping() }} DT</strong> pour la livraison offerte
+            </span>
+            <span style="color: #64748b;">{{ getFreeShippingProgress() }}%</span>
+          </div>
+          <div style="height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+            <div 
+              [style.width.%]="getFreeShippingProgress()"
+              [style.background]="isFreeShipping() ? '#16a34a' : '#4f46e5'"
+              style="height: 100%; transition: width 0.3s ease;">
+            </div>
+          </div>
+        </div>
   
         <div class="summary-line">
           <span>Sous-total</span>
@@ -49,18 +67,35 @@
         </div>
   
         <div class="summary-line">
-          <span>Livraison</span>
-          <span>{{ deliveryFee }} DT</span>
+          <span>Frais de livraison</span>
+          <span *ngIf="isFreeShipping()" style="color: #16a34a; font-weight: 700;">GRATUIT</span>
+          <span *ngIf="!isFreeShipping()">{{ deliveryFee }} DT</span>
         </div>
   
         <div class="summary-total">
-          <span>Total</span>
+          <span>Total à payer</span>
           <span>{{ getTotal() }} DT</span>
         </div>
   
         <button class="pay-btn" [disabled]="getTotal()===0" (click)="pay()">
-          ✅ Procéder au paiement
+          ✅ Valider ma commande
         </button>
+
+        <!-- Badges de réassurance -->
+        <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #475569; display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span>💵</span>
+            <span>Paiement en espèces à la livraison (Cash on Delivery)</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span>🚚</span>
+            <span>Livraison express en 24 à 72h ouvrées</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span>↩️</span>
+            <span>Garantie satisfait ou remboursé sous 15 jours</span>
+          </div>
+        </div>
   
       </div>
     </div>
