@@ -913,3 +913,4 @@ if (existsSync(chromePath)) {
 } else {
   console.error('[PDF Gen] Chrome not found at:', chromePath);
 }
+
